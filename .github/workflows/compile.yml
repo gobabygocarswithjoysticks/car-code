@@ -16,7 +16,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
-          " " > ./hex/configurations-info.txt
+          echo " " > ./hex/configurations-info.txt
           git rm -f ./hex/configurations_info.txt
           git commit -m "BOT update compiled files"
           git push
@@ -82,7 +82,7 @@ jobs:
           git pull # get the most recent state of the repo
           git add ./hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.hex # add the newly created hex file to git
           
-          "${{ matrix.config }}" >> ./hex/configurations-info.txt
+          echo "${{ matrix.config }}" >> ./hex/configurations-info.txt
           git add ./hex/configurations-info.txt
           
           git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
