@@ -10,7 +10,9 @@ jobs:
     strategy:
       max-parallel: 1 # since the actions edit files in the repo, only run one at a time.
       matrix:
-        config: ["normal-nano", "normal-uno", "blink-nano"] # list of programs to compile (can have multiple programs for multiple boards)
+        config: ["normal-nano", "normal-uno", "blink-nano"]
+        # list of programs to compile (can have multiple programs for multiple boards)
+        # for additional-commands use | to separate multiple commands, to install library, use arduino-cli lib install Library
         include:
           - config: "normal-nano"
             arduino-platform: "arduino:avr"
@@ -21,7 +23,7 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
             code-dir: ./gbg_program
-            additional-commands: arduino-cli lib install Servo | arduino-cli lib install EEPROM
+            additional-commands: arduino-cli lib install Servo
           - config: "blink-nano"
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
