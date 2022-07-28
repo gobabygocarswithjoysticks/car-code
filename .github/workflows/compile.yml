@@ -36,7 +36,11 @@ jobs:
       # in the build matrix.
       - name: Compile Sketch
         run: |
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.board-name }} ./gbg_program
+         arduino-cli compile --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.board-name }} ./gbg_program
+         rm hex/${{ matrix.board-name }}/gbg_program.ino.eep
+         rm hex/${{ matrix.board-name }}/gbg_program.ino.elf
+         rm hex/${{ matrix.board-name }}/gbg_program.ino.with_bootloader.bin
+         rm hex/${{ matrix.board-name }}/gbg_program.ino.with_bootloader.hex
 
       - name: Commit compiled files
         run: |
