@@ -42,6 +42,6 @@ jobs:
         run: |
           git config --global user.name 'bot'
           git config --global user.email 'joshua-8@users.noreply.github.com'
-          git add ./hex/uno/gbg_program.ino.hex
+          git add ./hex/${{ matrix.board-name }}/gbg_program.ino.hex
           git commit -am "update compiled files"
           git push
