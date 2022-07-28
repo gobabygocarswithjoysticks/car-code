@@ -4,6 +4,7 @@ name: Compile
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   compile-sketch:
@@ -35,5 +36,6 @@ jobs:
         run: |
           git config --global user.name 'bot'
           git config --global user.email 'joshua-8@users.noreply.github.com'
+          git add ./hex
           git commit -am "add compiled files"
           git push
