@@ -2,7 +2,7 @@ name: Compile
 
 on:
   push:
-    branches: [ main, pre-release]
+    branches: [release, pre-release]
   workflow_dispatch:
 
 jobs:
