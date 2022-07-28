@@ -2,7 +2,8 @@ name: Compile
 
 # The workflow will run on every push and pull request to the repository
 on:
-  release: published
+  push:
+    branches: [ main ]
 
 jobs:
   compile-sketch:
