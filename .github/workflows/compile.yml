@@ -3,7 +3,7 @@ name: Compile
 # The workflow will run on every push and pull request to the repository
 on:
   push:
-    branches: [ main ]
+    branches: [ main, pre-release]
   workflow_dispatch:
 
 jobs:
