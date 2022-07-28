@@ -1,4 +1,0 @@
-normal-nanoOld
-normal-uno
-normal-nanoNew
-blink-nano
