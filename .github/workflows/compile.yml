@@ -16,10 +16,12 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             code-dir: ./gbg_program
+            additional-commands: arduino-cli lib install Servo
           - config: "normal-uno"
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
             code-dir: ./gbg_program
+            additional-commands: arduino-cli lib install Servo | arduino-cli lib install EEPROM
           - config: "blink-nano"
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
@@ -33,6 +35,7 @@ jobs:
         run: |
           arduino-cli core update-index
           arduino-cli core install ${{ matrix.arduino-platform }} # install the arduino platform (avr, samd, etc) with the right platform for the current board
+          ${{ matrix.additional-commands }}
 
       - name: Checkout
         uses: actions/checkout@v3
