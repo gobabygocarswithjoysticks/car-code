@@ -16,7 +16,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
-          git rm -r -q ./hex
+          [ -d "./hex" ] && git rm -r ./hex # only delete the directory if it exists
           git commit . -m "BOT update compiled files"
           git push
   compile-sketch:
