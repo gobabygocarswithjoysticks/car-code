@@ -30,8 +30,6 @@ jobs:
         run: |
           arduino-cli compile --fqbn arduino:avr:uno --output-dir ./hex ./gbg_program
 
-      - uses: actions/checkout@v2
-      - name: Create report file
       - name: Commit compiled files
         run: |
           git config --global user.name 'bot'
