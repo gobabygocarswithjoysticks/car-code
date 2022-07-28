@@ -10,7 +10,7 @@ jobs:
   compile-sketch:
     strategy:
       matrix:
-        arduino-platform: ["arduino:samd", "arduino:avr"]
+        arduino-platform: ["nano", "uno"]
         include:
           - board: "nano"
             arduino-platform: "arduino:avr"
