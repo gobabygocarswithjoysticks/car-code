@@ -46,6 +46,7 @@ jobs:
         run: |
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+          git pull
           git add ./hex/${{ matrix.board-name }}/gbg_program.ino.hex
           git commit --allow-empty -m "BOT update compiled files"
           git push
