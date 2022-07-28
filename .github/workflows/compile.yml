@@ -1,6 +1,5 @@
 name: Compile
 
-# The workflow will run on every push and pull request to the repository
 on:
   push:
     branches: [ main, pre-release]
@@ -9,9 +8,9 @@ on:
 jobs:
   compile-sketch:
     strategy:
-      max-parallel: 1 
+      max-parallel: 1 # since the actions edit files in the repo, only run one at a time.
       matrix:
-        config: ["normal-nano", "normal-uno", "blink-nano"]
+        config: ["normal-nano", "normal-uno", "blink-nano"] # list of programs to compile (can have multiple programs for multiple boards)
         include:
           - config: "normal-nano"
             arduino-platform: "arduino:avr"
@@ -33,14 +32,15 @@ jobs:
       - name: Install Arduino platforms
         run: |
           arduino-cli core update-index
-          arduino-cli core install ${{ matrix.arduino-platform }}
+          arduino-cli core install ${{ matrix.arduino-platform }} # install the arduino platform (avr, samd, etc) with the right platform for the current board
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Compile Sketch
         run: |
-         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.config }}
+         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.config }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
+         # delete files other than programName.ino.hex since others aren't needed
          rm hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.eep
          rm hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.elf
          rm hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
@@ -50,7 +50,7 @@ jobs:
         run: |
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-          git pull
-          git add ./hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.hex
-          git commit --allow-empty -m "BOT update compiled files"
+          git pull # get the most recent state of the repo
+          git add ./hex/${{ matrix.config }}/${{ matrix.code-dir }}.ino.hex # add the newly created hex file to git
+          git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
           git push
