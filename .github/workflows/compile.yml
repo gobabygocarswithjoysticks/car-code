@@ -2,8 +2,7 @@ name: Compile
 
 # The workflow will run on every push and pull request to the repository
 on:
-  push:
-    branches: [ main ]
+  release: published
 
 jobs:
   compile-sketch:
@@ -28,4 +27,14 @@ jobs:
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
       - name: Compile Sketch
-        run: arduino-cli compile --fqbn arduino:avr:uno --output-dir ./hex ./gbg_program
+        run: |
+          arduino-cli compile --fqbn arduino:avr:uno --output-dir ./hex ./gbg_program
+
+      - uses: actions/checkout@v2
+      - name: Create report file
+      - name: Commit compiled files
+        run: |
+          git config --global user.name 'bot'
+          git config --global user.email 'joshua-8@users.noreply.github.com'
+          git commit -am "add compiled files"
+          git push
