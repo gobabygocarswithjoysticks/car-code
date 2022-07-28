@@ -16,7 +16,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
-          " " > ./hex/configurations-info.txt # creates file in case it doesn't exist (and clears it but it's about to be deleted)
+          " " > ./hex/configurations-info.txt
           git rm -f ./hex/configurations_info.txt
           git commit -m "BOT update compiled files"
           git push
