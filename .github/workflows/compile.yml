@@ -11,18 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # First of all, we clone the repo using the `checkout` action.
       - name: Checkout
         uses: actions/checkout@v3
 
-      # We use the `arduino/setup-arduino-cli` action to install and
-      # configure the Arduino CLI on the system.
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v1
 
-      # We then install the platform, which one will be determined
-      # dynamically by the build matrix.
-      - name: Install platform
+      - name: Install Arduino platforms
         run: |
           arduino-cli core update-index
           arduino-cli core install arduino:avr
@@ -30,12 +25,12 @@ jobs:
       # in the build matrix.
       - name: Compile Sketch
         run: |
-          arduino-cli compile --fqbn arduino:avr:uno --output-dir ./hex ./gbg_program
+          arduino-cli compile --fqbn arduino:avr:uno --output-dir ./hex/uno ./gbg_program
 
       - name: Commit compiled files
         run: |
           git config --global user.name 'bot'
           git config --global user.email 'joshua-8@users.noreply.github.com'
-          git add ./hex/gbg_program.ino.hex
+          git add ./hex/uno/gbg_program.ino.hex
           git commit -am "add compiled files"
           git push
