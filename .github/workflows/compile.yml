@@ -19,8 +19,6 @@ jobs:
           [ -d "./hex" ] && git rm -r ./hex # only delete the directory if it exists
           git commit . -m "BOT update compiled files" --allow-empty
           git push
-          git pull
-          git push
   compile-sketch:
     needs: clear-file-for-saving-info #run second
     strategy:
@@ -73,6 +71,10 @@ jobs:
 
       - name: Compile Sketch
         run: |
+         git config --global user.name 'gbg-with-joysticks'
+         git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+         git pull # get the most recent state of the repo
+
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex since others aren't needed
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
@@ -82,27 +84,23 @@ jobs:
 
       - name: Commit compiled files
         run: |
-          git config --global user.name 'gbg-with-joysticks'
-          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-          git pull # get the most recent state of the repo
-          echo A
-          cd
-          git status
-          echo B
-          echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" > hex/configurations-info.txt
-          echo C
-          git status
-          echo D
-          git add .
-          echo E
-          git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
-          echo F
-          git push
-  complete:
+         echo A
+         git status
+         echo B
+         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" > hex/configurations-info.txt
+         echo C
+         git status
+         echo D
+         git add .
+         echo E
+         git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
+         echo F
+         git push
+  compile-complete: # this job passes if the whole matrix passes
     needs: [ compile-sketch ]
     runs-on: ubuntu-latest
     steps:
-      - name: Complete
+      - name: Compile Complete
         run: |
           echo complete!
     
