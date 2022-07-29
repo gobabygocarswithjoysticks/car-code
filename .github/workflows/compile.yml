@@ -35,25 +35,25 @@ jobs:
             board-upload: "nanoOldBootloader"
             additional-commands: arduino-cli lib install Servo
 
-#          - configName: "standard-uno"
-#            code-dir: gbg_program
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:uno"
-#            board-upload: "uno"
-#            additional-commands: arduino-cli lib install Servo
-#            
-#          - configName: "standard-nanoNew"
-#            code-dir: gbg_program
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nano"
-#            additional-commands: arduino-cli lib install Servo
-#            
-#          - configName: "blink-nano"
-#            code-dir: blink
-#            arduino-platform: "arduino:avr"
-#            board-upload: "nanoOldBootloader"
-#            fqbn: "arduino:avr:nano"
+          - configName: "standard-uno"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:uno"
+            board-upload: "uno"
+            additional-commands: arduino-cli lib install Servo
+            
+          - configName: "standard-nanoNew"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            additional-commands: arduino-cli lib install Servo
+            
+          - configName: "blink-nano"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            board-upload: "nanoOldBootloader"
+            fqbn: "arduino:avr:nano"
              
     runs-on: ubuntu-latest
     steps:
@@ -84,18 +84,13 @@ jobs:
 
       - name: Commit compiled files
         run: |
-         echo A
          git status
-         echo B
-         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" > hex/configurations-info.txt
-         echo C
+         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" >> hex/configurations-info.txt
          git status
-         echo D
          git add .
-         echo E
          git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
-         echo F
          git push
+         
   compile-complete: # this job passes if the whole matrix passes
     needs: [ compile-sketch ]
     runs-on: ubuntu-latest
