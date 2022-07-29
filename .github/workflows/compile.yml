@@ -19,6 +19,8 @@ jobs:
           [ -d "./hex" ] && git rm -r ./hex # only delete the directory if it exists
           git commit . -m "BOT update compiled files" --allow-empty
           git push
+          git pull
+          git push
   compile-sketch:
     needs: clear-file-for-saving-info #run second
     strategy:
@@ -84,9 +86,10 @@ jobs:
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
           echo A
+          cd
           git status
           echo B
-          echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" >> hex/configurations-info.txt
+          echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" > hex/configurations-info.txt
           echo C
           git status
           echo D
