@@ -72,7 +72,7 @@ jobs:
 
       - name: Compile Sketch
         run: |
-         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
+         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex since others aren't needed
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
