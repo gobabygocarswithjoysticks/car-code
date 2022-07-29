@@ -83,10 +83,23 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
+          echo A
           git status
+          echo B
           echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" >> hex/configurations-info.txt
+          echo C
           git status
+          echo D
           git add .
-          
+          echo E
           git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
+          echo F
           git push
+  complete:
+    needs: [ compile-sketch ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Complete
+        run: |
+          echo complete!
+    
