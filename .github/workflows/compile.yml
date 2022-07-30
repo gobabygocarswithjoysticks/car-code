@@ -15,6 +15,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         
   clear-file-for-saving-info:
+    needs: wait-for-any-running-workflows-to-finish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
