@@ -6,6 +6,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  wait-for-any-running-workflows-to-finish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: wait-for-any-running-workflows-to-finish
+      uses: mktcode/consecutive-workflow-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
   clear-file-for-saving-info:
     runs-on: ubuntu-latest
     steps:
