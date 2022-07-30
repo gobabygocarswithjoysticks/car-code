@@ -17,7 +17,7 @@ jobs:
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
           [ -d "./hex" ] && git rm -r ./hex # only delete the directory if it exists
-          git commit . -m "BOT update compiled files" --allow-empty
+          git commit . -m "BOT delete old files" --allow-empty
           git push
   compile-sketch:
     needs: clear-file-for-saving-info #run second
@@ -88,7 +88,7 @@ jobs:
          echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" >> hex/configurations-info.txt
          git status
          git add .
-         git commit --allow-empty -m "BOT update compiled files" # --allow-empty is needed in case the hex file hasn't changed
+         git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
          git push
          
   compile-complete: # this job passes if the whole matrix passes
