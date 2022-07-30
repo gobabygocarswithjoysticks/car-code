@@ -58,13 +58,13 @@ jobs:
             board-upload: "nano"
             additional-commands: arduino-cli lib install Servo
             
-          - configName: "blink-nano"
+          - configName: "blink-nanoNew"
             code-dir: blink
             arduino-platform: "arduino:avr"
-            board-upload: "nanoOldBootloader"
+            board-upload: "nano"
             fqbn: "arduino:avr:nano"
                         
-          - configName: "blink-fast-nano"
+          - configName: "blink-fast-nanoOld"
             code-dir: blink_fast
             arduino-platform: "arduino:avr"
             board-upload: "nanoOldBootloader"
