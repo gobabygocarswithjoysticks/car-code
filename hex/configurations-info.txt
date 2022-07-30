@@ -6,3 +6,4 @@ blink-fast-nano, blink_fast, nanoOldBootloader
 standard-nanoNew, gbg_program, nano
 blink-fast-uno, blink_fast, uno
 blink-nano, blink, nanoOldBootloader
+blink-fast-nano, blink_fast, nanoOldBootloader
