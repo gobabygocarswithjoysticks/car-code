@@ -54,6 +54,18 @@ jobs:
             arduino-platform: "arduino:avr"
             board-upload: "nanoOldBootloader"
             fqbn: "arduino:avr:nano"
+                        
+          - configName: "blink-fast-nano"
+            code-dir: blink_fast
+            arduino-platform: "arduino:avr"
+            board-upload: "nanoOldBootloader"
+            fqbn: "arduino:avr:nano"
+                        
+          - configName: "blink-fast-uno"
+            code-dir: blink_fast
+            arduino-platform: "arduino:avr"
+            board-upload: "uno"
+            fqbn: "arduino:avr:uno"
              
     runs-on: ubuntu-latest
     steps:
