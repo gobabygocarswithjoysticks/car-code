@@ -35,19 +35,19 @@ jobs:
             board-upload: "nanoOldBootloader"
             additional-commands: arduino-cli lib install Servo
 
-          # - configName: "standard-uno"
-          #   code-dir: gbg_program
-          #   arduino-platform: "arduino:avr"
-          #   fqbn: "arduino:avr:uno"
-          #   board-upload: "uno"
-          #   additional-commands: arduino-cli lib install Servo
+          - configName: "standard-uno"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:uno"
+            board-upload: "uno"
+            additional-commands: arduino-cli lib install Servo
             
-          # - configName: "standard-nanoNew"
-          #   code-dir: gbg_program
-          #   arduino-platform: "arduino:avr"
-          #   fqbn: "arduino:avr:nano"
-          #   board-upload: "nano"
-          #   additional-commands: arduino-cli lib install Servo
+          - configName: "standard-nanoNew"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            additional-commands: arduino-cli lib install Servo
             
           - configName: "blink-nano"
             code-dir: blink
