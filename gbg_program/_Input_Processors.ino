@@ -1,6 +1,6 @@
 // returns a value between 0 and 1 after reading a knob
-float InputProcessor_ReadKnob(byte speedKnobPin, int slowVal, int fastVal) {
-  return constrain(floatMap(analogRead(speedKnobPin), slowVal, fastVal, 0, 1), 0, 1);
+float InputProcessor_ReadKnob(byte SPEED_KNOB_PIN, int slowVal, int fastVal) {
+  return constrain(floatMap(analogRead(SPEED_KNOB_PIN), slowVal, fastVal, 0, 1), 0, 1);
 }
 
 void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) {

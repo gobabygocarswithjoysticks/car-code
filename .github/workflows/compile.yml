@@ -13,7 +13,7 @@ jobs:
       uses: mktcode/consecutive-workflow-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        
+
   clear-file-for-saving-info:
     needs: wait-for-any-running-workflows-to-finish
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       matrix:
         # list of programs to compile (can have multiple programs for multiple boards)
         # for additional-commands use | to separate multiple commands, to install library, use arduino-cli lib install <Library>
-        # board-upload must match a board type as defined by https://github.com/dbuezas/arduino-web-uploader 
+        # board-upload must match a board type as defined by https://github.com/dbuezas/arduino-web-uploader
         include:
           - configName: "standard-nanoOld"
             code-dir: gbg_program
@@ -44,38 +44,38 @@ jobs:
             board-upload: "nanoOldBootloader"
             additional-commands: arduino-cli lib install Servo
 
-          - configName: "standard-uno"
-            code-dir: gbg_program
-            arduino-platform: "arduino:avr"
-            fqbn: "arduino:avr:uno"
-            board-upload: "uno"
-            additional-commands: arduino-cli lib install Servo
-            
           - configName: "standard-nanoNew"
             code-dir: gbg_program
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             additional-commands: arduino-cli lib install Servo
-            
+
+          - configName: "standard-uno"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:uno"
+            board-upload: "uno"
+            additional-commands: arduino-cli lib install Servo
+
+          - configName: "blink-nanoOld"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+
           - configName: "blink-nanoNew"
             code-dir: blink
             arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
             board-upload: "nano"
-            fqbn: "arduino:avr:nano"
-                        
-          - configName: "blink-fast-nanoOld"
-            code-dir: blink_fast
+
+          - configName: "blink-uno"
+            code-dir: blink
             arduino-platform: "arduino:avr"
-            board-upload: "nanoOldBootloader"
-            fqbn: "arduino:avr:nano"
-                        
-          - configName: "blink-fast-uno"
-            code-dir: blink_fast
-            arduino-platform: "arduino:avr"
-            board-upload: "uno"
             fqbn: "arduino:avr:uno"
-             
+            board-upload: "uno"
+
     runs-on: ubuntu-latest
     steps:
       - name: Setup Arduino CLI
@@ -111,7 +111,7 @@ jobs:
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
          git push
-         
+
   compile-complete: # this job passes if the whole matrix passes
     needs: [ compile-sketch ]
     runs-on: ubuntu-latest
@@ -119,4 +119,3 @@ jobs:
       - name: Compile Complete
         run: |
           echo complete!
-    
