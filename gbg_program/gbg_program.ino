@@ -1,20 +1,3 @@
-
-/*
-  Wild Things Project
-  Blythedale Children's Hospital
-    Authors:
-      Andres Guerrero
-      Joshua Phelps, 2022 summer volunteer (joshuaphelps127@gmail.com)
-
-    This program reads a joystick and uses two motor drivers to control left and right wheels.
-
-  Version 2:
-    Now with button control!
-    I copied a lot of this code from the jeep's new program.
-    All the calculations have been changed to use float variables instead of raw joystick and motor controller values. The program can still run quickly enough and I think it's easier to work with.
-
-*/
-
 /*
     This program is for controlling modified ride on cars for children who need special kinds of controls like joysticks.
     This program has three types of functions that can be combined together to customize how the car drives.
