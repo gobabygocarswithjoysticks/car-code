@@ -41,7 +41,7 @@ int CONTROL_DOWN = 1023; // use to calibrate joystick (value from the Y axis of 
 int Y_DEADZONE = 150; // radius around center where joystick is considered centered
 
 ///// input processor constants /////
-float ACCELERATION_FORWARD  = 1.0;      //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
+float ACCELERATION_FORWARD  = 9.8;      //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
 float DECELERATION_FORWARD  = 1.5;    //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
 float ACCELERATION_BACKWARD = 0.5;      //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
 float DECELERATION_BACKWARD = 2.5;    //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
