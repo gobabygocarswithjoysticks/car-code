@@ -58,6 +58,9 @@ void settingsSerial() {
       else if (strcmp(k, "SPEED_KNOB_PIN") == 0) SPEED_KNOB_PIN = atoi(v);
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
+      } else if (strcmp(k, "SETTINGS") == 0) {
+        printSettings();
+        changedSomething = false;
       } else {
         Serial.println(F("{\"result\": \"no change\"}"));
         changedSomething = false;
