@@ -51,11 +51,28 @@ void settingsSerial() {
       else if (strcmp(k, "SPEED_KNOB_FAST_VAL") == 0) SPEED_KNOB_FAST_VAL = atoi(v);
       else if (strcmp(k, "PRINT_VARIABLES_INTERVAL_MILLIS") == 0) PRINT_VARIABLES_INTERVAL_MILLIS = atoi(v);
 
-      else if (strcmp(k, "JOY_X_PIN") == 0) JOY_X_PIN = atoi(v);
-      else if (strcmp(k, "JOY_Y_PIN") == 0) JOY_Y_PIN = atoi(v);
-      else if (strcmp(k, "LEFT_MOTOR_CONTROLLER_PIN") == 0) LEFT_MOTOR_CONTROLLER_PIN = atoi(v);
-      else if (strcmp(k, "RIGHT_MOTOR_CONTROLLER_PIN") == 0) RIGHT_MOTOR_CONTROLLER_PIN = atoi(v);
-      else if (strcmp(k, "SPEED_KNOB_PIN") == 0) SPEED_KNOB_PIN = atoi(v);
+      else if (strcmp(k, "JOY_X_PIN") == 0) {
+        JOY_X_PIN = atoi(v);
+        pinMode(JOY_X_PIN, INPUT);
+      } else if (strcmp(k, "JOY_Y_PIN") == 0) {
+        JOY_Y_PIN = atoi(v);
+        pinMode(JOY_Y_PIN, INPUT);
+      } else if (strcmp(k, "LEFT_MOTOR_CONTROLLER_PIN") == 0) {
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        leftMotorController.detach();
+        LEFT_MOTOR_CONTROLLER_PIN = atoi(v);
+        leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+      } else if (strcmp(k, "RIGHT_MOTOR_CONTROLLER_PIN") == 0) {
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+        rightMotorController.detach();
+        RIGHT_MOTOR_CONTROLLER_PIN = atoi(v);
+        rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+      } else if (strcmp(k, "SPEED_KNOB_PIN") == 0) {
+        SPEED_KNOB_PIN = atoi(v);
+        pinMode(SPEED_KNOB_PIN, INPUT);
+      }
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
       } else if (strcmp(k, "SETTINGS") == 0) {
