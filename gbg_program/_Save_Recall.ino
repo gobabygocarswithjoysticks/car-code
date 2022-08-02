@@ -75,6 +75,8 @@ void settingsSerial() {
       }
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
+        changedSomething = false;
+        Serial.println(F("{\"result\": \"saved\"}"));
       } else if (strcmp(k, "SETTINGS") == 0) {
         printSettings();
         changedSomething = false;

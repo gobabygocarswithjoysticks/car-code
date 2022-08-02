@@ -4,6 +4,9 @@ float InputProcessor_ReadKnob(byte SPEED_KNOB_PIN, int slowVal, int fastVal) {
 }
 
 void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) {
+  FASTEST_BACKWARD = abs(FASTEST_BACKWARD);
+  FASTEST_FORWARD = abs(FASTEST_FORWARD);
+  TURN_SPEED = abs(TURN_SPEED);
   speedInput = twoMap(speedInput, -1, 0, 1,/**/ -FASTEST_BACKWARD * speedKnobScaler, 0, 0, FASTEST_FORWARD * speedKnobScaler, 0);
   speedInput = constrain(speedInput, -FASTEST_BACKWARD * speedKnobScaler, FASTEST_FORWARD * speedKnobScaler);
 
