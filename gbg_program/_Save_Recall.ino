@@ -52,7 +52,6 @@ void settingsSerial() {
       else if (strcmp(k, "SPEED_KNOB_SLOW_VAL") == 0) SPEED_KNOB_SLOW_VAL = atoi(v);
       else if (strcmp(k, "SPEED_KNOB_FAST_VAL") == 0) SPEED_KNOB_FAST_VAL = atoi(v);
       else if (strcmp(k, "PRINT_VARIABLES_INTERVAL_MILLIS") == 0) PRINT_VARIABLES_INTERVAL_MILLIS = atoi(v);
-
       else if (strcmp(k, "JOY_X_PIN") == 0) {
         JOY_X_PIN = atoi(v);
         pinMode(JOY_X_PIN, INPUT);
@@ -94,8 +93,7 @@ void settingsSerial() {
 
       if (changedSomething) {
         Serial.print(F("{\"result\": \"change\"")); Serial.print(", ");
-        Serial.print(F("\"setting\": \"")); Serial.print(k); Serial.print("\", ");
-        Serial.print(F("\"value\": \"")); Serial.print(resultBuf); Serial.println("\"}");
+        Serial.print(F("\"setting\": \"")); Serial.print(k); Serial.println("\"}");
       }
 
       bufP = 0;
