@@ -11,6 +11,8 @@ void settingsMemory() {
 char buf[50] = {0};
 byte bufP = 0;
 
+void(* resetFunc) (void) = 0; // resets the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+
 void settingsSerial() {
   char in = Serial.read();
   if (in != -1) {
@@ -80,12 +82,21 @@ void settingsSerial() {
       } else if (strcmp(k, "SETTINGS") == 0) {
         printSettings();
         changedSomething = false;
+      }  else if (strcmp(k, "REVERT") == 0) {
+        EEPROM.write(0, settings_memory_key + 1); // so that on reset the arduino discards EEPROM
+        resetFunc();
+      }  else if (strcmp(k, "REBOOT") == 0) {
+        resetFunc();
       } else {
         Serial.println(F("{\"result\": \"no change\"}"));
         changedSomething = false;
       }
 
-      if (changedSomething) Serial.println(F("{\"result\": \"success\"}"));
+      if (changedSomething) {
+        Serial.print(F("{\"result\": \"change\"")); Serial.print(", ");
+        Serial.print(F("\"setting\": \"")); Serial.print(k); Serial.print("\", ");
+        Serial.print(F("\"value\": \"")); Serial.print(resultBuf); Serial.println("\"}");
+      }
 
       bufP = 0;
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { //removes things like spaces and new line characters
@@ -181,7 +192,7 @@ void recallSettings() {
 }
 
 template <typename T>
-void EEPROMwrite (unsigned int & address, const T& value)
+void EEPROMwrite (unsigned int & address, const T & value)
 {
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   const byte * p = (const byte*) &value;
@@ -191,7 +202,7 @@ void EEPROMwrite (unsigned int & address, const T& value)
 }
 
 template <typename T>
-void EEPROMread (unsigned int & address, T& value)
+void EEPROMread (unsigned int & address, T & value)
 {
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   byte * p = ( byte*) &value;
