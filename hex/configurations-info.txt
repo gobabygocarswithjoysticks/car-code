@@ -3,3 +3,4 @@ standard-nanoNew, gbg_program, nano
 standard-uno, gbg_program, uno
 blink-nanoOld, blink, nanoOldBootloader
 blink-nanoNew, blink, nano
+blink-uno, blink, uno
