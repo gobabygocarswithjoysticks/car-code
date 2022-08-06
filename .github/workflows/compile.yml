@@ -51,13 +51,6 @@ jobs:
             board-upload: "nano"
             additional-commands: arduino-cli lib install Servo
 
-          - configName: "standard-uno"
-            code-dir: gbg_program
-            arduino-platform: "arduino:avr"
-            fqbn: "arduino:avr:uno"
-            board-upload: "uno"
-            additional-commands: arduino-cli lib install Servo
-
           - configName: "blink-nanoOld"
             code-dir: blink
             arduino-platform: "arduino:avr"
@@ -69,12 +62,6 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
-
-          - configName: "blink-uno"
-            code-dir: blink
-            arduino-platform: "arduino:avr"
-            fqbn: "arduino:avr:uno"
-            board-upload: "uno"
 
     runs-on: ubuntu-latest
     steps:
