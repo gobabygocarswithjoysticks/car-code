@@ -9,10 +9,10 @@ boolean printVariables(int interval) {
     Serial.print(F("\"joyYVal\": ")); Serial.print(joyYVal); Serial.print(", ");
     Serial.print(F("\"turnInput\": ")); Serial.print(turnInput, 4); Serial.print(", ");
     Serial.print(F("\"speedInput\": ")); Serial.print(speedInput, 4); Serial.print(", ");
+    Serial.print(F("\"turnProcessed\": ")); Serial.print(turnProcessed, 4); Serial.print(", ");
+    Serial.print(F("\"speedProcessed\": ")); Serial.print(speedProcessed, 4); Serial.print(", ");
     Serial.print(F("\"turnToDrive\": ")); Serial.print(turnToDrive, 4); Serial.print(", ");
     Serial.print(F("\"speedToDrive\": ")); Serial.print(speedToDrive, 4); Serial.print(", ");
-    Serial.print(F("\"turnProcessed\": ")); Serial.print(turnToDrive, 4); Serial.print(", ");
-    Serial.print(F("\"speedProcessed\": ")); Serial.print(speedToDrive, 4); Serial.print(", ");
     Serial.print(F("\"leftMotorWriteVal\": ")); Serial.print(leftMotorWriteVal); Serial.print(", ");
     Serial.print(F("\"rightMotorWriteVal\": ")); Serial.print(rightMotorWriteVal); Serial.print(", ");
     Serial.print(F("\"speedKnobScaler\": ")); Serial.print(speedKnobScaler, 4); //Serial.print(", ");
