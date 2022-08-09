@@ -68,13 +68,13 @@ void settingsSerial() {
         DECELERATION_TURNING = abs(atof(v));
         dtostrf(DECELERATION_TURNING, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_FORWARD") == 0) {
-        FASTEST_FORWARD = abs(atof(v));
+        FASTEST_FORWARD = constrain(abs(atof(v)), 0, 1);
         dtostrf(FASTEST_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_BACKWARD") == 0) {
-        FASTEST_BACKWARD = abs(atof(v));
+        FASTEST_BACKWARD = constrain(abs(atof(v)), 0, 1);
         dtostrf(FASTEST_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "TURN_SPEED") == 0) {
-        TURN_SPEED = abs(atof(v));
+        TURN_SPEED = constrain(abs(atof(v)), 0, 1);
         dtostrf(TURN_SPEED, 0, 4, resultBuf);
       } else if (strcmp(k, "SCALE_TURNING_WHEN_MOVING") == 0) {
         SCALE_TURNING_WHEN_MOVING = atof(v);
