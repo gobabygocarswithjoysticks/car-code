@@ -15,7 +15,7 @@ boolean printVariables(int interval) {
     Serial.print(F("\"speedToDrive\": ")); Serial.print(speedToDrive, 4); Serial.print(", ");
     Serial.print(F("\"leftMotorWriteVal\": ")); Serial.print(leftMotorWriteVal); Serial.print(", ");
     Serial.print(F("\"rightMotorWriteVal\": ")); Serial.print(rightMotorWriteVal); Serial.print(", ");
-    Serial.print(F("\"speedKnobScaler\": ")); Serial.print(speedKnobScaler, 4); //Serial.print(", ");
+    Serial.print(F("\"speedKnobVal\": ")); Serial.print(speedKnobVal); //Serial.print(", ");
     Serial.println("}");
     return true;
   }
@@ -43,7 +43,6 @@ void printSettings() {
   Serial.print(F("\"FASTEST_BACKWARD\": "));  Serial.print(FASTEST_BACKWARD, 4); Serial.print(", ");
   Serial.print(F("\"TURN_SPEED\": "));  Serial.print(TURN_SPEED, 4); Serial.print(", ");
   Serial.print(F("\"SCALE_TURNING_WHEN_MOVING\": "));  Serial.print(SCALE_TURNING_WHEN_MOVING, 4); Serial.print(", ");
-  Serial.print(F("\"SCALE_ACCEL_WITH_SPEED\": "));  Serial.print(SCALE_ACCEL_WITH_SPEED ? "true" : "false"); Serial.print(", ");
   Serial.print(F("\"REVERSE_TURN_IN_REVERSE\": "));  Serial.print(REVERSE_TURN_IN_REVERSE ? "true" : "false"); Serial.print(", ");
   Serial.print(F("\"LEFT_MOTOR_CENTER\": "));  Serial.print(LEFT_MOTOR_CENTER); Serial.print(", ");
   Serial.print(F("\"LEFT_MOTOR_SLOW\": "));  Serial.print(LEFT_MOTOR_SLOW); Serial.print(", ");
@@ -54,13 +53,13 @@ void printSettings() {
   Serial.print(F("\"USE_SPEED_KNOB\": "));  Serial.print(USE_SPEED_KNOB ? "true" : "false"); Serial.print(", ");
   Serial.print(F("\"SPEED_KNOB_SLOW_VAL\": "));  Serial.print(SPEED_KNOB_SLOW_VAL); Serial.print(", ");
   Serial.print(F("\"SPEED_KNOB_FAST_VAL\": "));  Serial.print(SPEED_KNOB_FAST_VAL); Serial.print(", ");
+  Serial.print(F("\"SCALE_ACCEL_WITH_SPEED\": "));  Serial.print(SCALE_ACCEL_WITH_SPEED ? "true" : "false"); Serial.print(", ");
+  Serial.print(F("\"SPEED_KNOB_PIN\": "));  Serial.print(SPEED_KNOB_PIN); Serial.print(", ");
   Serial.print(F("\"PRINT_VARIABLES_INTERVAL_MILLIS\": "));  Serial.print(PRINT_VARIABLES_INTERVAL_MILLIS); Serial.print(", ");
-
   Serial.print(F("\"JOY_X_PIN\": "));  Serial.print(JOY_X_PIN); Serial.print(", ");
   Serial.print(F("\"JOY_Y_PIN\": "));  Serial.print(JOY_Y_PIN); Serial.print(", ");
   Serial.print(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "));  Serial.print(LEFT_MOTOR_CONTROLLER_PIN); Serial.print(", ");
-  Serial.print(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); Serial.print(", ");
-  Serial.print(F("\"SPEED_KNOB_PIN\": "));  Serial.print(SPEED_KNOB_PIN); // Serial.print(", ");
+  Serial.print(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); //Serial.print(", ");
   Serial.println("}");
 
 }

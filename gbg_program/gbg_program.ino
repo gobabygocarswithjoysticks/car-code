@@ -17,6 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// "CONSTANTS" (change to calibrate and customize a car for a child) ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ///// joystick input reader constants /////
 int CONTROL_RIGHT = 632; // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 509; // use to calibrate joystick (value from the X axis of the joystick when it is centered)
@@ -73,7 +74,6 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 5;
 
 byte SPEED_KNOB_PIN = A4;
 
-
 //const byte buttonControlPin = 12;
 //
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
@@ -119,8 +119,8 @@ float turnToDrive = 0;
 float speedProcessed = 0;
 float turnProcessed = 0;
 
+int speedKnobVal = -1; //raw value
 float speedKnobScaler = 1;
-
 
 ///// servo signal values sent to motor controllers /////
 int leftMotorWriteVal = LEFT_MOTOR_CENTER;
@@ -194,7 +194,7 @@ void loop()
     float InputProcessor_LimitAccelerationTwoSettings(float velocity, float velocityTarget, float scale, float ACCELERATION, float DECELERATION, float timeInterval)
     float InputProcessor_LimitAccelerationOneSetting(float velocity, float velocityTarget, float scale, float ACCEL, float timeInterval)
 
-    float InputProcessor_ReadSpeedKnob(byte SPEED_KNOB_PIN, int slowVal, int fastVal)
+    float InputProcessor_ReadSpeedKnob(byte SPEED_KNOB_PIN, int slowVal, int fastVal, int& raw)
 
     float InputProcessor_ScaleTurningWhenMoving(float stwm, float x, float y)
 
@@ -209,7 +209,9 @@ void loop()
 
   /// scale based on speed knob and speed limits ///
   if (USE_SPEED_KNOB) {
-    speedKnobScaler = InputProcessor_ReadKnob(SPEED_KNOB_PIN, SPEED_KNOB_SLOW_VAL, SPEED_KNOB_FAST_VAL);
+    speedKnobScaler = InputProcessor_ReadKnob(SPEED_KNOB_PIN, SPEED_KNOB_SLOW_VAL, SPEED_KNOB_FAST_VAL, speedKnobVal);
+  } else {
+    speedKnobScaler = 1.0;
   }
   InputProcessor_ScaleInput(speedKnobScaler, turnProcessed, speedProcessed, FASTEST_FORWARD, FASTEST_BACKWARD, TURN_SPEED);
 
@@ -219,9 +221,13 @@ void loop()
     turnProcessed = -turnProcessed;
   }
 
-  speedToDrive = InputProcessor_LimitAccelerationFourSettings(speedToDrive, speedProcessed, (SCALE_ACCEL_WITH_SPEED ? speedKnobScaler : 1.0) , ACCELERATION_FORWARD, DECELERATION_FORWARD, ACCELERATION_BACKWARD, DECELERATION_BACKWARD, timeInterval);
-  turnToDrive = InputProcessor_LimitAccelerationTwoSettings(turnToDrive, turnProcessed, speedKnobScaler, ACCELERATION_TURNING, DECELERATION_TURNING, timeInterval);
-
+  speedToDrive = InputProcessor_LimitAccelerationFourSettings(speedToDrive, speedProcessed, (SCALE_ACCEL_WITH_SPEED ? speedKnobScaler : 1.0), ACCELERATION_FORWARD, DECELERATION_FORWARD, ACCELERATION_BACKWARD, DECELERATION_BACKWARD, timeInterval);
+  turnToDrive = InputProcessor_LimitAccelerationTwoSettings(turnToDrive, turnProcessed, (SCALE_ACCEL_WITH_SPEED ? speedKnobScaler : 1.0), ACCELERATION_TURNING, DECELERATION_TURNING, timeInterval);
+  if (USE_SPEED_KNOB) {
+    // force the speed to be below the speedKnobScaler (if turning the knob to slow, acceleration doesn't matter, it slows down right away)
+    speedToDrive = constrain(speedToDrive, -speedKnobScaler, speedKnobScaler);
+    turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
+  }
   ////////////////////////////// PUT THE DRIVE CONTROLLER HERE //////////////////////
   /**
     void DriveController_TwoSideDrive(float turnToDrive, float speedToDrive, int& leftMotorWrite, int& rightMotorWrite, int LEFT_MOTOR_CENTER, int LEFT_MOTOR_SLOW, int LEFT_MOTOR_FAST, int RIGHT_MOTOR_CENTER, int RIGHT_MOTOR_SLOW, int RIGHT_MOTOR_FAST)
