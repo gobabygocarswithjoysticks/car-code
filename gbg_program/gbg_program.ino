@@ -22,12 +22,12 @@
 int CONTROL_RIGHT = 632; // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 509; // use to calibrate joystick (value from the X axis of the joystick when it is centered)
 int CONTROL_LEFT = 385; // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 25; // radius around center where joystick is considered centered
+int X_DEADZONE = 10; // radius around center where joystick is considered centered
 
 int CONTROL_UP = 638; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
 int CONTROL_CENTER_Y = 511; // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
 int CONTROL_DOWN = 380; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 25; // radius around center where joystick is considered centered
+int Y_DEADZONE = 10; // radius around center where joystick is considered centered
 
 ///// input processor constants /////
 float ACCELERATION_FORWARD  = 2.0; //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
@@ -166,9 +166,10 @@ void setupPins() {
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
   rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
 
-
   leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);//tell the motor controller to not move
   rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
+
+  delay(2000);
 }
 void loop()
 {

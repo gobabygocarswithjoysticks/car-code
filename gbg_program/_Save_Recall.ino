@@ -8,12 +8,12 @@ void settingsMemory() {
   recallSettings();
 }
 
-char buf[50] = {0};
+char buf[50] = {0}; // buffer to fill with Serial input
 byte bufP = 0;
 
-char resultBuf[15] = {0};
+char resultBuf[15] = {0};  // for replying with the received value
 
-void(* resetFunc) (void) = 0; // resets the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+void(* resetFunc) (void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
 
 void settingsSerial() {
   char in = Serial.read();
