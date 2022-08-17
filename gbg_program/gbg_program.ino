@@ -169,7 +169,7 @@ void setupPins() {
   leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);//tell the motor controller to not move
   rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
 
-  delay(2000);
+  delay(2521); // wait for escs to calibrate
 }
 void loop()
 {
