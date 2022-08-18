@@ -138,16 +138,19 @@ Servo rightMotorController;
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used.
-const byte settings_memory_key = 0;
+const byte settings_memory_key = 5;
 #include <EEPROM.h>
 
 const int version_number = 1; // for interaction with website
 
 const boolean use_memory = true; // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
+boolean movementAllowed = true;
+
 void setup()
 {
   Serial.begin(115200);
+  Serial.println();
 
   if (use_memory)
     settingsMemory();
@@ -235,9 +238,13 @@ void loop()
 
   */
   DriveController_TwoSideDrive(turnToDrive, speedToDrive, leftMotorWriteVal, rightMotorWriteVal, LEFT_MOTOR_CENTER, LEFT_MOTOR_SLOW, LEFT_MOTOR_FAST, RIGHT_MOTOR_CENTER, RIGHT_MOTOR_SLOW, RIGHT_MOTOR_FAST);
-  leftMotorController.writeMicroseconds(leftMotorWriteVal);
-  rightMotorController.writeMicroseconds(rightMotorWriteVal);
-
+  if (movementAllowed) {
+    leftMotorController.writeMicroseconds(leftMotorWriteVal);
+    rightMotorController.writeMicroseconds(rightMotorWriteVal);
+    digitalWrite(LED_BUILTIN, LOW);
+  } else {
+    digitalWrite(LED_BUILTIN, HIGH);
+  }
   //////////////////////////////////////////////////////////////////////////////////
 
   if (  printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {

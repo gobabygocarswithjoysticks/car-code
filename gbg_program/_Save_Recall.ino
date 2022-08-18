@@ -1,8 +1,12 @@
-const unsigned int address_start = 1; // can be used to reserve some space at the start for values other than settings like the settings_memory_key.
+const unsigned int repeat_space = 150; // space between each copy of a variable
 
 void settingsMemory() {
-  if (EEPROM.read(0) != settings_memory_key) {
-    EEPROM.write(0, settings_memory_key);
+  byte settingsMemoryKeyRead; // the read value
+  unsigned int settingsMemoryKeyReadAddress = 0;
+  EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
+  if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
+    settingsMemoryKeyReadAddress = 0;
+    EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
     saveSettings();
   }
   recallSettings();
@@ -160,10 +164,19 @@ void settingsSerial() {
         printSettings();
         changedSomething = false;
       }  else if (strcmp(k, "REVERT") == 0) {
-        EEPROM.write(0, settings_memory_key + 1); // so that on reset the arduino discards EEPROM
+        unsigned int settingsMemoryKeyAddr = 4;
+        EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1); // so that on reset the arduino discards EEPROM
         resetFunc();
       }  else if (strcmp(k, "REBOOT") == 0) {
         resetFunc();
+      }  else if (strcmp(k, "G") == 0) {
+        changedSomething = false;
+        movementAllowed = true;
+        Serial.println(F("{\"result\": \"movement allowed\"}"));
+      }  else if (strcmp(k, "S") == 0) {
+        changedSomething = false;
+        movementAllowed = false;
+        Serial.println(F("{\"result\": \"stopped\"}"));
       } else {
         Serial.println(F("{\"result\": \"no change\"}"));
         changedSomething = false;
@@ -186,7 +199,7 @@ void settingsSerial() {
 }
 
 void saveSettings() {
-  unsigned int addressW = address_start;
+  unsigned int addressW = 1;
 
   EEPROMwrite(addressW, CONTROL_RIGHT);
   EEPROMwrite(addressW, CONTROL_CENTER_X);
@@ -227,7 +240,7 @@ void saveSettings() {
 
 }
 void recallSettings() {
-  unsigned int addressR = address_start;
+  unsigned int addressR = 1;
 
   EEPROMread(addressR, CONTROL_RIGHT);
   EEPROMread(addressR, CONTROL_CENTER_X);
@@ -265,7 +278,6 @@ void recallSettings() {
   EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, SPEED_KNOB_PIN);
-
 }
 
 template <typename T>
@@ -274,7 +286,12 @@ void EEPROMwrite (unsigned int & address, const T & value)
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   const byte * p = (const byte*) &value;
   for (unsigned int i = 0; i < sizeof value; i++) {
-    EEPROM.update(address++, *p++);
+    EEPROM.update(address, *p);
+    EEPROM.update(address + repeat_space, *p);
+    EEPROM.update(address + repeat_space * 2, *p);
+    // writes 3 copies
+    address++;
+    *p++;
   }
 }
 
@@ -284,6 +301,22 @@ void EEPROMread (unsigned int & address, T & value)
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   byte * p = ( byte*) &value;
   for (unsigned int i = 0; i < sizeof value; i++) {
-    *p++ = EEPROM.read(address++);
+    byte a = EEPROM.read(address);
+    byte b = EEPROM.read(address + repeat_space);
+    byte c = EEPROM.read(address + repeat_space * 2);
+    // majority voting
+    if (a == b && b == c) { //and a==c, so all agree
+      *p = a; // a normal read
+    } else { // disagreement, correct the corrupted bit (if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely)
+
+      Serial.print(F("{\"debug\": \"EEPROM corrected\"")); Serial.print(", ");
+      Serial.print(F("\"address\": \"")); Serial.print(address); Serial.println("\"}");
+      *p = (a & b) | (b & c) | (c & a); //bitwise majority https://stackoverflow.com/a/29892322
+      EEPROM.update(address, *p); // replace all three copies with the majority value
+      EEPROM.update(address + repeat_space, *p);
+      EEPROM.update(address + repeat_space * 2, *p);
+    }
+    address++;
+    *p++;
   }
 }
