@@ -19,6 +19,8 @@ char resultBuf[15] = {0};  // for replying with the received value
 
 void(* resetFunc) (void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
 
+uint32_t eepromCRC = 0;
+
 void settingsSerial() {
   char in = Serial.read();
   if (in != -1) {
@@ -164,7 +166,7 @@ void settingsSerial() {
         printSettings();
         changedSomething = false;
       }  else if (strcmp(k, "REVERT") == 0) {
-        unsigned int settingsMemoryKeyAddr = 4;
+        unsigned int settingsMemoryKeyAddr = 0;
         EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1); // so that on reset the arduino discards EEPROM
         resetFunc();
       }  else if (strcmp(k, "REBOOT") == 0) {
@@ -177,6 +179,22 @@ void settingsSerial() {
         changedSomething = false;
         movementAllowed = false;
         Serial.println(F("{\"result\": \"stopped\"}"));
+      }  else if (strcmp(k, "C1") == 0) { // todo: remove
+        changedSomething = false;
+
+
+        EEPROM.write(random(0, 460), random(0, 256));
+
+
+
+      }  else if (strcmp(k, "C2") == 0) { // todo: remove
+        changedSomething = false;
+
+        byte r = random(0, 150);
+        EEPROM.write(r, 56);
+        EEPROM.write(r + 150, 56);
+
+
       } else {
         Serial.println(F("{\"result\": \"no change\"}"));
         changedSomething = false;
@@ -200,6 +218,7 @@ void settingsSerial() {
 
 void saveSettings() {
   unsigned int addressW = 1;
+  eepromCRC = 0;
 
   EEPROMwrite(addressW, CONTROL_RIGHT);
   EEPROMwrite(addressW, CONTROL_CENTER_X);
@@ -238,9 +257,11 @@ void saveSettings() {
   EEPROMwrite(addressW, RIGHT_MOTOR_CONTROLLER_PIN);
   EEPROMwrite(addressW, SPEED_KNOB_PIN);
 
+  EEPROMwrite(addressW, eepromCRC);
 }
 void recallSettings() {
   unsigned int addressR = 1;
+  eepromCRC = 0;
 
   EEPROMread(addressR, CONTROL_RIGHT);
   EEPROMread(addressR, CONTROL_CENTER_X);
@@ -278,21 +299,56 @@ void recallSettings() {
   EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, SPEED_KNOB_PIN);
+
+  uint32_t tempEepromCRC = eepromCRC;
+  uint32_t readCRC = 0;
+  EEPROMread(addressR, readCRC);
+
+  if (tempEepromCRC != readCRC) {
+    Serial.println(F("{\"error\": \"eeprom failure\"}"));
+    // stop sending any signals out of the pins so ESCs stop (set all to inputs, even if it's on a Mega)
+    for (byte pin = 2; pin <= 100; pin++) {
+      pinMode(pin, INPUT);
+      digitalWrite(pin, LOW);
+    }
+    pinMode(LED_BUILTIN, OUTPUT);
+    while (true) { // flash SOS forever
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      delay(400);
+      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
+      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
+      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
+      delay(400);
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
+      delay(1000);
+      if (Serial.readStringUntil(',').equals("RESCUE-BROKEN-EEPROM")) { //revert to defaults
+        EEPROM.write(0, 255); EEPROM.write(repeat_space, 255); EEPROM.write(repeat_space * 2, 255);
+        resetFunc();
+      }
+    }
+  }
 }
 
 template <typename T>
 void EEPROMwrite (unsigned int & address, const T & value)
 {
+  uint32_t tempEepromCRC = eepromCRC;
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   const byte * p = (const byte*) &value;
   for (unsigned int i = 0; i < sizeof value; i++) {
     EEPROM.update(address, *p);
     EEPROM.update(address + repeat_space, *p);
     EEPROM.update(address + repeat_space * 2, *p);
+    tempEepromCRC = crc_update(tempEepromCRC, *p);
     // writes 3 copies
     address++;
     *p++;
   }
+  eepromCRC = tempEepromCRC;
 }
 
 template <typename T>
@@ -308,15 +364,32 @@ void EEPROMread (unsigned int & address, T & value)
     if (a == b && b == c) { //and a==c, so all agree
       *p = a; // a normal read
     } else { // disagreement, correct the corrupted bit (if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely)
-
-      Serial.print(F("{\"debug\": \"EEPROM corrected\"")); Serial.print(", ");
-      Serial.print(F("\"address\": \"")); Serial.print(address); Serial.println("\"}");
       *p = (a & b) | (b & c) | (c & a); //bitwise majority https://stackoverflow.com/a/29892322
       EEPROM.update(address, *p); // replace all three copies with the majority value
       EEPROM.update(address + repeat_space, *p);
       EEPROM.update(address + repeat_space * 2, *p);
+      digitalWrite(LED_BUILTIN, LOW); delay(100); digitalWrite(LED_BUILTIN, HIGH); delay(100);
     }
+    eepromCRC = crc_update(eepromCRC, *p);
     address++;
     *p++;
   }
+}
+
+// for calculating checksum of EEPROM data
+//https://forum.arduino.cc/t/fixed-working-arduino-crc-32-code/89249/5
+const uint32_t PROGMEM  crc_table[16] = {
+  0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+  0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+  0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+  0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
+};
+uint32_t crc_update(uint32_t crc, byte data)
+{
+  byte tbl_idx;
+  tbl_idx = crc ^ (data >> (0 * 4));
+  crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
+  tbl_idx = crc ^ (data >> (1 * 4));
+  crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
+  return crc;
 }

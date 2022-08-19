@@ -137,7 +137,7 @@ Servo rightMotorController;
 
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
-//change this key if you want changes to the hardcoded settings to be used.
+//change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
 const byte settings_memory_key = 5;
 #include <EEPROM.h>
 
@@ -150,7 +150,7 @@ boolean movementAllowed = true;
 void setup()
 {
   Serial.begin(115200);
-
+  digitalWrite(LED_BUILTIN, LOW);
   if (use_memory)
     settingsMemory();
 
@@ -240,9 +240,6 @@ void loop()
   if (movementAllowed) {
     leftMotorController.writeMicroseconds(leftMotorWriteVal);
     rightMotorController.writeMicroseconds(rightMotorWriteVal);
-    digitalWrite(LED_BUILTIN, LOW);
-  } else {
-    digitalWrite(LED_BUILTIN, HIGH);
   }
   //////////////////////////////////////////////////////////////////////////////////
 
