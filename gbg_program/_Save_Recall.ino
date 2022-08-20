@@ -306,6 +306,8 @@ void recallSettings() {
 
   if (tempEepromCRC != readCRC) {
     Serial.println(F("{\"error\": \"eeprom failure\"}"));
+    leftMotorController.detach();
+    rightMotorController.detach();
     // stop sending any signals out of the pins so ESCs stop (set all to inputs, even if it's on a Mega)
     for (byte pin = 2; pin <= 100; pin++) {
       pinMode(pin, INPUT);
