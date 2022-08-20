@@ -178,6 +178,8 @@ void settingsSerial() {
       }  else if (strcmp(k, "S") == 0) {
         changedSomething = false;
         movementAllowed = false;
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         Serial.println(F("{\"result\": \"stopped\"}"));
       }  else if (strcmp(k, "C1") == 0) { // todo: remove
         changedSomething = false;
