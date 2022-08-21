@@ -65,8 +65,8 @@ int PRINT_VARIABLES_INTERVAL_MILLIS = 100; // or -1 makes it not print variables
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
 ///// joystick reader pins /////
-byte JOY_X_PIN = A0; // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A2; // Analog input pin that the forwards-backwards potentiometer is attached to
+byte JOY_X_PIN = A2; // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = A0; // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
