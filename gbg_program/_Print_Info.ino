@@ -16,7 +16,8 @@ boolean printVariables(int interval) {
     Serial.print(F("\"leftMotorWriteVal\": ")); Serial.print(leftMotorWriteVal); Serial.print(", ");
     Serial.print(F("\"rightMotorWriteVal\": ")); Serial.print(rightMotorWriteVal); Serial.print(", ");
     Serial.print(F("\"speedKnobVal\": ")); Serial.print(speedKnobVal); Serial.print(", ");
-    Serial.print(F("\"movementAllowed\": ")); Serial.print(movementAllowed ? "true" : "false");// Serial.print(", ");
+    Serial.print(F("\"movementAllowed\": ")); Serial.print(movementAllowed ? "true" : "false"); Serial.print(", ");
+    Serial.print(F("\"joyOK\": ")); Serial.print(joyOK ? "true" : "false");// Serial.print(", ");
     Serial.println("}");
     return true;
   }

@@ -22,12 +22,12 @@
 int CONTROL_RIGHT = 632; // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 509; // use to calibrate joystick (value from the X axis of the joystick when it is centered)
 int CONTROL_LEFT = 385; // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 10; // radius around center where joystick is considered centered
+int X_DEADZONE = 25; // radius around center where joystick is considered centered
 
 int CONTROL_UP = 638; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
 int CONTROL_CENTER_Y = 511; // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
 int CONTROL_DOWN = 380; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 10; // radius around center where joystick is considered centered
+int Y_DEADZONE = 25; // radius around center where joystick is considered centered
 
 ///// input processor constants /////
 float ACCELERATION_FORWARD  = 2.0; //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
@@ -147,6 +147,9 @@ const boolean use_memory = true; // recall and save settings from EEPROM, and al
 
 boolean movementAllowed = true;
 
+boolean joyOK = false; // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
+long joystickCenterCounter = 0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -170,8 +173,7 @@ void setupPins() {
 
   leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);//tell the motor controller to not move
   rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
-
-  delay(2521); // wait for escs to calibrate
+  delay(100);
 }
 void loop()
 {
@@ -237,6 +239,21 @@ void loop()
 
   */
   DriveController_TwoSideDrive(turnToDrive, speedToDrive, leftMotorWriteVal, rightMotorWriteVal, LEFT_MOTOR_CENTER, LEFT_MOTOR_SLOW, LEFT_MOTOR_FAST, RIGHT_MOTOR_CENTER, RIGHT_MOTOR_SLOW, RIGHT_MOTOR_FAST);
+
+  if (!joyOK || millis() < 3000) { // wait for joystick to become ok. Also wait for 3 seconds for the ESCs to calibrate
+    leftMotorWriteVal = LEFT_MOTOR_CENTER;
+    rightMotorWriteVal = RIGHT_MOTOR_CENTER;
+    delay(1);
+    if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
+      joystickCenterCounter++;
+      if (joystickCenterCounter > 800) { // joystick must be centered for this long
+        joyOK = true;
+      }
+    } else {
+      joystickCenterCounter = 0;
+    }
+  }
+
   if (movementAllowed) {
     leftMotorController.writeMicroseconds(leftMotorWriteVal);
     rightMotorController.writeMicroseconds(rightMotorWriteVal);
