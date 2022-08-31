@@ -1,10 +1,11 @@
 #include <EEPROM.h>
 void setup() {
-  pinMode(13, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 255);
-  }
-  digitalWrite(13, HIGH);
+  }  digitalWrite(LED_BUILTIN, LOW);
+
 }
 void loop() {
 }
