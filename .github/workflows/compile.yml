@@ -51,14 +51,14 @@ jobs:
             board-upload: "nano"
             additional-commands: arduino-cli lib install Servo
 
-          - configName: "blink-nanoOld"
-            code-dir: blink
+          - configName: "clear_eeprom-nanoOld"
+            code-dir: clear_eeprom
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
 
-          - configName: "blink-nanoNew"
-            code-dir: blink
+          - configName: "clear_eeprom-nanoNew"
+            code-dir: clear_eeprom
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
