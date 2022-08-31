@@ -181,22 +181,6 @@ void settingsSerial() {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         Serial.println(F("{\"result\": \"stopped\"}"));
-      }  else if (strcmp(k, "C1") == 0) { // todo: remove
-        changedSomething = false;
-
-
-        EEPROM.write(random(0, 460), random(0, 256));
-
-
-
-      }  else if (strcmp(k, "C2") == 0) { // todo: remove
-        changedSomething = false;
-
-        byte r = random(0, 150);
-        EEPROM.write(r, 56);
-        EEPROM.write(r + 150, 56);
-
-
       } else {
         Serial.println(F("{\"result\": \"no change\"}"));
         changedSomething = false;
