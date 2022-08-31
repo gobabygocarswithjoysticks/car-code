@@ -307,15 +307,21 @@ void recallSettings() {
   EEPROMread(addressR, readCRC);
 
   if (tempEepromCRC != readCRC) {
+    delay(50);
     Serial.println(F("{\"error\": \"eeprom failure\"}"));
-    leftMotorController.detach();
-    rightMotorController.detach();
+    delay(50);
+    if (leftMotorController.attached())
+      leftMotorController.detach();
+    if (rightMotorController.attached())
+      rightMotorController.detach();
+    delay(100);
     // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
     for (byte pin = 2; pin <= 100; pin++) {
       pinMode(pin, INPUT);
       digitalWrite(pin, LOW);
     }
     pinMode(LED_BUILTIN, OUTPUT);
+    delay(50);
     while (true) { // flash SOS forever
       digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
       digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
