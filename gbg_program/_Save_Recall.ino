@@ -310,7 +310,7 @@ void recallSettings() {
     Serial.println(F("{\"error\": \"eeprom failure\"}"));
     leftMotorController.detach();
     rightMotorController.detach();
-    // stop sending any signals out of the pins so ESCs stop (set all to inputs, even if it's on a Mega)
+    // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
     for (byte pin = 2; pin <= 100; pin++) {
       pinMode(pin, INPUT);
       digitalWrite(pin, LOW);
@@ -329,10 +329,6 @@ void recallSettings() {
       digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
       digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
       delay(1000);
-      if (Serial.readStringUntil(',').equals("RESCUE-BROKEN-EEPROM")) { //revert to defaults
-        EEPROM.write(0, 255); EEPROM.write(repeat_space, 255); EEPROM.write(repeat_space * 2, 255);
-        resetFunc();
-      }
     }
   }
 }
