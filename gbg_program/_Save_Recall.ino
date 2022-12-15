@@ -195,7 +195,7 @@ void settingsSerial() {
       bufP = 0;
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { //removes things like spaces and new line characters
       buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
-      if (bufP + 2 < sizeof buf) {
+      if ((uint8_t)(bufP + 2) < sizeof buf) {
         bufP++; // don't go outside the buffer, leaving the last position always unused
       }
     }
@@ -336,7 +336,7 @@ void EEPROMwrite (unsigned int & address, const T & value)
     tempEepromCRC = crc_update(tempEepromCRC, *p);
     // writes 3 copies
     address++;
-    *p++;
+    p++;
   }
   eepromCRC = tempEepromCRC;
 }
@@ -362,7 +362,7 @@ void EEPROMread (unsigned int & address, T & value)
     }
     eepromCRC = crc_update(eepromCRC, *p);
     address++;
-    *p++;
+    p++;
   }
 }
 

@@ -1,7 +1,8 @@
 /*
-    This program is for controlling modified ride on cars for children who need special kinds of controls like joysticks.
+    This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
     Questions or comments? Please email gobabygocarswithjoysticks@gmail.com.
+    Website that can upload and configure this code: https://gobabygocarswithjoysticks.github.io/programmer/
 
     This program has three types of functions that can be combined together to customize how the car drives.
         Input readers       -   get control inputs from the child
@@ -252,6 +253,16 @@ void loop()
     } else {
       joystickCenterCounter = 0;
     }
+  }
+
+  static bool startupPulse = true;
+  if (startupPulse && joyOK && millis() >= 3000) {
+    startupPulse = false;
+    leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + LEFT_MOTOR_SLOW);
+    rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + RIGHT_MOTOR_SLOW);
+    delay(100); // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
+    leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+    rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
   }
 
   if (movementAllowed) {
