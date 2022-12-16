@@ -258,11 +258,15 @@ void loop()
   static bool startupPulse = true;
   if (startupPulse && joyOK && millis() >= 3000) {
     startupPulse = false;
-    leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + 90);
-    rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + 90);
+    if (movementAllowed) { // don't pulse if the website says don't move
+      leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + 90);
+      rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + 90);
+    }
     delay(150); // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
-    leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
-    rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+    if (movementAllowed) {
+      leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+      rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+    }
   }
 
   if (movementAllowed) {
