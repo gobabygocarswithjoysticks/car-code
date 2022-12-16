@@ -1,4 +1,0 @@
-standard-nanoOld, gbg_program, nanoOldBootloader
-standard-nanoNew, gbg_program, nano
-clear_eeprom-nanoOld, clear_eeprom, nanoOldBootloader
-clear_eeprom-nanoNew, clear_eeprom, nano
