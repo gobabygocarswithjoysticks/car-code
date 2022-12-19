@@ -151,8 +151,6 @@ boolean movementAllowed = true;
 boolean joyOK = false;  // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
 long joystickCenterCounter = 0;
 
-void setup()
-{
 void setup() {
   Serial.begin(115200);
   digitalWrite(LED_BUILTIN, LOW);
