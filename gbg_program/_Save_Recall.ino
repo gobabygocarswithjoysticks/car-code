@@ -1,10 +1,10 @@
-const unsigned int repeat_space = 150; // space between each copy of a variable
+const unsigned int repeat_space = 150;  // space between each copy of a variable
 
 void settingsMemory() {
-  byte settingsMemoryKeyRead; // the read value
+  byte settingsMemoryKeyRead;  // the read value
   unsigned int settingsMemoryKeyReadAddress = 0;
   EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
-  if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
+  if (settingsMemoryKeyRead != settings_memory_key) {  // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
     settingsMemoryKeyReadAddress = 0;
     EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
     saveSettings();
@@ -12,12 +12,12 @@ void settingsMemory() {
   recallSettings();
 }
 
-char buf[50] = {0}; // buffer to fill with Serial input
 byte bufP = 0;
+char buf[50] = { 0 };  // buffer to fill with Serial input
 
-char resultBuf[15] = {0};  // for replying with the received value
+char resultBuf[15] = { 0 };  // for replying with the received value
 
-void(* resetFunc) (void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+void (*resetFunc)(void) = 0;  // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
 
 uint32_t eepromCRC = 0;
 
@@ -25,11 +25,11 @@ void settingsSerial() {
   char in = Serial.read();
   if (in != -1) {
     if (in == ',') {
-      buf[bufP] = 0; // null terminator
+      buf[bufP] = 0;  // null terminator
       //process new input
       char *k = strtok(buf, ":,");
       char *v = strtok(0, ":,");
-      boolean changedSomething = true; // used to see if a valid command was found
+      boolean changedSomething = true;  // used to see if a valid command was found
       memset(resultBuf, '\0', 15);
       if (strcmp(k, "CONTROL_RIGHT") == 0) {
         CONTROL_RIGHT = atoi(v);
@@ -130,8 +130,7 @@ void settingsSerial() {
       } else if (strcmp(k, "PRINT_VARIABLES_INTERVAL_MILLIS") == 0) {
         PRINT_VARIABLES_INTERVAL_MILLIS = atoi(v);
         sprintf(resultBuf, "%d", PRINT_VARIABLES_INTERVAL_MILLIS);
-      }
-      else if (strcmp(k, "JOY_X_PIN") == 0) {
+      } else if (strcmp(k, "JOY_X_PIN") == 0) {
         JOY_X_PIN = atoi(v);
         pinMode(JOY_X_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_X_PIN);
@@ -157,25 +156,24 @@ void settingsSerial() {
         SPEED_KNOB_PIN = atoi(v);
         pinMode(SPEED_KNOB_PIN, INPUT);
         sprintf(resultBuf, "%d", SPEED_KNOB_PIN);
-      }
-      else if (strcmp(k, "SAVE") == 0) {
+      } else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
         changedSomething = false;
         Serial.println(F("{\"result\": \"saved\"}"));
       } else if (strcmp(k, "SETTINGS") == 0) {
         printSettings();
         changedSomething = false;
-      }  else if (strcmp(k, "REVERT") == 0) {
+      } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
-        EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1); // so that on reset the arduino discards EEPROM
+        EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
         resetFunc();
-      }  else if (strcmp(k, "REBOOT") == 0) {
+      } else if (strcmp(k, "REBOOT") == 0) {
         resetFunc();
-      }  else if (strcmp(k, "G") == 0) {
+      } else if (strcmp(k, "G") == 0) {
         changedSomething = false;
         movementAllowed = true;
         Serial.println(F("{\"result\": \"movement allowed\"}"));
-      }  else if (strcmp(k, "S") == 0) {
+      } else if (strcmp(k, "S") == 0) {
         changedSomething = false;
         movementAllowed = false;
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
@@ -193,10 +191,10 @@ void settingsSerial() {
       }
 
       bufP = 0;
-    } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { //removes things like spaces and new line characters
-      buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
+    } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') {  //removes things like spaces and new line characters
+      buf[bufP] = toupper(in);                                                            // settings names are all caps, but this way lower case versions will also be accepted
       if ((uint8_t)(bufP + 2) < sizeof buf) {
-        bufP++; // don't go outside the buffer, leaving the last position always unused
+        bufP++;  // don't go outside the buffer, leaving the last position always unused
       }
     }
   }
@@ -323,12 +321,11 @@ void recallSettings() {
   }
 }
 
-template <typename T>
-void EEPROMwrite (unsigned int & address, const T & value)
-{
+template<typename T>
+void EEPROMwrite(unsigned int &address, const T &value) {
   uint32_t tempEepromCRC = eepromCRC;
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
-  const byte * p = (const byte*) &value;
+  const byte *p = (const byte *)&value;
   for (unsigned int i = 0; i < sizeof value; i++) {
     EEPROM.update(address, *p);
     EEPROM.update(address + repeat_space, *p);
@@ -341,23 +338,23 @@ void EEPROMwrite (unsigned int & address, const T & value)
   eepromCRC = tempEepromCRC;
 }
 
-template <typename T>
-void EEPROMread (unsigned int & address, T & value)
-{
+template<typename T>
+void EEPROMread(unsigned int &address, T &value) {
   //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
-  byte * p = ( byte*) &value;
+  byte *p = (byte *)&value;
   for (unsigned int i = 0; i < sizeof value; i++) {
     byte a = EEPROM.read(address);
     byte b = EEPROM.read(address + repeat_space);
     byte c = EEPROM.read(address + repeat_space * 2);
     // majority voting
-    if (a == b && b == c) { //and a==c, so all agree
-      *p = a; // a normal read
-    } else { // disagreement, correct the corrupted bit (if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely)
-      *p = (a & b) | (b & c) | (c & a); //bitwise majority https://stackoverflow.com/a/29892322
-      EEPROM.update(address, *p); // replace all three copies with the majority value
+    if (a == b && b == c) {              //and a==c, so all agree
+      *p = a;                            // a normal read
+    } else {                             // disagreement, correct the corrupted bit (if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely)
+      *p = (a & b) | (b & c) | (c & a);  //bitwise majority https://stackoverflow.com/a/29892322
+      EEPROM.update(address, *p);        // replace all three copies with the majority value
       EEPROM.update(address + repeat_space, *p);
       EEPROM.update(address + repeat_space * 2, *p);
+      pinMode(LED_BUILTIN, OUTPUT);
       digitalWrite(LED_BUILTIN, LOW); delay(100); digitalWrite(LED_BUILTIN, HIGH); delay(100);
     }
     eepromCRC = crc_update(eepromCRC, *p);
@@ -368,14 +365,13 @@ void EEPROMread (unsigned int & address, T & value)
 
 // for calculating checksum of EEPROM data
 //https://forum.arduino.cc/t/fixed-working-arduino-crc-32-code/89249/5
-const uint32_t PROGMEM  crc_table[16] = {
+const uint32_t PROGMEM crc_table[16] = {
   0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
   0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
   0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
   0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
 };
-uint32_t crc_update(uint32_t crc, byte data)
-{
+uint32_t crc_update(uint32_t crc, byte data) {
   byte tbl_idx;
   tbl_idx = crc ^ (data >> (0 * 4));
   crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);

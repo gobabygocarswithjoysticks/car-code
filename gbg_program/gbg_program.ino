@@ -20,54 +20,54 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///// joystick input reader constants /////
-int CONTROL_RIGHT = 632; // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
-int CONTROL_CENTER_X = 509; // use to calibrate joystick (value from the X axis of the joystick when it is centered)
-int CONTROL_LEFT = 385; // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 25; // radius around center where joystick is considered centered
+int CONTROL_RIGHT = 632;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
+int CONTROL_CENTER_X = 509;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
+int CONTROL_LEFT = 385;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
+int X_DEADZONE = 25;         // radius around center where joystick is considered centered
 
-int CONTROL_UP = 638; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
-int CONTROL_CENTER_Y = 511; // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
-int CONTROL_DOWN = 380; // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 25; // radius around center where joystick is considered centered
+int CONTROL_UP = 638;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
+int CONTROL_CENTER_Y = 511;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
+int CONTROL_DOWN = 380;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
+int Y_DEADZONE = 25;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
-float ACCELERATION_FORWARD  = 2.0; //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
-float DECELERATION_FORWARD  = 1.5; //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
-float ACCELERATION_BACKWARD = 0.5; //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
-float DECELERATION_BACKWARD = 2.5; //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
+float ACCELERATION_FORWARD = 2.0;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
+float DECELERATION_FORWARD = 1.5;   //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
+float ACCELERATION_BACKWARD = 0.5;  //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
+float DECELERATION_BACKWARD = 2.5;  //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
 
-float ACCELERATION_TURNING = 1.0; //acceleration of turning speed
-float DECELERATION_TURNING = 2.0; //deceleration of turning speed
+float ACCELERATION_TURNING = 1.0;  //acceleration of turning speed
+float DECELERATION_TURNING = 2.0;  //deceleration of turning speed
 
-float FASTEST_FORWARD = 0.7; //change # to limit the forward speed [0.0-1.0]
-float FASTEST_BACKWARD = 0.6; //change # to limit the backward speed [0.0-1.0]
-float TURN_SPEED = 0.5; //change # to limit the turning speed (greater than 0)
+float FASTEST_FORWARD = 0.7;   //change # to limit the forward speed [0.0-1.0]
+float FASTEST_BACKWARD = 0.6;  //change # to limit the backward speed [0.0-1.0]
+float TURN_SPEED = 0.5;        //change # to limit the turning speed (greater than 0)
 
-float SCALE_TURNING_WHEN_MOVING = .5; // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
+float SCALE_TURNING_WHEN_MOVING = .5;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
 
-boolean SCALE_ACCEL_WITH_SPEED = true; //set true if using a speed knob and you want to keep time to max speed constant instead of acceleration being constant
+boolean SCALE_ACCEL_WITH_SPEED = true;  //set true if using a speed knob and you want to keep time to max speed constant instead of acceleration being constant
 
-boolean REVERSE_TURN_IN_REVERSE = false; //flip turn axis when backing up so that the car goes in the direction the joystick is pointed when in reverse
+boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so that the car goes in the direction the joystick is pointed when in reverse
 
 // calibrate signals to motor controllers
 int LEFT_MOTOR_CENTER = 1500;
-int LEFT_MOTOR_SLOW = 25; // CENTER +- what? makes the motor start to turn
-int LEFT_MOTOR_FAST = 500; // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int LEFT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
+int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 int RIGHT_MOTOR_CENTER = 1500;
-int RIGHT_MOTOR_SLOW = 25; // CENTER +- what? makes the motor start to turn
-int RIGHT_MOTOR_FAST = 500; // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int RIGHT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
+int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 
-boolean USE_SPEED_KNOB = false; // true = use speed knob, false = don't read the speed knob (see FASTEST_FORWARD, FASTEST_BACKWARD and TURN_SPEED to limit speed)
-int SPEED_KNOB_SLOW_VAL = 1060; // can be slightly out of range, so that it just gets really slow instead of stopping
-int SPEED_KNOB_FAST_VAL = 0; //analogRead value when knob is turned fully towards "fast" setting
+boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read the speed knob (see FASTEST_FORWARD, FASTEST_BACKWARD and TURN_SPEED to limit speed)
+int SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
+int SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
-int PRINT_VARIABLES_INTERVAL_MILLIS = 100; // or -1 makes it not print variables to the serial monitor
+int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
 ///// joystick reader pins /////
-byte JOY_X_PIN = A2; // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A0; // Analog input pin that the forwards-backwards potentiometer is attached to
+byte JOY_X_PIN = A2;  // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = A0;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
@@ -105,8 +105,8 @@ struct ButtonDriveConfig {
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
 //variables below this line aren't settings, don't change them.
 ///// joystick reader variables /////
-int joyXVal = 0; // value read from the joystick
-int joyYVal = 0; // value read from the joystick
+int joyXVal = 0;  // value read from the joystick
+int joyYVal = 0;  // value read from the joystick
 
 ///// variables set by input reader /////
 float speedInput = 0;
@@ -120,14 +120,14 @@ float turnToDrive = 0;
 float speedProcessed = 0;
 float turnProcessed = 0;
 
-int speedKnobVal = -1; //raw value
+int speedKnobVal = -1;  //raw value
 float speedKnobScaler = 1;
 
 ///// servo signal values sent to motor controllers /////
 int leftMotorWriteVal = LEFT_MOTOR_CENTER;
 int rightMotorWriteVal = RIGHT_MOTOR_CENTER;
 
-float timeInterval = 0; // time in seconds (usually a small fraction of a second) between runs of loop(), used for limiting acceleration
+float timeInterval = 0;  // time in seconds (usually a small fraction of a second) between runs of loop(), used for limiting acceleration
 
 unsigned long lastMillisPrintedValues = 0;
 
@@ -142,17 +142,18 @@ Servo rightMotorController;
 const byte settings_memory_key = 5;
 #include <EEPROM.h>
 
-const int version_number = 1; // for interaction with website
+const int version_number = 1;  // for interaction with website
 
-const boolean use_memory = true; // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
+const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
 boolean movementAllowed = true;
 
-boolean joyOK = false; // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
+boolean joyOK = false;  // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
 long joystickCenterCounter = 0;
 
 void setup()
 {
+void setup() {
   Serial.begin(115200);
   digitalWrite(LED_BUILTIN, LOW);
   if (use_memory)
@@ -189,7 +190,7 @@ void loop()
   */
   joyXVal = analogRead(JOY_X_PIN);
   joyYVal = analogRead(JOY_Y_PIN);
-  turnInput  = InputReader_JoystickAxis(joyXVal, CONTROL_LEFT, CONTROL_CENTER_X, CONTROL_RIGHT, X_DEADZONE);
+  turnInput = InputReader_JoystickAxis(joyXVal, CONTROL_LEFT, CONTROL_CENTER_X, CONTROL_RIGHT, X_DEADZONE);
   speedInput = InputReader_JoystickAxis(joyYVal, CONTROL_DOWN, CONTROL_CENTER_Y, CONTROL_UP, Y_DEADZONE);
 
   // TODO: buttons
@@ -241,13 +242,14 @@ void loop()
   */
   DriveController_TwoSideDrive(turnToDrive, speedToDrive, leftMotorWriteVal, rightMotorWriteVal, LEFT_MOTOR_CENTER, LEFT_MOTOR_SLOW, LEFT_MOTOR_FAST, RIGHT_MOTOR_CENTER, RIGHT_MOTOR_SLOW, RIGHT_MOTOR_FAST);
 
-  if (!joyOK || millis() < 3000) { // wait for joystick to become ok. Also wait for 3 seconds for the ESCs to calibrate
+  bool delayedStartDone = millis() >= 3000;
+
+  if (!joyOK || !delayedStartDone) {  // wait for joystick to become ok. Also wait for 3 seconds for the ESCs to calibrate
     leftMotorWriteVal = LEFT_MOTOR_CENTER;
     rightMotorWriteVal = RIGHT_MOTOR_CENTER;
-    delay(1);
     if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
       joystickCenterCounter++;
-      if (joystickCenterCounter > 800) { // joystick must be centered for this long
+      if (joystickCenterCounter > 800) {  // joystick must be centered for this long
         joyOK = true;
       }
     } else {
@@ -255,14 +257,13 @@ void loop()
     }
   }
 
-  static bool startupPulse = true;
-  if (startupPulse && joyOK && millis() >= 3000) {
+  if (startupPulse && joyOK && delayedStartDone) {
     startupPulse = false;
-    if (movementAllowed) { // don't pulse if the website says don't move
+    if (movementAllowed) {  // don't pulse if the website says don't move
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + 90);
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + 90);
     }
-    delay(150); // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
+    delay(150);  // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
     if (movementAllowed) {
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
@@ -275,8 +276,9 @@ void loop()
   }
   //////////////////////////////////////////////////////////////////////////////////
 
-  if (  printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {
+  if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {
     // code added here runs right after the line of data is printed
     //    Serial.println(timeInterval, 5);
   }
-} //end of loop()
+  delay(1);
+}  //end of loop()

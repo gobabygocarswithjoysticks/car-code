@@ -6,13 +6,13 @@ float InputReader_JoystickAxis(int reading, int neg, int cent, int pos, int dead
   deadzone = max(deadzone, 0);
   ////////// scale joystick values from adjustible range to -1 to 1
   float output = 0;
-  if (neg < pos) { //if the value for when the joystick is towards the left is less then the value for when the joystick is towards the right...
+  if (neg < pos) {  //if the value for when the joystick is towards the left is less then the value for when the joystick is towards the right...
     if (reading < cent - deadzone)
       output = floatMap(reading, neg, cent - deadzone, -1, 0);
     if (reading > cent + deadzone)
       output = floatMap(reading, pos, cent + deadzone, 1, 0);
   }
-  if (neg > pos) { // joystick axis is backwards
+  if (neg > pos) {  // joystick axis is backwards
     if (reading > cent + deadzone)
       output = floatMap(reading, neg, cent + deadzone, -1, 0);
     if (reading < cent - deadzone)

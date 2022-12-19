@@ -8,7 +8,7 @@ void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &s
   FASTEST_BACKWARD = abs(FASTEST_BACKWARD);
   FASTEST_FORWARD = abs(FASTEST_FORWARD);
   TURN_SPEED = abs(TURN_SPEED);
-  speedInput = twoMap(speedInput, -1, 0, 1,/**/ -FASTEST_BACKWARD * speedKnobScaler, 0, 0, FASTEST_FORWARD * speedKnobScaler, 0);
+  speedInput = twoMap(speedInput, -1, 0, 1, /**/ -FASTEST_BACKWARD * speedKnobScaler, 0, 0, FASTEST_FORWARD * speedKnobScaler, 0);
   speedInput = constrain(speedInput, -FASTEST_BACKWARD * speedKnobScaler, FASTEST_FORWARD * speedKnobScaler);
 
   turnInput = constrain(turnInput * TURN_SPEED * speedKnobScaler, -TURN_SPEED * speedKnobScaler, TURN_SPEED * speedKnobScaler);
@@ -20,38 +20,38 @@ void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &s
 */
 
 float InputProcessor_LimitAccelerationFourSettings(float velocity, float velocityTarget, float scaler, float ACCELERATION_FORWARD, float DECELERATION_FORWARD, float ACCELERATION_BACKWARD, float DECELERATION_BACKWARD, float timeInterval) {
-  ACCELERATION_FORWARD  = max(ACCELERATION_FORWARD, 0) * scaler;
-  DECELERATION_FORWARD  = max(DECELERATION_FORWARD, 0) * scaler;
+  ACCELERATION_FORWARD = max(ACCELERATION_FORWARD, 0) * scaler;
+  DECELERATION_FORWARD = max(DECELERATION_FORWARD, 0) * scaler;
   ACCELERATION_BACKWARD = max(ACCELERATION_BACKWARD, 0) * scaler;
   DECELERATION_BACKWARD = max(DECELERATION_BACKWARD, 0) * scaler;
   if (velocity == 0) {
     velocity += constrain(velocityTarget - velocity, -ACCELERATION_BACKWARD * timeInterval, ACCELERATION_FORWARD * timeInterval);
   } else if (velocity > 0) {
     velocity += constrain(velocityTarget - velocity, -DECELERATION_FORWARD * timeInterval, ACCELERATION_FORWARD * timeInterval);
-    if (velocity < 0) { // prevent decel from crossing zero and causing accel
+    if (velocity < 0) {  // prevent decel from crossing zero and causing accel
       velocity = 0;
     }
-  } else { //velocity < 0
+  } else {  //velocity < 0
     velocity += constrain(velocityTarget - velocity, -ACCELERATION_BACKWARD * timeInterval, DECELERATION_BACKWARD * timeInterval);
-    if (velocity > 0) { // prevent decel from crossing zero and causing accel
+    if (velocity > 0) {  // prevent decel from crossing zero and causing accel
       velocity = 0;
     }
   }
   return velocity;
 }
 float InputProcessor_LimitAccelerationTwoSettings(float velocity, float velocityTarget, float scaler, float ACCELERATION, float DECELERATION, float timeInterval) {
-  ACCELERATION  = max(ACCELERATION, 0) * scaler;
-  DECELERATION  = max(DECELERATION, 0) * scaler;
+  ACCELERATION = max(ACCELERATION, 0) * scaler;
+  DECELERATION = max(DECELERATION, 0) * scaler;
   if (velocity == 0) {
     velocity += constrain(velocityTarget - velocity, -ACCELERATION * timeInterval, ACCELERATION * timeInterval);
   } else if (velocity > 0) {
     velocity += constrain(velocityTarget - velocity, -DECELERATION * timeInterval, ACCELERATION * timeInterval);
-    if (velocity < 0) { // prevent decel from crossing zero and causing accel
+    if (velocity < 0) {  // prevent decel from crossing zero and causing accel
       velocity = 0;
     }
-  } else { //velocity < 0
+  } else {  //velocity < 0
     velocity += constrain(velocityTarget - velocity, -ACCELERATION * timeInterval, DECELERATION * timeInterval);
-    if (velocity > 0) { // prevent decel from crossing zero and causing accel
+    if (velocity > 0) {  // prevent decel from crossing zero and causing accel
       velocity = 0;
     }
   }
@@ -59,7 +59,7 @@ float InputProcessor_LimitAccelerationTwoSettings(float velocity, float velocity
 }
 
 float InputProcessor_LimitAccelerationOneSetting(float velocity, float velocityTarget, float scaler, float CELERATION, float timeInterval) {
-  CELERATION  = max(CELERATION, 0) * scaler;
+  CELERATION = max(CELERATION, 0) * scaler;
   velocity += constrain(velocityTarget - velocity, -CELERATION * timeInterval, CELERATION * timeInterval);
   return velocity;
 }
