@@ -163,7 +163,7 @@ void setup() {
   turnToDrive = 0;
   speedProcessed = 0;
   turnProcessed = 0;
-  speedKnobVal = -1;  //raw value
+  speedKnobVal = -1;
   speedKnobScaler = 1;
   leftMotorWriteVal = LEFT_MOTOR_CENTER;
   rightMotorWriteVal = RIGHT_MOTOR_CENTER;
