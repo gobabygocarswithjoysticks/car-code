@@ -53,9 +53,14 @@ boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so th
 int LEFT_MOTOR_CENTER = 1500;
 int LEFT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int RIGHT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 int RIGHT_MOTOR_CENTER = 1500;
 int RIGHT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start //TODO: MAKE SETTING
+int START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start //TODO: MAKE SETTING
+
+int JOYSTICK_CALIBRATION_COUNT = 800; // how long does joystick need to be centered? (units of somewhere between 1 and 2 milliseconds) // TODO: make setting
 
 boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read the speed knob (see FASTEST_FORWARD, FASTEST_BACKWARD and TURN_SPEED to limit speed)
 int SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
@@ -269,9 +274,12 @@ void loop()
   if (!joyOK || !delayedStartDone) {  // wait for joystick to become ok. Also wait for 3 seconds for the ESCs to calibrate
     leftMotorWriteVal = LEFT_MOTOR_CENTER;
     rightMotorWriteVal = RIGHT_MOTOR_CENTER;
+    if (JOYSTICK_CALIBRATION_COUNT <= 0) {
+      joyOK = true;
+    }
     if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
       joystickCenterCounter++;
-      if (joystickCenterCounter > 800) {  // joystick must be centered for this long
+      if (joystickCenterCounter > JOYSTICK_CALIBRATION_COUNT) {  // joystick must be centered for this long
         joyOK = true;
       }
     } else {
@@ -282,10 +290,10 @@ void loop()
   if (startupPulse && joyOK && delayedStartDone) {
     startupPulse = false;
     if (movementAllowed) {  // don't pulse if the website says don't move
-      leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + 90);
-      rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + 90);
+      leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + LEFT_MOTOR_PULSE * (LEFT_MOTOR_SLOW > 0 ? 1 : -1));
+      rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + RIGHT_MOTOR_PULSE * (RIGHT_MOTOR_SLOW > 0 ? 1 : -1));
     }
-    delay(150);  // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
+    delay(START_MOTOR_PULSE_TIME);  // pulse motors to indicate that the car is ready to drive (like classic code did in setup())
     if (movementAllowed) {
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
