@@ -1,23 +1,32 @@
-const unsigned int repeat_space = 150;  // space between each copy of a variable
+/*
+This file contains code for receiving settings values over Serial, and saving and recalling settings from EEPROM (lasts between power cycles) memory.
+To counter the possibility of values in EEPROM becoming corrupted, every value is stored three times and if there are differences, there is a vote bit by bit to restore the more likely correct value.
+A checksum value is also calculated so that if the data isn't restored correctly the car is likely to detect that.
+If the checksum reveals data corruption, the car enters a safe mode instead of driving with wrong values.
+*/
 
-void settingsMemory() {
-  byte settingsMemoryKeyRead;  // the read value
-  unsigned int settingsMemoryKeyReadAddress = 0;
-  EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
-  if (settingsMemoryKeyRead != settings_memory_key) {  // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
-    settingsMemoryKeyReadAddress = 0;
-    EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
-    saveSettings();
-  }
-  recallSettings();
+const unsigned int repeat_space = 150; // space between each copy of a variable
+
+void settingsMemory()
+{
+    byte settingsMemoryKeyRead; // the read value
+    unsigned int settingsMemoryKeyReadAddress = 0;
+    EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
+    if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
+        settingsMemoryKeyReadAddress = 0;
+        EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
+        saveSettings();
+        movementAllowed = false;
+    }
+    recallSettings();
 }
 
 byte bufP = 0;
-char buf[50] = { 0 };  // buffer to fill with Serial input
+char buf[50] = { 0 }; // buffer to fill with Serial input
 
-char resultBuf[15] = { 0 };  // for replying with the received value
+char resultBuf[15] = { 0 }; // for replying with the received value
 
-void (*resetFunc)(void) = 0;  // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+void (*resetFunc)(void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
 
 uint32_t eepromCRC = 0;
 
@@ -184,198 +193,239 @@ void settingsSerial() {
         changedSomething = false;
       }
 
-      if (changedSomething) {
-        Serial.print(F("{\"result\": \"change\"")); Serial.print(", ");
-        Serial.print(F("\"setting\": \"")); Serial.print(k); Serial.print("\", ");
-        Serial.print(F("\"value\": \"")); Serial.print(resultBuf); Serial.println("\"}");
-      }
+            if (changedSomething) {
+                Serial.print(F("{\"result\": \"change\""));
+                Serial.print(", ");
+                Serial.print(F("\"setting\": \""));
+                Serial.print(k);
+                Serial.print("\", ");
+                Serial.print(F("\"value\": \""));
+                Serial.print(resultBuf);
+                Serial.println("\"}");
+            }
 
-      bufP = 0;
-    } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') {  //removes things like spaces and new line characters
-      buf[bufP] = toupper(in);                                                            // settings names are all caps, but this way lower case versions will also be accepted
-      if ((uint8_t)(bufP + 2) < sizeof buf) {
-        bufP++;  // don't go outside the buffer, leaving the last position always unused
-      }
+            bufP = 0;
+        } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
+            buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
+            if ((uint8_t)(bufP + 2) < sizeof buf) {
+                bufP++; // don't go outside the buffer, leaving the last position always unused
+            }
+        }
     }
-  }
 }
 
-void saveSettings() {
-  unsigned int addressW = 1;
-  eepromCRC = 0;
+void saveSettings()
+{
+    unsigned int addressW = 1;
+    eepromCRC = 0;
 
-  EEPROMwrite(addressW, CONTROL_RIGHT);
-  EEPROMwrite(addressW, CONTROL_CENTER_X);
-  EEPROMwrite(addressW, CONTROL_LEFT);
-  EEPROMwrite(addressW, X_DEADZONE);
-  EEPROMwrite(addressW, CONTROL_UP);
-  EEPROMwrite(addressW, CONTROL_CENTER_Y);
-  EEPROMwrite(addressW, CONTROL_DOWN);
-  EEPROMwrite(addressW, Y_DEADZONE);
-  EEPROMwrite(addressW, ACCELERATION_FORWARD);
-  EEPROMwrite(addressW, DECELERATION_FORWARD);
-  EEPROMwrite(addressW, ACCELERATION_BACKWARD);
-  EEPROMwrite(addressW, DECELERATION_BACKWARD);
-  EEPROMwrite(addressW, ACCELERATION_TURNING);
-  EEPROMwrite(addressW, DECELERATION_TURNING);
-  EEPROMwrite(addressW, FASTEST_FORWARD);
-  EEPROMwrite(addressW, FASTEST_BACKWARD);
-  EEPROMwrite(addressW, TURN_SPEED);
-  EEPROMwrite(addressW, SCALE_TURNING_WHEN_MOVING);
-  EEPROMwrite(addressW, SCALE_ACCEL_WITH_SPEED);
-  EEPROMwrite(addressW, REVERSE_TURN_IN_REVERSE);
-  EEPROMwrite(addressW, LEFT_MOTOR_CENTER);
-  EEPROMwrite(addressW, LEFT_MOTOR_SLOW);
-  EEPROMwrite(addressW, LEFT_MOTOR_FAST);
-  EEPROMwrite(addressW, RIGHT_MOTOR_CENTER);
-  EEPROMwrite(addressW, RIGHT_MOTOR_SLOW);
-  EEPROMwrite(addressW, RIGHT_MOTOR_FAST);
-  EEPROMwrite(addressW, USE_SPEED_KNOB);
-  EEPROMwrite(addressW, SPEED_KNOB_SLOW_VAL);
-  EEPROMwrite(addressW, SPEED_KNOB_FAST_VAL);
-  EEPROMwrite(addressW, PRINT_VARIABLES_INTERVAL_MILLIS);
+    EEPROMwrite(addressW, CONTROL_RIGHT);
+    EEPROMwrite(addressW, CONTROL_CENTER_X);
+    EEPROMwrite(addressW, CONTROL_LEFT);
+    EEPROMwrite(addressW, X_DEADZONE);
+    EEPROMwrite(addressW, CONTROL_UP);
+    EEPROMwrite(addressW, CONTROL_CENTER_Y);
+    EEPROMwrite(addressW, CONTROL_DOWN);
+    EEPROMwrite(addressW, Y_DEADZONE);
+    EEPROMwrite(addressW, ACCELERATION_FORWARD);
+    EEPROMwrite(addressW, DECELERATION_FORWARD);
+    EEPROMwrite(addressW, ACCELERATION_BACKWARD);
+    EEPROMwrite(addressW, DECELERATION_BACKWARD);
+    EEPROMwrite(addressW, ACCELERATION_TURNING);
+    EEPROMwrite(addressW, DECELERATION_TURNING);
+    EEPROMwrite(addressW, FASTEST_FORWARD);
+    EEPROMwrite(addressW, FASTEST_BACKWARD);
+    EEPROMwrite(addressW, TURN_SPEED);
+    EEPROMwrite(addressW, SCALE_TURNING_WHEN_MOVING);
+    EEPROMwrite(addressW, SCALE_ACCEL_WITH_SPEED);
+    EEPROMwrite(addressW, REVERSE_TURN_IN_REVERSE);
+    EEPROMwrite(addressW, LEFT_MOTOR_CENTER);
+    EEPROMwrite(addressW, LEFT_MOTOR_SLOW);
+    EEPROMwrite(addressW, LEFT_MOTOR_FAST);
+    EEPROMwrite(addressW, RIGHT_MOTOR_CENTER);
+    EEPROMwrite(addressW, RIGHT_MOTOR_SLOW);
+    EEPROMwrite(addressW, RIGHT_MOTOR_FAST);
+    EEPROMwrite(addressW, USE_SPEED_KNOB);
+    EEPROMwrite(addressW, SPEED_KNOB_SLOW_VAL);
+    EEPROMwrite(addressW, SPEED_KNOB_FAST_VAL);
+    EEPROMwrite(addressW, PRINT_VARIABLES_INTERVAL_MILLIS);
 
-  EEPROMwrite(addressW, JOY_X_PIN);
-  EEPROMwrite(addressW, JOY_Y_PIN);
-  EEPROMwrite(addressW, LEFT_MOTOR_CONTROLLER_PIN);
-  EEPROMwrite(addressW, RIGHT_MOTOR_CONTROLLER_PIN);
-  EEPROMwrite(addressW, SPEED_KNOB_PIN);
+    EEPROMwrite(addressW, JOY_X_PIN);
+    EEPROMwrite(addressW, JOY_Y_PIN);
+    EEPROMwrite(addressW, LEFT_MOTOR_CONTROLLER_PIN);
+    EEPROMwrite(addressW, RIGHT_MOTOR_CONTROLLER_PIN);
+    EEPROMwrite(addressW, SPEED_KNOB_PIN);
 
-  EEPROMwrite(addressW, eepromCRC);
+    EEPROMwrite(addressW, eepromCRC);
 }
-void recallSettings() {
-  unsigned int addressR = 1;
-  eepromCRC = 0;
+void recallSettings()
+{
+    unsigned int addressR = 1;
+    eepromCRC = 0;
 
-  EEPROMread(addressR, CONTROL_RIGHT);
-  EEPROMread(addressR, CONTROL_CENTER_X);
-  EEPROMread(addressR, CONTROL_LEFT);
-  EEPROMread(addressR, X_DEADZONE);
-  EEPROMread(addressR, CONTROL_UP);
-  EEPROMread(addressR, CONTROL_CENTER_Y);
-  EEPROMread(addressR, CONTROL_DOWN);
-  EEPROMread(addressR, Y_DEADZONE);
-  EEPROMread(addressR, ACCELERATION_FORWARD);
-  EEPROMread(addressR, DECELERATION_FORWARD);
-  EEPROMread(addressR, ACCELERATION_BACKWARD);
-  EEPROMread(addressR, DECELERATION_BACKWARD);
-  EEPROMread(addressR, ACCELERATION_TURNING);
-  EEPROMread(addressR, DECELERATION_TURNING);
-  EEPROMread(addressR, FASTEST_FORWARD);
-  EEPROMread(addressR, FASTEST_BACKWARD);
-  EEPROMread(addressR, TURN_SPEED);
-  EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING);
-  EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
-  EEPROMread(addressR, REVERSE_TURN_IN_REVERSE);
-  EEPROMread(addressR, LEFT_MOTOR_CENTER);
-  EEPROMread(addressR, LEFT_MOTOR_SLOW);
-  EEPROMread(addressR, LEFT_MOTOR_FAST);
-  EEPROMread(addressR, RIGHT_MOTOR_CENTER);
-  EEPROMread(addressR, RIGHT_MOTOR_SLOW);
-  EEPROMread(addressR, RIGHT_MOTOR_FAST);
-  EEPROMread(addressR, USE_SPEED_KNOB);
-  EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
-  EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
-  EEPROMread(addressR, PRINT_VARIABLES_INTERVAL_MILLIS);
+    EEPROMread(addressR, CONTROL_RIGHT);
+    EEPROMread(addressR, CONTROL_CENTER_X);
+    EEPROMread(addressR, CONTROL_LEFT);
+    EEPROMread(addressR, X_DEADZONE);
+    EEPROMread(addressR, CONTROL_UP);
+    EEPROMread(addressR, CONTROL_CENTER_Y);
+    EEPROMread(addressR, CONTROL_DOWN);
+    EEPROMread(addressR, Y_DEADZONE);
+    EEPROMread(addressR, ACCELERATION_FORWARD);
+    EEPROMread(addressR, DECELERATION_FORWARD);
+    EEPROMread(addressR, ACCELERATION_BACKWARD);
+    EEPROMread(addressR, DECELERATION_BACKWARD);
+    EEPROMread(addressR, ACCELERATION_TURNING);
+    EEPROMread(addressR, DECELERATION_TURNING);
+    EEPROMread(addressR, FASTEST_FORWARD);
+    EEPROMread(addressR, FASTEST_BACKWARD);
+    EEPROMread(addressR, TURN_SPEED);
+    EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING);
+    EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
+    EEPROMread(addressR, REVERSE_TURN_IN_REVERSE);
+    EEPROMread(addressR, LEFT_MOTOR_CENTER);
+    EEPROMread(addressR, LEFT_MOTOR_SLOW);
+    EEPROMread(addressR, LEFT_MOTOR_FAST);
+    EEPROMread(addressR, RIGHT_MOTOR_CENTER);
+    EEPROMread(addressR, RIGHT_MOTOR_SLOW);
+    EEPROMread(addressR, RIGHT_MOTOR_FAST);
+    EEPROMread(addressR, USE_SPEED_KNOB);
+    EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
+    EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
+    EEPROMread(addressR, PRINT_VARIABLES_INTERVAL_MILLIS);
 
-  EEPROMread(addressR, JOY_X_PIN);
-  EEPROMread(addressR, JOY_Y_PIN);
-  EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
-  EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
-  EEPROMread(addressR, SPEED_KNOB_PIN);
+    EEPROMread(addressR, JOY_X_PIN);
+    EEPROMread(addressR, JOY_Y_PIN);
+    EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
+    EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
+    EEPROMread(addressR, SPEED_KNOB_PIN);
 
-  uint32_t tempEepromCRC = eepromCRC;
-  uint32_t readCRC = 0;
-  EEPROMread(addressR, readCRC);
-
-  if (tempEepromCRC != readCRC) {
-    delay(50);
-    Serial.println(F("{\"error\": \"eeprom failure\"}"));
-    delay(50);
-    if (leftMotorController.attached())
-      leftMotorController.detach();
-    if (rightMotorController.attached())
-      rightMotorController.detach();
-    delay(100);
-    // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
-    for (byte pin = 2; pin <= 100; pin++) {
-      pinMode(pin, INPUT);
-      digitalWrite(pin, LOW);
+    uint32_t tempEepromCRC = eepromCRC;
+    uint32_t readCRC = 0;
+    EEPROMread(addressR, readCRC);
+    // a checksum isn't a perfect guarantee that the stored data is valid, but likely better than 1 in 1000
+    if (tempEepromCRC != readCRC) { // calculated checksum of data doesn't match stored checksum of data
+        delay(50);
+        Serial.println(F("{\"error\": \"eeprom failure\"}"));
+        delay(50); // eeprom bad, shut down everything
+        if (leftMotorController.attached())
+            leftMotorController.detach();
+        if (rightMotorController.attached())
+            rightMotorController.detach();
+        delay(100);
+        // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
+        for (byte pin = 2; pin <= 100; pin++) {
+            pinMode(pin, INPUT);
+            digitalWrite(pin, LOW);
+        }
+        pinMode(LED_BUILTIN, OUTPUT);
+        delay(50);
+        while (true) { // flash SOS forever
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            delay(400);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(500);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(400);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(500);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(400);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(500);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(400);
+            delay(400);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(200);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(200);
+            delay(1000);
+        }
     }
-    pinMode(LED_BUILTIN, OUTPUT);
-    delay(50);
-    while (true) { // flash SOS forever
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      delay(400);
-      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
-      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
-      digitalWrite(LED_BUILTIN, HIGH); delay(500); digitalWrite(LED_BUILTIN, LOW); delay(400);
-      delay(400);
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      digitalWrite(LED_BUILTIN, HIGH); delay(200); digitalWrite(LED_BUILTIN, LOW); delay(200);
-      delay(1000);
-    }
-  }
 }
 
-template<typename T>
-void EEPROMwrite(unsigned int &address, const T &value) {
-  uint32_t tempEepromCRC = eepromCRC;
-  //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
-  const byte *p = (const byte *)&value;
-  for (unsigned int i = 0; i < sizeof value; i++) {
-    EEPROM.update(address, *p);
-    EEPROM.update(address + repeat_space, *p);
-    EEPROM.update(address + repeat_space * 2, *p);
-    tempEepromCRC = crc_update(tempEepromCRC, *p);
-    // writes 3 copies
-    address++;
-    p++;
-  }
-  eepromCRC = tempEepromCRC;
+template <typename T>
+void EEPROMwrite(unsigned int& address, const T& value)
+{
+    uint32_t tempEepromCRC = eepromCRC;
+    // modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
+    const byte* p = (const byte*)&value;
+    for (unsigned int i = 0; i < sizeof value; i++) {
+        EEPROM.update(address, *p); // Three copies of the data are stored in EEPROM to detect and correct single bit errors
+        EEPROM.update(address + repeat_space, *p);
+        EEPROM.update(address + repeat_space * 2, *p);
+        tempEepromCRC = crc_update(tempEepromCRC, *p);
+        // writes 3 copies
+        address++;
+        p++;
+    }
+    eepromCRC = tempEepromCRC;
 }
 
-template<typename T>
-void EEPROMread(unsigned int &address, T &value) {
-  //modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
-  byte *p = (byte *)&value;
-  for (unsigned int i = 0; i < sizeof value; i++) {
-    byte a = EEPROM.read(address);
-    byte b = EEPROM.read(address + repeat_space);
-    byte c = EEPROM.read(address + repeat_space * 2);
-    // majority voting
-    if (a == b && b == c) {              //and a==c, so all agree
-      *p = a;                            // a normal read
-    } else {                             // disagreement, correct the corrupted bit (if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely)
-      *p = (a & b) | (b & c) | (c & a);  //bitwise majority https://stackoverflow.com/a/29892322
-      EEPROM.update(address, *p);        // replace all three copies with the majority value
-      EEPROM.update(address + repeat_space, *p);
-      EEPROM.update(address + repeat_space * 2, *p);
-      pinMode(LED_BUILTIN, OUTPUT);
-      digitalWrite(LED_BUILTIN, LOW); delay(100); digitalWrite(LED_BUILTIN, HIGH); delay(100);
+template <typename T>
+void EEPROMread(unsigned int& address, T& value)
+{
+    // modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
+    byte* p = (byte*)&value;
+    for (unsigned int i = 0; i < sizeof value; i++) {
+        byte a = EEPROM.read(address);
+        byte b = EEPROM.read(address + repeat_space);
+        byte c = EEPROM.read(address + repeat_space * 2);
+        // majority voting
+        if (a == b && b == c) { // and a==c, so all agree
+            *p = a; // a normal read
+        } else { // disagreement, correct the corrupted bit
+            //(if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely and likely to be caught by the checksum)
+            *p = (a & b) | (b & c) | (c & a); // bitwise majority https://stackoverflow.com/a/29892322
+            EEPROM.update(address, *p); // replace all three copies with the majority value
+            EEPROM.update(address + repeat_space, *p);
+            EEPROM.update(address + repeat_space * 2, *p);
+            pinMode(LED_BUILTIN, OUTPUT);
+            digitalWrite(LED_BUILTIN, LOW);
+            delay(100);
+            digitalWrite(LED_BUILTIN, HIGH);
+            delay(100);
+        }
+        eepromCRC = crc_update(eepromCRC, *p);
+        address++;
+        p++;
     }
-    eepromCRC = crc_update(eepromCRC, *p);
-    address++;
-    p++;
-  }
 }
 
 // for calculating checksum of EEPROM data
-//https://forum.arduino.cc/t/fixed-working-arduino-crc-32-code/89249/5
+// https://forum.arduino.cc/t/fixed-working-arduino-crc-32-code/89249/5
 const uint32_t PROGMEM crc_table[16] = {
-  0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
-  0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
-  0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
-  0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
+    0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+    0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+    0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+    0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
 };
-uint32_t crc_update(uint32_t crc, byte data) {
-  byte tbl_idx;
-  tbl_idx = crc ^ (data >> (0 * 4));
-  crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
-  tbl_idx = crc ^ (data >> (1 * 4));
-  crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
-  return crc;
+uint32_t crc_update(uint32_t crc, byte data)
+{
+    byte tbl_idx;
+    tbl_idx = crc ^ (data >> (0 * 4));
+    crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
+    tbl_idx = crc ^ (data >> (1 * 4));
+    crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
+    return crc;
 }

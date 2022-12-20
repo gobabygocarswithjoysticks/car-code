@@ -80,8 +80,8 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 5;
 
 byte SPEED_KNOB_PIN = A4;
 
-//const byte buttonControlPin = 12;
-//
+const byte buttonControlPin = 12;
+
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 //boolean BUTTON_CONTROL_PIN_ENABLE_STATE = LOW; // is the button control pin HIGH or LOW when button control should be enabled? change if you want to reverse the action of the button control switch
 //// needed for button control settings
