@@ -105,31 +105,31 @@ struct ButtonDriveConfig {
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
 //variables below this line aren't settings, don't change them.
 ///// joystick reader variables /////
-int joyXVal = 0;  // value read from the joystick
-int joyYVal = 0;  // value read from the joystick
+int joyXVal;  // value read from the joystick
+int joyYVal;  // value read from the joystick
 
 ///// variables set by input reader /////
-float speedInput = 0;
-float turnInput = 0;
+float speedInput;
+float turnInput;
 
 
 ///// variables to send to drive controller (sent through input processors)
-float speedToDrive = 0;
-float turnToDrive = 0;
+float speedToDrive;
+float turnToDrive;
 
-float speedProcessed = 0;
-float turnProcessed = 0;
+float speedProcessed;
+float turnProcessed;
 
-int speedKnobVal = -1;  //raw value
-float speedKnobScaler = 1;
+int speedKnobVal;  //raw value
+float speedKnobScaler;
 
 ///// servo signal values sent to motor controllers /////
-int leftMotorWriteVal = LEFT_MOTOR_CENTER;
-int rightMotorWriteVal = RIGHT_MOTOR_CENTER;
+int leftMotorWriteVal;
+int rightMotorWriteVal;
 
-float timeInterval = 0;  // time in seconds (usually a small fraction of a second) between runs of loop(), used for limiting acceleration
+float timeInterval;  // time in seconds (usually a small fraction of a second) between runs of loop(), used for limiting acceleration
 
-unsigned long lastMillisPrintedValues = 0;
+unsigned long lastMillisPrintedValues;
 
 ///// common types of motor controllers (ESCs) can be controlled with the Servo library /////
 #include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/
@@ -146,12 +146,36 @@ const int version_number = 1;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
-boolean movementAllowed = true;
+boolean movementAllowed;
 
-boolean joyOK = false;  // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
-long joystickCenterCounter = 0;
+boolean joyOK;  // has the joystick input held steadily inside the deadzone? movement is disabled otherwise
+long joystickCenterCounter;
+
+boolean startupPulse;
 
 void setup() {
+  //initialize variables
+  joyXVal = 0;
+  joyYVal = 0;
+  speedInput = 0;
+  turnInput = 0;
+  speedToDrive = 0;
+  turnToDrive = 0;
+  speedProcessed = 0;
+  turnProcessed = 0;
+  speedKnobVal = -1;  //raw value
+  speedKnobScaler = 1;
+  leftMotorWriteVal = LEFT_MOTOR_CENTER;
+  rightMotorWriteVal = RIGHT_MOTOR_CENTER;
+  timeInterval = 0;
+  lastMillisPrintedValues = 0;
+  movementAllowed = true;
+  joyOK = false;
+  joystickCenterCounter = 0;
+  startupPulse = true;
+
+
+
   Serial.begin(115200);
   digitalWrite(LED_BUILTIN, LOW);
   if (use_memory)
