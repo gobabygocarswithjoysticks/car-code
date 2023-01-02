@@ -136,9 +136,6 @@ void settingsSerial() {
       } else if (strcmp(k, "SPEED_KNOB_FAST_VAL") == 0) {
         SPEED_KNOB_FAST_VAL = atoi(v);
         sprintf(resultBuf, "%d", SPEED_KNOB_FAST_VAL);
-      } else if (strcmp(k, "PRINT_VARIABLES_INTERVAL_MILLIS") == 0) {
-        PRINT_VARIABLES_INTERVAL_MILLIS = atoi(v);
-        sprintf(resultBuf, "%d", PRINT_VARIABLES_INTERVAL_MILLIS);
       } else if (strcmp(k, "JOY_X_PIN") == 0) {
         JOY_X_PIN = atoi(v);
         pinMode(JOY_X_PIN, INPUT);
@@ -248,7 +245,6 @@ void saveSettings()
     EEPROMwrite(addressW, USE_SPEED_KNOB);
     EEPROMwrite(addressW, SPEED_KNOB_SLOW_VAL);
     EEPROMwrite(addressW, SPEED_KNOB_FAST_VAL);
-    EEPROMwrite(addressW, PRINT_VARIABLES_INTERVAL_MILLIS);
 
     EEPROMwrite(addressW, JOY_X_PIN);
     EEPROMwrite(addressW, JOY_Y_PIN);
@@ -292,7 +288,6 @@ void recallSettings()
     EEPROMread(addressR, USE_SPEED_KNOB);
     EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
     EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
-    EEPROMread(addressR, PRINT_VARIABLES_INTERVAL_MILLIS);
 
     EEPROMread(addressR, JOY_X_PIN);
     EEPROMread(addressR, JOY_Y_PIN);

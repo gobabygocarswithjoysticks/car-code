@@ -23,24 +23,24 @@
 int CONTROL_RIGHT = 632;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 509;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
 int CONTROL_LEFT = 385;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 25;         // radius around center where joystick is considered centered
+int X_DEADZONE = 20;         // radius around center where joystick is considered centered
 
 int CONTROL_UP = 638;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
 int CONTROL_CENTER_Y = 511;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
 int CONTROL_DOWN = 380;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 25;         // radius around center where joystick is considered centered
+int Y_DEADZONE = 20;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
-float ACCELERATION_FORWARD = 2.0;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
-float DECELERATION_FORWARD = 1.5;   //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
+float ACCELERATION_FORWARD = 0.75;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
+float DECELERATION_FORWARD = 1.0;   //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
 float ACCELERATION_BACKWARD = 0.5;  //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
-float DECELERATION_BACKWARD = 2.5;  //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
+float DECELERATION_BACKWARD = 1.5;  //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
 
 float ACCELERATION_TURNING = 1.0;  //acceleration of turning speed
-float DECELERATION_TURNING = 2.0;  //deceleration of turning speed
+float DECELERATION_TURNING = 1.5;  //deceleration of turning speed
 
-float FASTEST_FORWARD = 0.7;   //change # to limit the forward speed [0.0-1.0]
-float FASTEST_BACKWARD = 0.6;  //change # to limit the backward speed [0.0-1.0]
+float FASTEST_FORWARD = 0.6;   //change # to limit the forward speed [0.0-1.0]
+float FASTEST_BACKWARD = 0.5;  //change # to limit the backward speed [0.0-1.0]
 float TURN_SPEED = 0.5;        //change # to limit the turning speed (greater than 0)
 
 float SCALE_TURNING_WHEN_MOVING = .5;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
@@ -66,8 +66,6 @@ boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read th
 int SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
 int SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
-int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
-
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
 ///// joystick reader pins /////
@@ -80,7 +78,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 5;
 
 byte SPEED_KNOB_PIN = A4;
 
-const byte buttonControlPin = 12;
+const byte buttonControlPin = 12; // TODO
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 //boolean BUTTON_CONTROL_PIN_ENABLE_STATE = LOW; // is the button control pin HIGH or LOW when button control should be enabled? change if you want to reverse the action of the button control switch
@@ -90,7 +88,7 @@ struct ButtonDriveConfig {
   float speed;
   float turn;
 };
-//// button control settings
+//// button control settings         // TODO
 //const byte maxNumDriveButtons = 5;
 //byte numDriveButtons = 5;
 //ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
@@ -105,6 +103,7 @@ struct ButtonDriveConfig {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -144,10 +143,10 @@ Servo rightMotorController;
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-const byte settings_memory_key = 5;
+const byte settings_memory_key = 22;
 #include <EEPROM.h>
 
-const int version_number = 1;  // for interaction with website
+const int version_number = 2;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -160,8 +159,8 @@ boolean startupPulse;
 
 void setup() {
   //initialize variables
-  joyXVal = 0;
-  joyYVal = 0;
+  joyXVal = 512;
+  joyYVal = 512;
   speedInput = 0;
   turnInput = 0;
   speedToDrive = 0;
@@ -177,7 +176,7 @@ void setup() {
   movementAllowed = true;
   joyOK = false;
   joystickCenterCounter = 0;
-  startupPulse = true;
+  startupPulse = true;      //TODO: add as setting
 
 
 
