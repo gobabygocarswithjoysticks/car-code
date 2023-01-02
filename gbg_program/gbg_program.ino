@@ -1,4 +1,3 @@
-bork
 /*
     This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
