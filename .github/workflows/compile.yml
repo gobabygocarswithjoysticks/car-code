@@ -50,7 +50,7 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
-            niceBoardName: "new nano, uno"
+            niceBoardName: "new nano or uno"
             additional-commands: arduino-cli lib install Servo
 
           - configName: "clear_eeprom-nanoOld"
@@ -65,7 +65,7 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
-            niceBoardName: "new nano, uno"
+            niceBoardName: "new nano or uno"
             
 
     runs-on: ubuntu-latest
