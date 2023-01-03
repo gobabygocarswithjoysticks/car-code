@@ -1,3 +1,4 @@
 standard-nanoOld, gbg_program, nanoOldBootloader, old nano
 standard-nanoNew, gbg_program, nano, new nano, uno
 clear_eeprom-nanoOld, clear_eeprom, nanoOldBootloader, old nano
+clear_eeprom-nanoNew, clear_eeprom, nano, new nano, uno
