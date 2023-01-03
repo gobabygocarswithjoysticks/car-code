@@ -42,6 +42,7 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
             additional-commands: arduino-cli lib install Servo
 
           - configName: "standard-nanoNew"
@@ -49,6 +50,7 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
+            niceBoardName: "new nano, uno"
             additional-commands: arduino-cli lib install Servo
 
           - configName: "clear_eeprom-nanoOld"
@@ -56,12 +58,15 @@ jobs:
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
 
           - configName: "clear_eeprom-nanoNew"
             code-dir: clear_eeprom
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
+            niceBoardName: "new nano, uno"
+            
 
     runs-on: ubuntu-latest
     steps:
@@ -93,7 +98,7 @@ jobs:
       - name: Commit compiled files
         run: |
          git status
-         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}" >> hex/configurations-info.txt
+         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" >> hex/configurations-info.txt
          git status
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
