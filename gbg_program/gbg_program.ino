@@ -23,12 +23,12 @@
 int CONTROL_RIGHT = 632;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 509;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
 int CONTROL_LEFT = 385;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 20;         // radius around center where joystick is considered centered
+int X_DEADZONE = 15;         // radius around center where joystick is considered centered
 
 int CONTROL_UP = 638;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
 int CONTROL_CENTER_Y = 511;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
 int CONTROL_DOWN = 380;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 20;         // radius around center where joystick is considered centered
+int Y_DEADZONE = 15;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
 float ACCELERATION_FORWARD = 0.75;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
@@ -53,7 +53,7 @@ boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so th
 int LEFT_MOTOR_CENTER = 1500;
 int LEFT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
-int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start //TODO: MAKE SETTING
 int RIGHT_MOTOR_CENTER = 1500;
 int RIGHT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
