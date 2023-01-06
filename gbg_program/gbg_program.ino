@@ -180,12 +180,17 @@ void setup() {
 
 
 
-  Serial.begin(115200);
+  Serial.begin(250000);
   digitalWrite(LED_BUILTIN, LOW);
   if (use_memory)
     settingsMemory();
 
+  delay(100);
   printSettings();  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
+  delay(100);
+  printSettings();  // do it again to increase the chance of a valid message going through
+  delay(100);
+  printSettings();  // do it again to increase the chance of a valid message going through
 
   setupPins();
 
