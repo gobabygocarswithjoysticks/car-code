@@ -65,10 +65,10 @@ void printSettings() {
   serialChecksum += Serial.print(F("\"JOY_Y_PIN\": "));  serialChecksum += Serial.print(JOY_Y_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(LEFT_MOTOR_CONTROLLER_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print((ENABLE_STARTUP_PULSE ? "true" : "false")); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"LEFT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(LEFT_MOTOR_PULSE); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"RIGHT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_PULSE); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"START_MOTOR_PULSE_TIME\": "));  serialChecksum += Serial.print(START_MOTOR_PULSE_TIME); serialChecksum += Serial.print(", ");
-  serialChecksum += Serial.print(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print((ENABLE_STARTUP_PULSE ? "true" : "false")); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"JOY_CALIB_COUNT\": "));  serialChecksum += Serial.print(JOY_CALIB_COUNT); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"ENABLE_BUTTON_CTRL\": "));  serialChecksum += Serial.print((ENABLE_BUTTON_CTRL ? "true" : "false")); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"USE_BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print((USE_BUTTON_MODE_PIN ? "true" : "false")); serialChecksum += Serial.print(", ");
