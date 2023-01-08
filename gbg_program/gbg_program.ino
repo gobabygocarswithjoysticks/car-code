@@ -53,14 +53,16 @@ boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so th
 int LEFT_MOTOR_CENTER = 1500;
 int LEFT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
-int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start //TODO: MAKE SETTING
+int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 int RIGHT_MOTOR_CENTER = 1500;
 int RIGHT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
 int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
-int RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start //TODO: MAKE SETTING
-int START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start //TODO: MAKE SETTING
+int RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start
 
-int JOYSTICK_CALIBRATION_COUNT = 800; // how long does joystick need to be centered? (units of somewhere between 1 and 2 milliseconds) // TODO: make setting
+boolean ENABLE_STARTUP_PULSE = true; // small movement to indicate that the car is ready
+
+int JOY_CALIB_COUNT = 800; // how long does joystick need to be centered? (units of somewhere between 1 and 2 milliseconds)
 
 boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read the speed knob (see FASTEST_FORWARD, FASTEST_BACKWARD and TURN_SPEED to limit speed)
 int SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
@@ -78,32 +80,34 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 5;
 
 byte SPEED_KNOB_PIN = A4;
 
-const byte buttonControlPin = 12; // TODO
+byte BUTTON_MODE_PIN = 6;
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
-//boolean BUTTON_CONTROL_PIN_ENABLE_STATE = LOW; // is the button control pin HIGH or LOW when button control should be enabled? change if you want to reverse the action of the button control switch
+boolean ENABLE_BUTTON_CTRL = false;
+boolean USE_BUTTON_MODE_PIN = false;
 //// needed for button control settings
 struct ButtonDriveConfig {
   byte pin;
   float speed;
   float turn;
 };
-//// button control settings         // TODO
-//const byte maxNumDriveButtons = 5;
-//byte numDriveButtons = 5;
-//ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
-//  //pin, speed, turn (there must be numDriveButtons number of rows)
-//  {11, 0, 1}, //right
-//  {10, .9, 1}, //RF
-//  {9, 1, 0}, //forwards
-//  {12, .9, -1}, //LF
-//  {8, 0, -1} //left
-//};
+// button control settings
+const byte maxNumDriveButtons = 6;
+byte NUM_DRIVE_BUTTONS = 0;
+ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
+  //pin, speed, turn (there must be numDriveButtons number of rows)
+  {7, 1, 0}, //forwards
+  {8, 0, -1}, //left
+  {9, 0, 1}, //right
+  {10, 1, -1}, //LF
+  {11, 1, 1}, //RF
+  {12, -1, 0} //backwards
+};
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
+const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -143,10 +147,10 @@ Servo rightMotorController;
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-const byte settings_memory_key = 22;
+const byte settings_memory_key = 26;
 #include <EEPROM.h>
 
-const int version_number = 2;  // for interaction with website
+const int version_number = 3;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -176,7 +180,7 @@ void setup() {
   movementAllowed = true;
   joyOK = false;
   joystickCenterCounter = 0;
-  startupPulse = true;      //TODO: add as setting
+  startupPulse = ENABLE_STARTUP_PULSE;
 
 
 
@@ -199,6 +203,11 @@ void setupPins() {
   pinMode(JOY_X_PIN, INPUT);
   pinMode(JOY_Y_PIN, INPUT);
   pinMode(SPEED_KNOB_PIN, INPUT);
+
+  pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+  for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
+    pinMode(driveButtons[i].pin, INPUT_PULLUP);
+  }
 
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
@@ -224,7 +233,9 @@ void loop()
   turnInput = InputReader_JoystickAxis(joyXVal, CONTROL_LEFT, CONTROL_CENTER_X, CONTROL_RIGHT, X_DEADZONE);
   speedInput = InputReader_JoystickAxis(joyYVal, CONTROL_DOWN, CONTROL_CENTER_Y, CONTROL_UP, Y_DEADZONE);
 
-  // TODO: buttons
+  if (ENABLE_BUTTON_CTRL) {
+    InputReader_Buttons(!USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW), true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
+  }
 
   ////////////////////////////// PUT INPUT PROCESSORS HERE ///////////////////////
   /**
@@ -278,12 +289,12 @@ void loop()
   if (!joyOK || !delayedStartDone) {  // wait for joystick to become ok. Also wait for 3 seconds for the ESCs to calibrate
     leftMotorWriteVal = LEFT_MOTOR_CENTER;
     rightMotorWriteVal = RIGHT_MOTOR_CENTER;
-    if (JOYSTICK_CALIBRATION_COUNT <= 0) {
+    if (JOY_CALIB_COUNT <= 0) {
       joyOK = true;
     }
     if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
       joystickCenterCounter++;
-      if (joystickCenterCounter > JOYSTICK_CALIBRATION_COUNT) {  // joystick must be centered for this long
+      if (joystickCenterCounter > JOY_CALIB_COUNT) {  // joystick must be centered for this long
         joyOK = true;
       }
     } else {

@@ -65,6 +65,28 @@ void printSettings() {
   serialChecksum += Serial.print(F("\"JOY_Y_PIN\": "));  serialChecksum += Serial.print(JOY_Y_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(LEFT_MOTOR_CONTROLLER_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"LEFT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(LEFT_MOTOR_PULSE); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"RIGHT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_PULSE); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"START_MOTOR_PULSE_TIME\": "));  serialChecksum += Serial.print(START_MOTOR_PULSE_TIME); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print(ENABLE_STARTUP_PULSE); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"JOY_CALIB_COUNT\": "));  serialChecksum += Serial.print(JOY_CALIB_COUNT); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print(BUTTON_MODE_PIN); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"ENABLE_BUTTON_CTRL\": "));  serialChecksum += Serial.print(ENABLE_BUTTON_CTRL); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"USE_BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print(USE_BUTTON_MODE_PIN); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"NUM_DRIVE_BUTTONS\": "));  serialChecksum += Serial.print(NUM_DRIVE_BUTTONS); serialChecksum += Serial.print(", ");
+
+  for (byte db = 0; db < maxNumDriveButtons; db++) {
+    serialChecksum += Serial.print(F("DRIVE_BUTTONS\": "));
+    serialChecksum += Serial.print(db);
+    serialChecksum += Serial.print("_");
+    serialChecksum += Serial.print(driveButtons[db].pin);
+    serialChecksum += Serial.print("_");
+    serialChecksum += Serial.print(driveButtons[db].speed, 4);
+    serialChecksum += Serial.print("_");
+    serialChecksum += Serial.print(driveButtons[db].turn, 4);
+    serialChecksum += Serial.print(", ");
+  }
+
   serialChecksum += Serial.print(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
   Serial.println("}");
 

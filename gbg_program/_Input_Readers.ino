@@ -23,18 +23,18 @@ float InputReader_JoystickAxis(int reading, int neg, int cent, int pos, int dead
 /**
   This function reads a set of buttons and edits turnInput and speedInput.
 */
-//void InputReader_Buttons(boolean enable, boolean resetValues, byte numDriveButtons, ButtonDriveConfig driveButtons[], float& turnInput, float& speedInput, boolean buttonState) {
-//  if (enable) {
-//    if (resetValues) {
-//      speedInput = 0;
-//      turnInput = 0; //overwrite other inputs and make them have no effect
-//    } //if reset values if false, buttons just add to
-//    //buttons for drive control add to the joystick's value, and add with each other.
-//    for (byte button = 0; button < numDriveButtons; button++) {
-//      if (digitalRead(driveButtons[button].pin) == buttonState) {
-//        speedInput += driveButtons[button].speed;
-//        turnInput += driveButtons[button].turn;
-//      }
-//    }
-//  }
-//}
+void InputReader_Buttons(boolean enable, boolean resetValues, byte numDriveButtons, ButtonDriveConfig driveButtons[], float& turnInput, float& speedInput, boolean buttonState) {
+  if (enable) {
+    if (resetValues) {
+      speedInput = 0;
+      turnInput = 0; //overwrite other inputs and make them have no effect
+    } //if reset values if false, buttons just add
+    //buttons for drive control add to the joystick's value, and add with each other.
+    for (byte button = 0; button < numDriveButtons; button++) {
+      if (digitalRead(driveButtons[button].pin) == buttonState) {
+        speedInput += driveButtons[button].speed;
+        turnInput += driveButtons[button].turn;
+      }
+    }
+  }
+}
