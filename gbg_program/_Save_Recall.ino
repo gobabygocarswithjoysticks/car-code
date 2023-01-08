@@ -218,12 +218,11 @@ void settingsSerial() {
           Serial.print(F("{\"result\": \"change\""));
           Serial.print(", ");
           Serial.print(F("\"setting\": \""));
-          Serial.print(k);
+          Serial.print("DRIVE_BUTTON_");
+          Serial.print(db + 1);
           Serial.print("\", ");
           Serial.print(F("\"value\": ["));
 
-          Serial.print(db);
-          Serial.print(",");
           Serial.print(driveButtons[db].pin);
           Serial.print(",");
           dtostrf(driveButtons[db].speed, 0, 4, resultBuf);
