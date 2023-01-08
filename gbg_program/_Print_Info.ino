@@ -70,9 +70,9 @@ void printSettings() {
   serialChecksum += Serial.print(F("\"START_MOTOR_PULSE_TIME\": "));  serialChecksum += Serial.print(START_MOTOR_PULSE_TIME); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print((ENABLE_STARTUP_PULSE ? "true" : "false")); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"JOY_CALIB_COUNT\": "));  serialChecksum += Serial.print(JOY_CALIB_COUNT); serialChecksum += Serial.print(", ");
-  serialChecksum += Serial.print(F("\"BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print(BUTTON_MODE_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"ENABLE_BUTTON_CTRL\": "));  serialChecksum += Serial.print((ENABLE_BUTTON_CTRL ? "true" : "false")); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"USE_BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print((USE_BUTTON_MODE_PIN ? "true" : "false")); serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(F("\"BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print(BUTTON_MODE_PIN); serialChecksum += Serial.print(", ");
   serialChecksum += Serial.print(F("\"NUM_DRIVE_BUTTONS\": "));  serialChecksum += Serial.print(NUM_DRIVE_BUTTONS); serialChecksum += Serial.print(", ");
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
