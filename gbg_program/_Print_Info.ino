@@ -76,9 +76,9 @@ void printSettings() {
   serialChecksum += Serial.print(F("\"NUM_DRIVE_BUTTONS\": "));  serialChecksum += Serial.print(NUM_DRIVE_BUTTONS); serialChecksum += Serial.print(", ");
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
-    serialChecksum += Serial.print(F("\"DRIVE_BUTTONS\": ["));
-    serialChecksum += Serial.print(db);
-    serialChecksum += Serial.print(",");
+    serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
+    serialChecksum += Serial.print(db + 1);
+    serialChecksum += Serial.print("\": [");
     serialChecksum += Serial.print(driveButtons[db].pin);
     serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].speed, 4);
