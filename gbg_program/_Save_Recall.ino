@@ -188,12 +188,28 @@ void settingsSerial() {
         sprintf(resultBuf, "%d", BUTTON_MODE_PIN);
       } else if (strcmp(k, "ENABLE_BUTTON_CTRL") == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
+        if (ENABLE_BUTTON_CTRL) {
+          if (USE_BUTTON_MODE_PIN) {
+            pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+          }
+          for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
+            pinMode(driveButtons[i].pin, INPUT_PULLUP);
+          }
+        }
         if (ENABLE_BUTTON_CTRL)
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
       } else if (strcmp(k, "USE_BUTTON_MODE_PIN") == 0) {
         USE_BUTTON_MODE_PIN = atoi(v);
+        if (ENABLE_BUTTON_CTRL) {
+          if (USE_BUTTON_MODE_PIN) {
+            pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+          }
+          for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
+            pinMode(driveButtons[i].pin, INPUT_PULLUP);
+          }
+        }
         if (USE_BUTTON_MODE_PIN)
           sprintf(resultBuf, "true");
         else
@@ -457,7 +473,7 @@ void recallSettings()
 }
 
 template <typename T>
-void EEPROMwrite(unsigned int& address, const T& value)
+void EEPROMwrite(unsigned int& address, const T & value)
 {
   uint32_t tempEepromCRC = eepromCRC;
   // modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
@@ -475,7 +491,7 @@ void EEPROMwrite(unsigned int& address, const T& value)
 }
 
 template <typename T>
-void EEPROMread(unsigned int& address, T& value)
+void EEPROMread(unsigned int& address, T & value)
 {
   // modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   byte* p = (byte*)&value;

@@ -204,9 +204,13 @@ void setupPins() {
   pinMode(JOY_Y_PIN, INPUT);
   pinMode(SPEED_KNOB_PIN, INPUT);
 
-  pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
-  for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
-    pinMode(driveButtons[i].pin, INPUT_PULLUP);
+  if (ENABLE_BUTTON_CTRL) {
+    if (USE_BUTTON_MODE_PIN) {
+      pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+    }
+    for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
+      pinMode(driveButtons[i].pin, INPUT_PULLUP);
+    }
   }
 
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
