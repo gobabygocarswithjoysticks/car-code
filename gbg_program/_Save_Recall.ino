@@ -203,7 +203,7 @@ void settingsSerial() {
         sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
       }
 
-      else if (strcmp(k, "DRIVE_BUTTON") == 0) {
+      else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
 
         int db = atoi(v); // which row of the driveButtons array?
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
@@ -220,19 +220,19 @@ void settingsSerial() {
           Serial.print(F("\"setting\": \""));
           Serial.print(k);
           Serial.print("\", ");
-          Serial.print(F("\"value\": \""));
+          Serial.print(F("\"value\": ["));
 
           Serial.print(db);
-          Serial.print("_");
+          Serial.print(",");
           Serial.print(driveButtons[db].pin);
-          Serial.print("_");
+          Serial.print(",");
           dtostrf(driveButtons[db].speed, 0, 4, resultBuf);
           Serial.print(resultBuf);
-          Serial.print("_");
+          Serial.print(",");
           dtostrf(driveButtons[db].turn, 0, 4, resultBuf);
           Serial.print(resultBuf);
 
-          Serial.println("\"}");
+          Serial.println("]}");
 
         }
         changedSomething = false;
