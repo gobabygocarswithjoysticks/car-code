@@ -20,6 +20,30 @@ boolean printVariables(int interval) {
     serialChecksum += Serial.print(F("\"speedKnobVal\": ")); serialChecksum += Serial.print(speedKnobVal); serialChecksum += Serial.print(", ");
     serialChecksum += Serial.print(F("\"movementAllowed\": ")); serialChecksum += Serial.print(movementAllowed ? "true" : "false"); serialChecksum += Serial.print(", ");
     serialChecksum += Serial.print(F("\"joyOK\": ")); serialChecksum += Serial.print(joyOK ? "true" : "false"); serialChecksum += Serial.print(", ");
+    int buttonBits = 0;
+    if (ENABLE_BUTTON_CTRL) {
+      int button;
+      for (button = 0; button < maxNumDriveButtons; button++) {
+        if (digitalRead(driveButtons[button].pin) == LOW)
+          bitSet(buttonBits, button);
+      }
+    }
+    serialChecksum += Serial.print(F("\"buttons\": ")); serialChecksum += Serial.print(buttonBits); serialChecksum += Serial.print(", ");
+    serialChecksum += Serial.print(F("\"b_m_p\": "));
+    if (ENABLE_BUTTON_CTRL) {
+      if (USE_BUTTON_MODE_PIN) {
+        if (digitalRead(BUTTON_MODE_PIN) == LOW)
+          serialChecksum += Serial.print("\"Y\"");
+        else
+          serialChecksum += Serial.print("\"N\"");
+      } else { // mode pin use = false; buttons on
+        serialChecksum += Serial.print("\"A\"");
+      }
+    } else {
+      serialChecksum += Serial.print("\"B\"");
+    }
+
+    serialChecksum += Serial.print(", ");
     serialChecksum += Serial.print(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1 /*closing bracket*/ + count_digits(serialChecksum));
     Serial.println("}");
     return true;

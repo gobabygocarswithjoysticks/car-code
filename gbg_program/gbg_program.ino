@@ -140,7 +140,7 @@ float timeInterval;  // time in seconds (usually a small fraction of a second) b
 unsigned long lastMillisPrintedValues;
 
 ///// common types of motor controllers (ESCs) can be controlled with the Servo library /////
-#include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/
+#include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/, used version 1.1.8
 Servo leftMotorController;
 Servo rightMotorController;
 
@@ -148,9 +148,9 @@ Servo rightMotorController;
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
 const byte settings_memory_key = 26;
-#include <EEPROM.h>
+#include <EEPROM.h> // used version 2.0
 
-const int version_number = 3;  // for interaction with website
+const int version_number = 10;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -173,14 +173,11 @@ void setup() {
   turnProcessed = 0;
   speedKnobVal = -1;
   speedKnobScaler = 1;
-  leftMotorWriteVal = LEFT_MOTOR_CENTER;
-  rightMotorWriteVal = RIGHT_MOTOR_CENTER;
   timeInterval = 0;
   lastMillisPrintedValues = 0;
   movementAllowed = true;
   joyOK = false;
   joystickCenterCounter = 0;
-  startupPulse = ENABLE_STARTUP_PULSE;
 
 
 
@@ -189,10 +186,12 @@ void setup() {
   if (use_memory)
     settingsMemory();
 
+  leftMotorWriteVal = LEFT_MOTOR_CENTER;
+  rightMotorWriteVal = RIGHT_MOTOR_CENTER;
+  startupPulse = ENABLE_STARTUP_PULSE;
+
   delay(100);
   printSettings();  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  delay(100);
-  printSettings();  // do it again to increase the chance of a valid message going through
   delay(100);
   printSettings();  // do it again to increase the chance of a valid message going through
 
