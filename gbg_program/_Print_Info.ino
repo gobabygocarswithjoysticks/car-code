@@ -27,6 +27,21 @@ boolean printVariables(int interval) {
         if (digitalRead(driveButtons[button].pin) == LOW)
           bitSet(buttonBits, button);
       }
+
+      // extra MSB set to 1 if buttons active, to indicate the size of maxNumDriveButtons
+      if (ENABLE_BUTTON_CTRL) {
+        if (USE_BUTTON_MODE_PIN) {
+          if (digitalRead(BUTTON_MODE_PIN) == LOW)
+            bitSet(buttonBits, button);
+        } else { // mode pin use = false; buttons on
+          bitSet(buttonBits, button);
+        }
+      } //else  buttons off
+
+
+      if (ENABLE_BUTTON_CTRL && !(USE_BUTTON_MODE_PIN && digitalRead(BUTTON_MODE_PIN) == HIGH)) { // buttons on
+        bitSet(buttonBits, button); // extra MSB set to 1, to indicate the size of maxNumDriveButtons
+      }
     }
     serialChecksum += Serial.print(F("\"buttons\": ")); serialChecksum += Serial.print(buttonBits); serialChecksum += Serial.print(", ");
     serialChecksum += Serial.print(F("\"b_m_p\": "));
@@ -39,7 +54,7 @@ boolean printVariables(int interval) {
       } else { // mode pin use = false; buttons on
         serialChecksum += Serial.print("\"A\"");
       }
-    } else {
+    } else { // buttons off
       serialChecksum += Serial.print("\"B\"");
     }
 
