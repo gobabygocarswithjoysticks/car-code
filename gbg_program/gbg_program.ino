@@ -1,7 +1,7 @@
 /*
     This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
-    Questions or comments? Please email gobabygocarswithjoysticks@gmail.com.
+    Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions.
     Website that can upload and configure this code: https://gobabygocarswithjoysticks.github.io/programmer/
 
     This program has three types of functions that can be combined together to customize how the car drives.
@@ -71,16 +71,16 @@ int SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully to
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
 ///// joystick reader pins /////
-byte JOY_X_PIN = A2;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A0;  // Analog input pin that the forwards-backwards potentiometer is attached to
+byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
-byte RIGHT_MOTOR_CONTROLLER_PIN = 5;
+byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 
 byte SPEED_KNOB_PIN = A4;
 
-byte BUTTON_MODE_PIN = 6;
+byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 boolean ENABLE_BUTTON_CTRL = false;
@@ -103,6 +103,9 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {11, 1, 1}, //RF
   {12, -1, 0} //backwards
 };
+
+boolean STEERING_OFF_SWITCH = false;
+byte STEERING_OFF_SWITCH_PIN = 4;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
@@ -147,10 +150,10 @@ Servo rightMotorController;
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-const byte settings_memory_key = 26;
+const byte settings_memory_key = 11;
 #include <EEPROM.h> // used version 2.0
 
-const int version_number = 10;  // for interaction with website
+const int version_number = 11;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -212,6 +215,10 @@ void setupPins() {
     }
   }
 
+  if (STEERING_OFF_SWITCH) {
+    pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
+  }
+
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
   rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
@@ -256,8 +263,11 @@ void loop()
   turnProcessed = turnInput;
   speedProcessed = speedInput;
 
-  //reduce the turning when moving forward or backward. change SCALE_TURNING_WHEN_MOVING to change the turn radius when the joystick is pushed to a corner.
-  turnProcessed = InputProcessor_ScaleTurningWhenMoving(SCALE_TURNING_WHEN_MOVING, turnProcessed, speedProcessed);
+  if (STEERING_OFF_SWITCH) {
+    if (digitalRead(STEERING_OFF_SWITCH_PIN) == LOW) {
+      turnProcessed = 0;
+    }
+  }
 
   /// scale based on speed knob and speed limits ///
   if (USE_SPEED_KNOB) {
@@ -266,6 +276,9 @@ void loop()
     speedKnobScaler = 1.0;
   }
   InputProcessor_ScaleInput(speedKnobScaler, turnProcessed, speedProcessed, FASTEST_FORWARD, FASTEST_BACKWARD, TURN_SPEED);
+
+  //reduce the turning when moving forward or backward. change SCALE_TURNING_WHEN_MOVING to change the turn radius when the joystick is pushed to a corner.
+  turnProcessed = InputProcessor_ScaleTurningWhenMoving(SCALE_TURNING_WHEN_MOVING, turnProcessed, speedProcessed);
 
   // option to make the car go in the direction the joystick is pointed when in reverse
   // if the joystick is pulled to the back right corner, the front can turn towards the left (the reverse of normal for when the joystick is to the right) so the back of the car steers to the right

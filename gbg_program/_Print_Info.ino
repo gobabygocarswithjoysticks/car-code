@@ -125,6 +125,8 @@ void printSettings() {
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
     checksumPrintFlashString(F("], "));
   }
+  checksumPrintFlashString(F("\"STEERING_OFF_SWITCH\": "));  serialChecksum += Serial.print((STEERING_OFF_SWITCH ? "true" : "false")); checksumPrintComma();
+  checksumPrintFlashString(F("\"STEERING_OFF_SWITCH_PIN\": "));  serialChecksum += Serial.print(STEERING_OFF_SWITCH_PIN); checksumPrintComma();
 
   checksumPrintFlashString(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
   Serial.println("}");

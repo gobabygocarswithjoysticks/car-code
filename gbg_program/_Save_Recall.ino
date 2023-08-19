@@ -252,7 +252,20 @@ void settingsSerial() {
         }
         changedSomething = false;
       }
-
+      else if (strcmp(k, "STEERING_OFF_SWITCH") == 0) {
+        STEERING_OFF_SWITCH = atoi(v);
+        if (STEERING_OFF_SWITCH) {
+          pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
+          sprintf(resultBuf, "true");
+        }
+        else
+          sprintf(resultBuf, "false");
+      }
+      else if (strcmp(k, "STEERING_OFF_SWITCH_PIN") == 0) {
+        STEERING_OFF_SWITCH_PIN = atoi(v);
+        pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
+        sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
+      }
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
         changedSomething = false;
@@ -353,6 +366,8 @@ void saveSettings()
   EEPROMwrite(addressW, USE_BUTTON_MODE_PIN);
   EEPROMwrite(addressW, NUM_DRIVE_BUTTONS);
   EEPROMwrite(addressW, driveButtons);
+  EEPROMwrite(addressW, STEERING_OFF_SWITCH);
+  EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
 
   EEPROMwrite(addressW, eepromCRC);
 }
@@ -407,6 +422,8 @@ void recallSettings()
   EEPROMread(addressR, USE_BUTTON_MODE_PIN);
   EEPROMread(addressR, NUM_DRIVE_BUTTONS);
   EEPROMread(addressR, driveButtons);
+  EEPROMread(addressR, STEERING_OFF_SWITCH);
+  EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
 
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
