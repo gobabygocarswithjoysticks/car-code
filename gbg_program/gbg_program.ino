@@ -279,6 +279,7 @@ void loop()
 
   //reduce the turning when moving forward or backward. change SCALE_TURNING_WHEN_MOVING to change the turn radius when the joystick is pushed to a corner.
   turnProcessed = InputProcessor_ScaleTurningWhenMoving(SCALE_TURNING_WHEN_MOVING, turnProcessed, speedProcessed);
+  turnProcessed = constrain(turnProcessed, -1, 1);
 
   // option to make the car go in the direction the joystick is pointed when in reverse
   // if the joystick is pulled to the back right corner, the front can turn towards the left (the reverse of normal for when the joystick is to the right) so the back of the car steers to the right
