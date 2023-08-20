@@ -20,14 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///// joystick input reader constants /////
-int CONTROL_RIGHT = 632;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
-int CONTROL_CENTER_X = 509;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
-int CONTROL_LEFT = 385;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
+int CONTROL_RIGHT = 42;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
+int CONTROL_CENTER_X = 492;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
+int CONTROL_LEFT = 950;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
 int X_DEADZONE = 15;         // radius around center where joystick is considered centered
 
-int CONTROL_UP = 638;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
-int CONTROL_CENTER_Y = 511;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
-int CONTROL_DOWN = 380;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
+int CONTROL_UP = 927;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
+int CONTROL_CENTER_Y = 495;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
+int CONTROL_DOWN = 43;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
 int Y_DEADZONE = 15;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
