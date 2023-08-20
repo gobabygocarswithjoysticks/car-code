@@ -78,7 +78,7 @@ byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiome
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
 byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 
-byte SPEED_KNOB_PIN = A4;
+byte SPEED_KNOB_PIN = A3;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 
