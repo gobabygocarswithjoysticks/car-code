@@ -5,11 +5,12 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: compile
+  cancel-in-progress: true
+
 jobs:
   clear-file-for-saving-info:
-    concurrency:
-      group: compile
-      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
