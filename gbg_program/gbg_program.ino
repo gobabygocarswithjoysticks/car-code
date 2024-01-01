@@ -23,27 +23,27 @@
 int CONTROL_RIGHT = 42;     // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
 int CONTROL_CENTER_X = 492;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
 int CONTROL_LEFT = 950;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 15;         // radius around center where joystick is considered centered
+int X_DEADZONE = 50;         // radius around center where joystick is considered centered
 
 int CONTROL_UP = 927;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
 int CONTROL_CENTER_Y = 495;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
 int CONTROL_DOWN = 43;      // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 15;         // radius around center where joystick is considered centered
+int Y_DEADZONE = 50;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
-float ACCELERATION_FORWARD = 0.75;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
-float DECELERATION_FORWARD = 1.0;   //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
-float ACCELERATION_BACKWARD = 0.5;  //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
-float DECELERATION_BACKWARD = 1.5;  //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
+float ACCELERATION_FORWARD = 0.25;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
+float DECELERATION_FORWARD = 3;   //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
+float ACCELERATION_BACKWARD = 0.25;  //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
+float DECELERATION_BACKWARD = 3;  //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
 
-float ACCELERATION_TURNING = 1.0;  //acceleration of turning speed
-float DECELERATION_TURNING = 1.5;  //deceleration of turning speed
+float ACCELERATION_TURNING = 1;  //acceleration of turning speed
+float DECELERATION_TURNING = 3;  //deceleration of turning speed
 
-float FASTEST_FORWARD = 0.6;   //change # to limit the forward speed [0.0-1.0]
-float FASTEST_BACKWARD = 0.5;  //change # to limit the backward speed [0.0-1.0]
-float TURN_SPEED = 0.5;        //change # to limit the turning speed (greater than 0)
+float FASTEST_FORWARD = 0.2;   //change # to limit the forward speed [0.0-1.0]
+float FASTEST_BACKWARD = 0.2;  //change # to limit the backward speed [0.0-1.0]
+float TURN_SPEED = 0.15;        //change # to limit the turning speed (greater than 0)
 
-float SCALE_TURNING_WHEN_MOVING = .5;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
+float SCALE_TURNING_WHEN_MOVING = 0.85;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
 
 boolean SCALE_ACCEL_WITH_SPEED = true;  //set true if using a speed knob and you want to keep time to max speed constant instead of acceleration being constant
 
@@ -51,11 +51,11 @@ boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so th
 
 // calibrate signals to motor controllers
 int LEFT_MOTOR_CENTER = 1500;
-int LEFT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
+int LEFT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
 int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 int RIGHT_MOTOR_CENTER = 1500;
-int RIGHT_MOTOR_SLOW = 25;   // CENTER +- what? makes the motor start to turn
+int RIGHT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
 int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 int RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 int START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start
