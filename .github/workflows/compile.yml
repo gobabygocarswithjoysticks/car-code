@@ -6,16 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  wait-for-any-running-workflows-to-finish:
-    runs-on: ubuntu-latest
-    steps:
-    - name: wait-for-any-running-workflows-to-finish
-      uses: mktcode/consecutive-workflow-action@eb43c6b5852dd0e33efa797a1817196d06daa4b2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-
   clear-file-for-saving-info:
-    needs: wait-for-any-running-workflows-to-finish
+    concurrency:
+      group: compile
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
