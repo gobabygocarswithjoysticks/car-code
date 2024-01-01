@@ -1,7 +1,7 @@
 /*
     This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
-    Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions.
+    Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions
     Website that can upload and configure this code: https://gobabygocarswithjoysticks.github.io/programmer/
 
     This program has three types of functions that can be combined together to customize how the car drives.
