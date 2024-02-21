@@ -165,6 +165,7 @@ long joystickCenterCounter;
 boolean startupPulse;
 
 void setup() {
+  delay(50);
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
