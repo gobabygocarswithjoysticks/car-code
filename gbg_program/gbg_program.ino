@@ -153,6 +153,8 @@ Servo rightMotorController;
 const byte settings_memory_key = 11;
 #include <EEPROM.h> // used version 2.0
 
+#include <avr/wdt.h>
+
 const int version_number = 11;  // for interaction with website
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
@@ -164,8 +166,20 @@ long joystickCenterCounter;
 
 boolean startupPulse;
 
+
+
 void setup() {
   delay(50);
+  cli();
+  wdt_reset();
+  // Enter Watchdog Configuration mode:
+  WDTCSR |= (1<<WDE);
+  // Set Watchdog settings:
+  WDTCSR = (1<<WDIE) | (1<<WDE) |
+  (0<<WDP3) | (1<<WDP2) | (1<<WDP1) |
+  (1<<WDP0);
+  sei();
+    
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
