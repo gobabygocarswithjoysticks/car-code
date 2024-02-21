@@ -166,20 +166,22 @@ long joystickCenterCounter;
 
 boolean startupPulse;
 
-
+void (*resetFunc)(void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+ISR(WDT_vect) // Watchdog timer interrupt.
+{
+  wdt_reset();
+  resetFunc();
+}
 
 void setup() {
-  delay(50);
   cli();
   wdt_reset();
-  // Enter Watchdog Configuration mode:
-  WDTCSR |= (1<<WDE);
-  // Set Watchdog settings:
-  WDTCSR = (1<<WDIE) | (1<<WDE) |
-  (0<<WDP3) | (1<<WDP2) | (1<<WDP1) |
-  (1<<WDP0);
+  WDTCSR |= (1 << WDCE) | (1 << WDE);
+  WDTCSR = (1 << WDIE) | (0 << WDE) |
+           (0 << WDP3) | (1 << WDP2) | (1 << WDP1) |
+           (1 << WDP0);
   sei();
-    
+
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
@@ -196,8 +198,6 @@ void setup() {
   movementAllowed = true;
   joyOK = false;
   joystickCenterCounter = 0;
-
-
 
   Serial.begin(250000);
   digitalWrite(LED_BUILTIN, LOW);

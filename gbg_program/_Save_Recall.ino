@@ -26,8 +26,6 @@ char buf[60] = { 0 }; // buffer to fill with Serial input
 
 char resultBuf[15] = { 0 }; // for replying with the received value
 
-void (*resetFunc)(void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
-
 uint32_t eepromCRC = 0;
 
 void settingsSerial() {
@@ -445,6 +443,7 @@ void recallSettings()
     }
     pinMode(LED_BUILTIN, OUTPUT);
     delay(50);
+    wdt_disable();
     while (true) { // flash SOS forever
       digitalWrite(LED_BUILTIN, HIGH);
       delay(200);
