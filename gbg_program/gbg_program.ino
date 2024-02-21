@@ -244,6 +244,8 @@ void setupPins() {
 }
 void loop()
 {
+  wdt_reset();
+
   if (use_memory)
     settingsSerial();
 
