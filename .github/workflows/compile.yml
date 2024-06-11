@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: compile
+  group: Compile
   cancel-in-progress: true
 
 jobs:
@@ -48,6 +48,14 @@ jobs:
             niceBoardName: "new nano or uno"
             additional-commands: arduino-cli lib install Servo
 
+          - configName: "standard-rpiPico"
+            code-dir: gbg_program
+            arduino-platform: "arduino:mbed_rp2040"
+            fqbn: "arduino:mbed_rp2040:pico"
+            board-upload: "nano"
+            niceBoardName: "rpi pico"
+            additional-commands: arduino-cli lib install Servo
+
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
             arduino-platform: "arduino:avr"
@@ -61,6 +69,34 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
+
+          - configName: "clear_eeprom-rpiPico"
+            code-dir: clear_eeprom
+            arduino-platform: "arduino:mbed_rp2040"
+            fqbn: "arduino:mbed_rp2040:pico"
+            board-upload: "nano"
+            niceBoardName: "rpi pico"
+
+          - configName: "blink-nanoOld"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
+
+          - configName: "blink-nanoNew"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            niceBoardName: "new nano or uno"
+
+          - configName: "blink-rpiPico"
+            code-dir: clear_eeprom
+            arduino-platform: "arduino:mbed_rp2040"
+            fqbn: "arduino:mbed_rp2040:pico"
+            board-upload: "nano"
+            niceBoardName: "rpi pico"
             
 
     runs-on: ubuntu-latest
