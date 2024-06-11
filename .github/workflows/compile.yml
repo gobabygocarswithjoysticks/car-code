@@ -54,7 +54,7 @@ jobs:
             fqbn: "arduino:mbed_rp2040:pico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
-            additional-commands: arduino-cli lib install Servo
+            additional-commands: arduino-cli lib install Servo EEPROM
 
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
