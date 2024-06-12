@@ -106,6 +106,7 @@ jobs:
 
       - name: Install Arduino platforms
         run: |
+          arduino-cli config add board_manager.additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
           arduino-cli core update-index
           arduino-cli core install ${{ matrix.arduino-platform }} # install the arduino platform (avr, samd, etc) with the right platform for the current board
           ${{ matrix.additional-commands }}
