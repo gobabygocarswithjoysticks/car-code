@@ -443,8 +443,13 @@ void recallSettings()
     }
     pinMode(LED_BUILTIN, OUTPUT);
     delay(50);
+#ifdef AVR
     wdt_disable();
+#endif
     while (true) { // flash SOS forever
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(200);
       digitalWrite(LED_BUILTIN, LOW);
@@ -458,18 +463,27 @@ void recallSettings()
       digitalWrite(LED_BUILTIN, LOW);
       delay(200);
       delay(400);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(200);
@@ -483,6 +497,9 @@ void recallSettings()
       delay(200);
       digitalWrite(LED_BUILTIN, LOW);
       delay(200);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
       delay(1000);
     }
   }
