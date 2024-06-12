@@ -50,8 +50,8 @@ jobs:
 
 #          - configName: "standard-rpiPico"
  #           code-dir: gbg_program
-  #          arduino-platform: "arduino:mbed_rp2040"
-   #         fqbn: "arduino:mbed_rp2040:pico"
+  #          arduino-platform: "earlephilhower:arduino-pico"
+   #         fqbn: "earlephilhower:arduino-pico:pico"
     #        board-upload: "nano"
      #       niceBoardName: "rpi pico"
       #      additional-commands: arduino-cli lib install Servo
@@ -72,8 +72,8 @@ jobs:
 
           - configName: "clear_eeprom-rpiPico"
             code-dir: clear_eeprom
-            arduino-platform: "arduino:mbed_rp2040"
-            fqbn: "arduino:mbed_rp2040:pico"
+            arduino-platform: "earlephilhower:arduino-pico"
+            fqbn: "earlephilhower:arduino-pico:pico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
 
@@ -93,8 +93,8 @@ jobs:
 
           - configName: "blink-rpiPico"
             code-dir: clear_eeprom
-            arduino-platform: "arduino:mbed_rp2040"
-            fqbn: "arduino:mbed_rp2040:pico"
+            arduino-platform: "earlephilhower:arduino-pico"
+            fqbn: "earlephilhower:arduino-pico:pico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
             
