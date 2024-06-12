@@ -274,9 +274,9 @@ void settingsSerial() {
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
         EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
-        resetFunc();
+        delay(5000); // trigger wdt
       } else if (strcmp(k, "REBOOT") == 0) {
-        resetFunc();
+        delay(5000); // trigger wdt
       } else if (strcmp(k, "G") == 0) {
         changedSomething = false;
         movementAllowed = true;
