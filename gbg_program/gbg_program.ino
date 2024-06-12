@@ -155,6 +155,12 @@ const byte settings_memory_key = 11;
 
 #ifdef AVR
 #include <avr/wdt.h>
+void (*resetFunc)(void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
+ISR(WDT_vect) // Watchdog timer interrupt.
+{
+  wdt_reset();
+  resetFunc();
+}
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
 // no include needed for pico
 #endif
@@ -170,13 +176,6 @@ long joystickCenterCounter;
 
 boolean startupPulse;
 
-void (*resetFunc)(void) = 0; // reboots the Arduino https://www.theengineeringprojects.com/2015/11/reset-arduino-programmatically.html
-ISR(WDT_vect) // Watchdog timer interrupt.
-{
-  wdt_reset();
-  resetFunc();
-}
-
 void setup() {
 #ifdef AVR
   cli();
@@ -187,7 +186,7 @@ void setup() {
            (1 << WDP0);
   sei();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
-rp2040.wdt_begin(2000);
+  rp2040.wdt_begin(2000);
 #endif
     
   //initialize variables
