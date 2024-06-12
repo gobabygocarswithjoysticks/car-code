@@ -187,6 +187,7 @@ void setup() {
   sei();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   rp2040.wdt_begin(2000);
+  EEPROM.begin(1024);
 #endif
     
   //initialize variables
