@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli #@28065f7e0317cc0dde372e0c11631963d743ee3b
+        uses: arduino/setup-arduino-cli@v1.1.2
 
       - name: Install Arduino platforms
         run: |
