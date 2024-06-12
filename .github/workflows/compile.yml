@@ -48,13 +48,13 @@ jobs:
             niceBoardName: "new nano or uno"
             additional-commands: arduino-cli lib install Servo
 
-#          - configName: "standard-rpiPico"
- #           code-dir: gbg_program
-  #          arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
-   #         fqbn: "rp2040:rp2040:rpipico"
-    #        board-upload: "nano"
-     #       niceBoardName: "rpi pico"
-      #      additional-commands: arduino-cli lib install Servo
+          - configName: "standard-rpiPico"
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico"
+            board-upload: "nano"
+            niceBoardName: "rpi pico"
+            additional-commands: arduino-cli lib install Servo
 
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
@@ -129,6 +129,8 @@ jobs:
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
 
       - name: Commit compiled files
         run: |
