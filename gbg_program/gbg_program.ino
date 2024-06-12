@@ -153,7 +153,11 @@ Servo rightMotorController;
 const byte settings_memory_key = 11;
 #include <EEPROM.h> // used version 2.0
 
+#ifdef AVR
 #include <avr/wdt.h>
+#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+// no include needed for pico
+#endif
 
 const int version_number = 11;  // for interaction with website
 
@@ -174,6 +178,7 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 }
 
 void setup() {
+#ifdef AVR
   cli();
   wdt_reset();
   WDTCSR |= (1 << WDCE) | (1 << WDE);
@@ -181,7 +186,10 @@ void setup() {
            (0 << WDP3) | (1 << WDP2) | (1 << WDP1) |
            (1 << WDP0);
   sei();
-
+#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+rp2040.wdt_begin(2000);
+#endif
+    
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
@@ -244,7 +252,11 @@ void setupPins() {
 }
 void loop()
 {
+#ifdef AVR
   wdt_reset();
+#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+rp2040.wdt_reset()
+#endif
 
   if (use_memory)
     settingsSerial();
