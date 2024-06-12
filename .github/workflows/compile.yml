@@ -125,10 +125,10 @@ jobs:
          ls
          cd ../..
          pwd
-         rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
-         rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
-         rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
-         rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
 
       - name: Commit compiled files
         run: |
