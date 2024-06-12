@@ -50,7 +50,7 @@ jobs:
 
 #          - configName: "standard-rpiPico"
  #           code-dir: gbg_program
-  #          arduino-platform: "rp2040:rp2040"
+  #          arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
    #         fqbn: "rp2040:rp2040:rpipico"
     #        board-upload: "nano"
      #       niceBoardName: "rpi pico"
@@ -72,7 +72,7 @@ jobs:
 
           - configName: "clear_eeprom-rpiPico"
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040 --additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
@@ -93,7 +93,7 @@ jobs:
 
           - configName: "blink-rpiPico"
             code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
