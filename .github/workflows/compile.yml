@@ -121,9 +121,10 @@ jobs:
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex since others aren't needed
-         cd hex
+         cd hex/${{ matrix.configName }}/${{ matrix.code-dir }}
          ls
-         cd ..
+         cd ../../..
+         pwd
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
          rm hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
