@@ -72,7 +72,7 @@ jobs:
 
           - configName: "clear_eeprom-rpiPico"
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040"
+            arduino-platform: "rp2040:rp2040 --additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
@@ -92,8 +92,8 @@ jobs:
             niceBoardName: "new nano or uno"
 
           - configName: "blink-rpiPico"
-            code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040"
+            code-dir: blink
+            arduino-platform: "rp2040:rp2040 --additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "nano"
             niceBoardName: "rpi pico"
@@ -106,7 +106,6 @@ jobs:
 
       - name: Install Arduino platforms
         run: |
-          arduino-cli config add board_manager.additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
           arduino-cli core update-index
           arduino-cli core install ${{ matrix.arduino-platform }} # install the arduino platform (avr, samd, etc) with the right platform for the current board
           ${{ matrix.additional-commands }}
