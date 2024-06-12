@@ -4,3 +4,4 @@ clear_eeprom-nanoOld, clear_eeprom, nanoOldBootloader, old nano
 clear_eeprom-nanoNew, clear_eeprom, nano, new nano or uno
 clear_eeprom-rpiPico, clear_eeprom, RPIPICO, rpi pico
 blink-nanoOld, blink, nanoOldBootloader, old nano
+blink-nanoNew, blink, nano, new nano or uno
