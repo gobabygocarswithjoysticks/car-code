@@ -71,14 +71,14 @@ int SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully to
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
 ///// joystick reader pins /////
-byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
+byte JOY_X_PIN = A2;  // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = A0;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
 byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 
-byte SPEED_KNOB_PIN = A3;
+byte SPEED_KNOB_PIN = A1;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 
@@ -255,7 +255,7 @@ void loop()
 #ifdef AVR
   wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
-rp2040.wdt_reset()
+rp2040.wdt_reset();
 #endif
 
   if (use_memory)
