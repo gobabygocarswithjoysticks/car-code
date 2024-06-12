@@ -48,12 +48,12 @@ jobs:
             niceBoardName: "new nano or uno"
             additional-commands: arduino-cli lib install Servo
 
-          - configName: "standard-rpiPico"
-            code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
-            board-upload: "nano"
-            niceBoardName: "rpi pico"
+        #  - configName: "standard-rpiPico"
+        #    code-dir: gbg_program
+        #    arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+        #    fqbn: "rp2040:rp2040:rpipico"
+        #    board-upload: "RPIPICO"
+        #     niceBoardName: "rpi pico"
     
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
@@ -73,7 +73,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
-            board-upload: "nano"
+            board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
 
           - configName: "blink-nanoOld"
@@ -94,7 +94,7 @@ jobs:
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
-            board-upload: "nano"
+            board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             
 
