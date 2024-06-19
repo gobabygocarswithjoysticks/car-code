@@ -20,15 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///// joystick input reader constants /////
-int CONTROL_RIGHT = 42;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
-int CONTROL_CENTER_X = 492;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
-int CONTROL_LEFT = 950;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int X_DEADZONE = 50;         // radius around center where joystick is considered centered
+int16_t CONTROL_RIGHT = 42;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
+int16_t CONTROL_CENTER_X = 492;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
+int16_t CONTROL_LEFT = 950;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
+int16_t X_DEADZONE = 50;         // radius around center where joystick is considered centered
 
-int CONTROL_UP = 927;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
-int CONTROL_CENTER_Y = 495;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
-int CONTROL_DOWN = 43;       // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int Y_DEADZONE = 50;         // radius around center where joystick is considered centered
+int16_t CONTROL_UP = 927;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
+int16_t CONTROL_CENTER_Y = 495;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
+int16_t CONTROL_DOWN = 43;       // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
+int16_t Y_DEADZONE = 50;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
 float ACCELERATION_FORWARD = 0.25;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
@@ -50,23 +50,23 @@ boolean SCALE_ACCEL_WITH_SPEED = true;  //set true if using a speed knob and you
 boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so that the car goes in the direction the joystick is pointed when in reverse
 
 // calibrate signals to motor controllers
-int LEFT_MOTOR_CENTER = 1500;
-int LEFT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
-int LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
-int LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
-int RIGHT_MOTOR_CENTER = 1500;
-int RIGHT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
-int RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
-int RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
-int START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start
+int16_t LEFT_MOTOR_CENTER = 1500;
+int16_t LEFT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
+int16_t LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int16_t LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int16_t RIGHT_MOTOR_CENTER = 1500;
+int16_t RIGHT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
+int16_t RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
+int16_t RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int16_t START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start
 
 boolean ENABLE_STARTUP_PULSE = true; // small movement to indicate that the car is ready
 
-int JOY_CALIB_COUNT = 800; // how long does joystick need to be centered? (units of somewhere between 1 and 2 milliseconds)
+int16_t JOY_CALIB_COUNT = 800; // how long does joystick need to be centered? (units of somewhere between 1 and 2 milliseconds)
 
 boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read the speed knob (see FASTEST_FORWARD, FASTEST_BACKWARD and TURN_SPEED to limit speed)
-int SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
-int SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
+int16_t SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
+int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
@@ -187,9 +187,10 @@ void setup() {
   sei();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   rp2040.wdt_begin(2000);
+  rp2040.wdt_reset();
   EEPROM.begin(1024);
 #endif
-    
+
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
@@ -255,7 +256,7 @@ void loop()
 #ifdef AVR
   wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
-rp2040.wdt_reset();
+  rp2040.wdt_reset();
 #endif
 
   if (use_memory)

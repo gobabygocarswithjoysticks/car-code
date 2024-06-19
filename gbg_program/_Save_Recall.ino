@@ -5,21 +5,8 @@
   If the checksum reveals data corruption, the car enters a safe mode instead of driving with wrong values.
 */
 
-const unsigned int repeat_space = 200; // space between each copy of a variable
+const unsigned int repeat_space = 200; // space between each copy of a variable (larger than number of bytes needed for settings)
 
-void settingsMemory()
-{
-  byte settingsMemoryKeyRead; // the read value
-  unsigned int settingsMemoryKeyReadAddress = 0;
-  EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
-  if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
-    settingsMemoryKeyReadAddress = 0;
-    EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
-    saveSettings();
-    movementAllowed = false;
-  }
-  recallSettings();
-}
 
 byte bufP = 0;
 char buf[60] = { 0 }; // buffer to fill with Serial input
@@ -28,8 +15,35 @@ char resultBuf[15] = { 0 }; // for replying with the received value
 
 uint32_t eepromCRC = 0;
 
+boolean errorCorrectionPerformed = false;
+
+void settingsMemory()
+{
+  byte settingsMemoryKeyRead; // the read value
+  unsigned int settingsMemoryKeyReadAddress = 0;
+
+  errorCorrectionPerformed = false;
+  EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+  if (errorCorrectionPerformed) {
+    EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
+  }
+#endif
+
+  if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
+    settingsMemoryKeyReadAddress = 0;
+    EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+    EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
+#endif
+    saveSettings();
+    movementAllowed = false;
+  } // end of special case of overwriting using default values
+  recallSettings();
+}
+
 void settingsSerial() {
-  char in = Serial.read();
+  int8_t in = Serial.read();
   if (in != -1) {
     if (in == ',') {
       buf[bufP] = 0;  // null terminator
@@ -274,6 +288,9 @@ void settingsSerial() {
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
         EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+        EEPROM.commit();
+#endif
         delay(5000); // trigger wdt
       } else if (strcmp(k, "REBOOT") == 0) {
         delay(5000); // trigger wdt
@@ -368,12 +385,15 @@ void saveSettings()
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
 
   EEPROMwrite(addressW, eepromCRC);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+  EEPROM.commit();
+#endif
 }
 void recallSettings()
 {
   unsigned int addressR = 1;
   eepromCRC = 0;
-
+  errorCorrectionPerformed = false;
   EEPROMread(addressR, CONTROL_RIGHT);
   EEPROMread(addressR, CONTROL_CENTER_X);
   EEPROMread(addressR, CONTROL_LEFT);
@@ -426,6 +446,13 @@ void recallSettings()
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
+
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+  if (errorCorrectionPerformed) {
+    EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
+  }
+#endif
+
   // a checksum isn't a perfect guarantee that the stored data is valid, but likely better than 1 in 1000
   if (tempEepromCRC != readCRC) { // calculated checksum of data doesn't match stored checksum of data
     delay(50);
@@ -439,7 +466,6 @@ void recallSettings()
     // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
     for (byte pin = 2; pin <= 100; pin++) {
       pinMode(pin, INPUT);
-      digitalWrite(pin, LOW);
     }
     pinMode(LED_BUILTIN, OUTPUT);
     delay(50);
@@ -512,9 +538,9 @@ void EEPROMwrite(unsigned int& address, const T & value)
   // modified from code by Nick Gammon https://forum.arduino.cc/t/how-do-i-convert-a-struct-to-a-byte-array-and-back-to-a-struct-again/261791/8
   const byte* p = (const byte*)&value;
   for (unsigned int i = 0; i < sizeof value; i++) {
-    EEPROM.update(address, *p); // Three copies of the data are stored in EEPROM to detect and correct single bit errors
-    EEPROM.update(address + repeat_space, *p);
-    EEPROM.update(address + repeat_space * 2, *p);
+    EEPROM.write(address, *p); // Three copies of the data are stored in EEPROM to detect and correct single bit errors
+    EEPROM.write(address + repeat_space, *p);
+    EEPROM.write(address + repeat_space * 2, *p);
     tempEepromCRC = crc_update(tempEepromCRC, *p);
     // writes 3 copies
     address++;
@@ -538,14 +564,23 @@ void EEPROMread(unsigned int& address, T & value)
     } else { // disagreement, correct the corrupted bit
       //(if two bits flip, both in the same place, then instead of correcting the error, the error is kept, but this is hopefully unlikely and likely to be caught by the checksum)
       *p = (a & b) | (b & c) | (c & a); // bitwise majority https://stackoverflow.com/a/29892322
-      EEPROM.update(address, *p); // replace all three copies with the majority value
-      EEPROM.update(address + repeat_space, *p);
-      EEPROM.update(address + repeat_space * 2, *p);
+      EEPROM.write(address, *p); // replace all three copies with the majority value
+      EEPROM.write(address + repeat_space, *p);
+      EEPROM.write(address + repeat_space * 2, *p);
+
+      errorCorrectionPerformed = true;
       pinMode(LED_BUILTIN, OUTPUT);
       digitalWrite(LED_BUILTIN, LOW);
       delay(100);
       digitalWrite(LED_BUILTIN, HIGH);
-      delay(100);
+      delay(50);
+      // correcting errors can take a while. don't let the watchdog timeout
+#ifdef AVR
+      wdt_reset();
+#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+      rp2040.wdt_reset();
+#endif
+
     }
     eepromCRC = crc_update(eepromCRC, *p);
     address++;
