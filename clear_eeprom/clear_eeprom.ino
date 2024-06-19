@@ -2,7 +2,9 @@
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   EEPROM.begin(1024);
+#endif
   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 255);
     delay(1);
