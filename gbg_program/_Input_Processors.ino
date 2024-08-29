@@ -64,6 +64,6 @@ float InputProcessor_LimitAccelerationOneSetting(float velocity, float velocityT
   return velocity;
 }
 
-float InputProcessor_ScaleTurningWhenMoving(float stwm, float x, float y) {
-  return x * max(1.0 - (1.0 - stwm) * abs(y), 0.0);
+float InputProcessor_ScaleTurningWhenMoving(float stwm, float x, float y, float maxy) {
+  return x * max(1.0 - (1.0 - stwm) * abs(y) / (abs(maxy) + 0.0001), 0.0);
 }
