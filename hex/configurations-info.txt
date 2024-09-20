@@ -1,1 +1,2 @@
 standard-rpiPico-W, gbg_program, RPIPICOW, rpi pico W
+blink-rpiPico-W, blink, RPIPICOW, rpi pico W
