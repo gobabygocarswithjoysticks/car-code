@@ -385,6 +385,13 @@ void saveSettings()
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
 
   EEPROMwrite(addressW, eepromCRC);
+
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   EEPROM.commit();
 #endif
@@ -446,13 +453,6 @@ void recallSettings()
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
-
-Serial.println(addressR);
-Serial.println(addressR);
-Serial.println(addressR);
-Serial.println(addressR);
-Serial.println(addressR);
-
 
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   if (errorCorrectionPerformed) {
