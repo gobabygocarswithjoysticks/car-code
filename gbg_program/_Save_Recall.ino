@@ -447,6 +447,13 @@ void recallSettings()
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
 
+Serial.println(addressR);
+Serial.println(addressR);
+Serial.println(addressR);
+Serial.println(addressR);
+Serial.println(addressR);
+
+
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   if (errorCorrectionPerformed) {
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
