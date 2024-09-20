@@ -257,6 +257,10 @@ void setupPins() {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
 
+#ifdef PICO_W
+  setupWifi();
+#endif
+
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
   rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
@@ -271,6 +275,10 @@ void loop()
   wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   rp2040.wdt_reset();
+#endif
+
+#ifdef PICO_W
+  runWifi();
 #endif
 
   if (use_memory)

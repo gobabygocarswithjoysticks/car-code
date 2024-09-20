@@ -384,9 +384,9 @@ void saveSettings()
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
 
-  EEPROMwrite(addressW, eepromCRC);
+  EEPROMwrite(addressW, eepromCRC); //172 bytes
 
-  Serial.println(addressW);
+  Serial.println(addressW); // 172
   Serial.println(addressW);
   Serial.println(addressW);
   Serial.println(addressW);
