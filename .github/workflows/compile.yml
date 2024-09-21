@@ -37,14 +37,9 @@ jobs:
 
           rm -f ./gbg_program/_wifi_site.ino
           cp ./gbg_program/_wifi_site.html ./gbg_program/_wifi_site.ino
-          echo "HI"
-          ls
-          pwd
-          cat ./gbg_program/_wifi_site.ino   
-          ehco "BYE"
-          cd ./gbg_program
-          ls
-          pwd
+
+          sed 's/"/\"/g' _wifi_site.ino
+          tf '\n' ' ' <_wifi_site.ino
 
           git commit . -m "BOT process website" --allow-empty
           git push
