@@ -42,7 +42,7 @@ jobs:
           tr '\n' ' ' < ./gbg_program/_website.ino > ./gbg_program/_website.ino.tmp
           mv -f ./gbg_program/_website.ino.tmp ./gbg_program/_website.ino
 
-          sed -i 's:^:// Don't edit. Auto generated from _wifi_site.html \n#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " :' ./gbg_program/_website.ino
+          sed -i 's:^:\/\/ Don't edit. Auto generated from _wifi_site.html \n#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " :' ./gbg_program/_website.ino
           printf '"; \n #endif' >> ./gbg_program/_website.ino
 
           git add .
