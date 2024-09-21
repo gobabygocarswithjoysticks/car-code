@@ -13,14 +13,18 @@
   <div id="status" style="font-size: 50px;">status: </div>
 </body>
 <script>
-  function loop() {
+  async function loop() {
+    var errorTimeout;
     try {
-      fetch('/status').then(function (response) {
-        return response.text();
-      }).then(function (text) {
-        document.getElementById("status").innerHTML = "status: " + text;
-      });
+      // set timeout with prototype function
+      errorTimeout = setTimeout(() => {
+        document.getElementById("status").innerHTML = "status: disconnected";
+      }, 150);
+      const text = await fetch('/status');
+      document.getElementById("status").innerHTML = "status: " + text;
+      clearTimeout(errorTimeout);
     } catch (e) {
+      clearTimeout(errorTimeout);
       console.log(e);
       document.getElementById("status").innerHTML = "status: disconnected";
     }
