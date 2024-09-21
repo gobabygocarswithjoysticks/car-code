@@ -9,7 +9,8 @@
   <p>Use the buttons below to turn the car's joystick on and off.</p>
   <button onclick='fetch("/activate");' style='font-size: 100px;'>GO</button>
   <button onclick='fetch("/deactivate");' style='font-size: 200px; float: right;'>STOP</button>
-  <div id="status">status: </div>
+  <br>
+  <div id="status" style="font-size: 50px;">status: </div>
 </body>
 <script>
   function loop() {
@@ -24,7 +25,7 @@
       document.getElementById("status").innerHTML = "status: disconnected";
     }
   }
-  setInterval(loop, 1000);
+  setInterval(loop, 200);
 </script>
 
 </html>
