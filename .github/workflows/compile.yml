@@ -36,7 +36,7 @@ jobs:
           git pull # get the most recent state of the repo
    
           cp ./gbg_program/_wifi_site.html _wifi_site.ino
-          sed 's/hi/moo/g' _wifi_site.ino
+   
 
           git commit . -m "BOT process website" --allow-empty
           git push
