@@ -128,6 +128,11 @@ void printSettings() {
   checksumPrintFlashString(F("\"STEERING_OFF_SWITCH\": "));  serialChecksum += Serial.print((STEERING_OFF_SWITCH ? "true" : "false")); checksumPrintComma();
   checksumPrintFlashString(F("\"STEERING_OFF_SWITCH_PIN\": "));  serialChecksum += Serial.print(STEERING_OFF_SWITCH_PIN); checksumPrintComma();
 
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  checksumPrintFlashString(F("\"CAR_WIFI_NAME\": "));  serialChecksum += Serial.print(CAR_WIFI_NAME); checksumPrintComma();
+  checksumPrintFlashString(F("\"CAR_WIFI_PASSWORD\": "));  serialChecksum += Serial.print(CAR_WIFI_PASSWORD); checksumPrintComma();
+#endif
+
   checksumPrintFlashString(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
   Serial.println("}");
 

@@ -278,6 +278,17 @@ void settingsSerial() {
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
       }
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+      else if (strcmp(k, "CAR_WIFI_NAME") == 0) {
+        CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
+        sprintf(resultBuf, "%d", CAR_WIFI_NAME);
+      }
+      else if (strcmp(k, "CAR_WIFI_PASSWORD") == 0) {
+        CAR_WIFI_PASSWORD = atoi(v);
+        CAR_WIFI_PASSWORD = constrain(CAR_WIFI_PASSWORD, 0, 999999999);
+        sprintf(resultBuf, "%d", CAR_WIFI_PASSWORD);
+      }
+#endif
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
         changedSomething = false;
@@ -383,16 +394,14 @@ void saveSettings()
   EEPROMwrite(addressW, driveButtons);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  EEPROMwrite(addressW, CAR_WIFI_NAME);
+  EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
+#endif
+  EEPROMwrite(addressW, eepromCRC);
+  // addressW equaled 177 on pico W on this line
 
-  EEPROMwrite(addressW, eepromCRC); //172 bytes
-
-  Serial.println(addressW); // 172
-  Serial.println(addressW);
-  Serial.println(addressW);
-  Serial.println(addressW);
-  Serial.println(addressW);
-
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040) || defined(ARDUINO_ARCH_RP2040)
   EEPROM.commit();
 #endif
 }
@@ -449,6 +458,10 @@ void recallSettings()
   EEPROMread(addressR, driveButtons);
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  EEPROMread(addressR, CAR_WIFI_NAME);
+  EEPROMread(addressR, CAR_WIFI_PASSWORD);
+#endif
 
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
@@ -471,15 +484,20 @@ void recallSettings()
       rightMotorController.detach();
     delay(100);
     // stop sending any signals out of the pins (set all to inputs, even if it's on a Mega)
+#ifdef AVR // setting all pins to input messes up rpi picos
     for (byte pin = 2; pin <= 100; pin++) {
       pinMode(pin, INPUT);
     }
+#endif
+
     pinMode(LED_BUILTIN, OUTPUT);
     delay(50);
+
 #ifdef AVR
     wdt_disable();
 #endif
     while (true) { // flash SOS forever
+      Serial.println(F("{\"error\": \"eeprom failure\"}"));
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
 #endif
@@ -505,6 +523,7 @@ void recallSettings()
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
+
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
 #endif
@@ -514,6 +533,7 @@ void recallSettings()
       delay(500);
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
+
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
 #endif

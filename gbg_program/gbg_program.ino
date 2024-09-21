@@ -121,10 +121,19 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 boolean STEERING_OFF_SWITCH = false;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+int8_t CAR_WIFI_NAME = 1;
+int32_t CAR_WIFI_PASSWORD = 12345678;
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
+
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+boolean activatedByRemote = true;
+#endif
 
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +188,11 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 // no include needed for pico
 #endif
 
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+const int version_number = 12;  // for interaction with website
+#else
 const int version_number = 11;  // for interaction with website
+#endif
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -191,6 +204,13 @@ long joystickCenterCounter;
 boolean startupPulse;
 
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+  Serial.begin(250000);
+  Serial.println();
+  delay(50);
+  digitalWrite(LED_BUILTIN, LOW);
+
 #ifdef AVR
   cli();
   wdt_reset();
@@ -204,7 +224,6 @@ void setup() {
   rp2040.wdt_reset();
   EEPROM.begin(1024);
 #endif
-
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
@@ -222,8 +241,6 @@ void setup() {
   joyOK = false;
   joystickCenterCounter = 0;
 
-  Serial.begin(250000);
-  digitalWrite(LED_BUILTIN, LOW);
   if (use_memory)
     settingsMemory();
 
@@ -238,6 +255,10 @@ void setup() {
 
   setupPins();
 
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  setupWifi();
+
+#endif
 }
 void setupPins() {
   pinMode(JOY_X_PIN, INPUT);
@@ -257,10 +278,6 @@ void setupPins() {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
 
-#ifdef PICO_W
-  setupWifi();
-#endif
-
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
   rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
@@ -277,7 +294,7 @@ void loop()
   rp2040.wdt_reset();
 #endif
 
-#ifdef PICO_W
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
   runWifi();
 #endif
 
@@ -312,8 +329,17 @@ void loop()
     void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) // speedInput and turnInput are edited by this function
 
   */
-  turnProcessed = turnInput;
-  speedProcessed = speedInput;
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  if (activatedByRemote) {
+#endif
+    turnProcessed = turnInput;
+    speedProcessed = speedInput;
+#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+  } else {
+    turnProcessed = 0;
+    speedProcessed = 0;
+  }
+#endif
 
   if (STEERING_OFF_SWITCH) {
     if (digitalRead(STEERING_OFF_SWITCH_PIN) == LOW) {
