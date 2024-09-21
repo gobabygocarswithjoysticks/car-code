@@ -38,8 +38,8 @@ jobs:
           rm -f ./gbg_program/_wifi_site.ino
           cp ./gbg_program/_wifi_site.html ./gbg_program/_wifi_site.ino
 
-          sed 's/"/\"/g' _wifi_site.ino
-          tf '\n' ' ' <_wifi_site.ino
+          sed 's/"/\"/g' ./gbg_program/_wifi_site.ino
+          tr '\n' ' ' < ./gbg_program/_wifi_site.ino
 
           git commit . -m "BOT process website" --allow-empty
           git push
