@@ -23,6 +23,23 @@ jobs:
           [ -d "./hex" ] && git rm -r ./hex # only delete the directory if it exists
           git commit . -m "BOT delete old files" --allow-empty
           git push
+  process-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: process file
+        run: |
+          git config --global user.name 'gbg-with-joysticks'
+          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+          git pull # get the most recent state of the repo
+   
+          cp ./gbg_program/_wifi_site.html _wifi_site.ino
+          sed 's/hi/moo/g' _wifi_site.ino
+          tf 'o' 'x' <_wifi_site.ino
+
+          git commit . -m "BOT process website" --allow-empty
+          git push
   compile-sketch:
     needs: clear-file-for-saving-info #run second
     strategy:
@@ -138,18 +155,14 @@ jobs:
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
          git pull # get the most recent state of the repo
 
-         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; cp ./gbg_program/_wifi_site.html _wifi_site.ino; fi
-         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; sed 's/hi/moo/g' _wifi_site.ino; fi
-         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; tf 'o' 'x' <_wifi_site.ino; fi
-
-    #     arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
-         # delete files other than programName.ino.hex since others aren't needed
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin
-    #     rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
+         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
+         # delete files other than programName.ino.hex (or .uf2) since others aren't needed
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
 
       - name: Commit compiled files
         run: |
