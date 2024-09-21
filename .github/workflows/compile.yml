@@ -34,8 +34,10 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
-   
+
+          rm -f ./gbg_program/_wifi_site.ino
           cp ./gbg_program/_wifi_site.html _wifi_site.ino
+          echo "HI"
           echo ./gbg_program/_wifi_site.ino   
 
           git commit . -m "BOT process website" --allow-empty
