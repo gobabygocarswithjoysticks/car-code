@@ -43,7 +43,7 @@ jobs:
           mv -f ./gbg_program/_website.ino.tmp ./gbg_program/_website.ino
 
           sed -i 's:^:\/\/ Do not edit. Auto generated from _wifi_site.html \n#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " :' ./gbg_program/_website.ino
-          printf '"; \n #endif' >> ./gbg_program/_website.ino
+          printf '"; \n#endif' >> ./gbg_program/_website.ino
 
           git add .
           git commit . -m "BOT process website" --allow-empty
@@ -65,20 +65,20 @@ jobs:
             niceBoardName: "old nano"
             additional-commands: arduino-cli lib install Servo
 
-#          - configName: "standard-nanoNew"
-#            code-dir: gbg_program
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nano"
-#            niceBoardName: "new nano or uno"
-#            additional-commands: arduino-cli lib install Servo
+          - configName: "standard-nanoNew"
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            niceBoardName: "new nano or uno"
+            additional-commands: arduino-cli lib install Servo
 
-#          - configName: "standard-rpiPico"
-#            code-dir: gbg_program
-#            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-#            fqbn: "rp2040:rp2040:rpipico"
-#            board-upload: "RPIPICO"
-#            niceBoardName: "rpi pico"
+          - configName: "standard-rpiPico"
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico"
+            board-upload: "RPIPICO"
+            niceBoardName: "rpi pico"
 
           - configName: "standard-rpiPico-W"
             code-dir: gbg_program
@@ -87,61 +87,61 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
     
-#          - configName: "clear_eeprom-nanoOld"
-#            code-dir: clear_eeprom
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nanoOldBootloader"
-#            niceBoardName: "old nano"
+          - configName: "clear_eeprom-nanoOld"
+            code-dir: clear_eeprom
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
 
-#          - configName: "clear_eeprom-nanoNew"
-#            code-dir: clear_eeprom
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nano"
-#            niceBoardName: "new nano or uno"
+          - configName: "clear_eeprom-nanoNew"
+            code-dir: clear_eeprom
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            niceBoardName: "new nano or uno"
 
-#          - configName: "clear_eeprom-rpiPico"
-#            code-dir: clear_eeprom
-#            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-#            fqbn: "rp2040:rp2040:rpipico"
-#            board-upload: "RPIPICO"
-#            niceBoardName: "rpi pico"
+          - configName: "clear_eeprom-rpiPico"
+            code-dir: clear_eeprom
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico"
+            board-upload: "RPIPICO"
+            niceBoardName: "rpi pico"
 
-#          - configName: "clear_eeprom-rpiPico-W"
-#            code-dir: clear_eeprom
-#            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-#            fqbn: "rp2040:rp2040:rpipicow"
-#            board-upload: "RPIPICOW"
-#            niceBoardName: "rpi pico W"
+          - configName: "clear_eeprom-rpiPico-W"
+            code-dir: clear_eeprom
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipicow"
+            board-upload: "RPIPICOW"
+            niceBoardName: "rpi pico W"
     
-#          - configName: "blink-nanoOld"
-#            code-dir: blink
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nanoOldBootloader"
-#            niceBoardName: "old nano"
+          - configName: "blink-nanoOld"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
 
-#          - configName: "blink-nanoNew"
-#            code-dir: blink
-#            arduino-platform: "arduino:avr"
-#            fqbn: "arduino:avr:nano"
-#            board-upload: "nano"
-#            niceBoardName: "new nano or uno"
+          - configName: "blink-nanoNew"
+            code-dir: blink
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            niceBoardName: "new nano or uno"
 
-#          - configName: "blink-rpiPico"
-#            code-dir: blink
-#            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-#            fqbn: "rp2040:rp2040:rpipico"
-#            board-upload: "RPIPICO"
-#            niceBoardName: "rpi pico"
+          - configName: "blink-rpiPico"
+            code-dir: blink
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico"
+            board-upload: "RPIPICO"
+            niceBoardName: "rpi pico"
             
-#          - configName: "blink-rpiPico-W"
-#            code-dir: blink
-#            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-#            fqbn: "rp2040:rp2040:rpipicow"
-#            board-upload: "RPIPICOW"
-#            niceBoardName: "rpi pico W"
+          - configName: "blink-rpiPico-W"
+            code-dir: blink
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipicow"
+            board-upload: "RPIPICOW"
+            niceBoardName: "rpi pico W"
 
     runs-on: ubuntu-latest
     steps:
