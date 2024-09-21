@@ -35,15 +35,15 @@ jobs:
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull # get the most recent state of the repo
 
-          rm -f ./gbg_program/_wifi_site.ino
-          cp ./gbg_program/_wifi_site.html ./gbg_program/_wifi_site.ino
+          rm -f ./gbg_program/_website.ino
+          cp ./gbg_program/_wifi_site.html ./gbg_program/_website.ino
 
-          sed -i 's:":\\":g' ./gbg_program/_wifi_site.ino
-          tr '\n' ' ' < ./gbg_program/_wifi_site.ino > ./gbg_program/_wifi_site.ino.tmp
-          mv -f ./gbg_program/_wifi_site.ino.tmp ./gbg_program/_wifi_site.ino
+          sed -i 's:":\\":g' ./gbg_program/_website.ino
+          tr '\n' ' ' < ./gbg_program/_website.ino > ./gbg_program/_website.ino.tmp
+          mv -f ./gbg_program/_website.ino.tmp ./gbg_program/_website.ino
 
-          sed -i 's/^/#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " /' ./gbg_program/_wifi_site.ino
-          printf '"; \n #endif' >> ./gbg_program/_wifi_site.ino
+          sed -i 's:^:// Don't edit. Auto generated from _wifi_site.html \n#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " :' ./gbg_program/_website.ino
+          printf '"; \n #endif' >> ./gbg_program/_website.ino
 
           git add .
           git commit . -m "BOT process website" --allow-empty
