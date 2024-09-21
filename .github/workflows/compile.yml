@@ -24,6 +24,7 @@ jobs:
           git commit . -m "BOT delete old files" --allow-empty
           git push
   process-website:
+    needs: clear-file-for-saving-info #run after
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,12 +37,11 @@ jobs:
    
           cp ./gbg_program/_wifi_site.html _wifi_site.ino
           sed 's/hi/moo/g' _wifi_site.ino
-          tf 'o' 'x' <_wifi_site.ino
 
           git commit . -m "BOT process website" --allow-empty
           git push
   compile-sketch:
-    needs: clear-file-for-saving-info #run second
+    needs: process-website #run after
     strategy:
       max-parallel: 1 # since the actions edit files in the repo, only run one at a time.
       matrix:
