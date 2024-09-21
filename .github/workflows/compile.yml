@@ -138,7 +138,9 @@ jobs:
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
          git pull # get the most recent state of the repo
 
-         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; cp ./gbg_program/_wifi_site.html _wifi_site.ino; sed 's/hi/moo/g' _wifi_site.ino; tf 'o' 'x' <_wifi_site.ino; fi
+         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; cp ./gbg_program/_wifi_site.html _wifi_site.ino; fi
+         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; sed 's/hi/moo/g' _wifi_site.ino; fi
+         if [[ ${{matrix.fqbn}} == "rp2040:rp2040:rpipicow" ]]; tf 'o' 'x' <_wifi_site.ino; fi
 
     #     arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex since others aren't needed
