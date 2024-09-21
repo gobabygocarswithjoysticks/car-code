@@ -28,6 +28,9 @@ void setupWifi() {
     activatedByRemote = false;
     webServer.send(200);
   });
+  webServer.on("/status", []() {
+    webServer.send(200,"text/plain",activatedByRemote?"on":"off");
+  });
 
   webServer.begin();
 }
