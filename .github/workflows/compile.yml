@@ -43,7 +43,7 @@ jobs:
           mv -f ./gbg_program/_wifi_site.ino.tmp ./gbg_program/_wifi_site.ino
 
           sed -i 's/^/#ifdef ARDUINO_RASPBERRY_PI_PICO_W \n  const char indexHTML[] = " /' ./gbg_program/_wifi_site.ino
-          echo '"; \n #endif' >> ./gbg_program/_wifi_site.ino
+          printf '"; \n #endif' >> ./gbg_program/_wifi_site.ino
 
           git add .
           git commit . -m "BOT process website" --allow-empty
