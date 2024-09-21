@@ -38,16 +38,11 @@ jobs:
           rm -f ./gbg_program/_wifi_site.ino
           cp ./gbg_program/_wifi_site.html ./gbg_program/_wifi_site.ino
 
-          echo "111111"
-
           sed -i 's/"/\"/g' ./gbg_program/_wifi_site.ino
-          echo "222222"
           tr '\n' ' ' < ./gbg_program/_wifi_site.ino > ./gbg_program/_wifi_site.ino.tmp
-          echo "333333"
           mv -f ./gbg_program/_wifi_site.ino.tmp ./gbg_program/_wifi_site.ino
-          echo "444444"
-          git status
 
+          git add .
           git commit . -m "BOT process website" --allow-empty
           git push
   compile-sketch:
