@@ -38,7 +38,7 @@ jobs:
           rm -f ./gbg_program/_wifi_site.ino
           cp ./gbg_program/_wifi_site.html ./gbg_program/_wifi_site.ino
 
-          sed -i 's/"/\"/g' ./gbg_program/_wifi_site.ino
+          sed -i 's:":\\":g' ./gbg_program/_wifi_site.ino
           tr '\n' ' ' < ./gbg_program/_wifi_site.ino > ./gbg_program/_wifi_site.ino.tmp
           mv -f ./gbg_program/_wifi_site.ino.tmp ./gbg_program/_wifi_site.ino
 
