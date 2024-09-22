@@ -20,6 +20,7 @@
         document.getElementById("status").innerHTML = "status: disconnected";
       }, 125);
       const text = await fetch('/status');
+      text = await text.text();
       document.getElementById("status").innerHTML = "status: " + text;
       clearTimeout(errorTimeout);
     } catch (e) {
