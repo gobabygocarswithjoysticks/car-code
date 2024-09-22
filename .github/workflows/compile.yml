@@ -180,7 +180,7 @@ jobs:
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
-         if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then cd ./hex/${{ matrix.configName }}; wget "https://github.com/espressif/arduino-esp32/raw/refs/tags/3.0.5/tools/partitions/boot_app0.bin"; fi
+         if [[ "${{ matrix.fqbn }}" == "esp32:esp32:esp32" ]]; then cd ./hex/${{ matrix.configName }}; wget "https://github.com/espressif/arduino-esp32/raw/refs/tags/3.0.5/tools/partitions/boot_app0.bin"; fi
 
       - name: Commit compiled files
         run: |
