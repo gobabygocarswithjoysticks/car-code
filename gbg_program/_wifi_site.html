@@ -16,7 +16,6 @@
   async function loop() {
     var errorTimeout;
     try {
-      // set timeout with prototype function
       errorTimeout = setTimeout(() => {
         document.getElementById("status").innerHTML = "status: disconnected";
         console.log("error timeout");
