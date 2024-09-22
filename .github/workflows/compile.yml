@@ -136,12 +136,12 @@ jobs:
           #   board-upload: "RPIPICO"
           #   niceBoardName: "rpi pico"
             
-          # - configName: "blink-rpiPico-W"
-          #   code-dir: blink
-          #   arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
-          #   fqbn: "rp2040:rp2040:rpipicow"
-          #   board-upload: "RPIPICOW"
-          #   niceBoardName: "rpi pico W"
+          - configName: "blink-rpiPico-W"
+            code-dir: blink
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.0.2/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipicow"
+            board-upload: "RPIPICOW"
+            niceBoardName: "rpi pico W"
 
           - configName: "blink-esp32"
             code-dir: blink
@@ -173,12 +173,15 @@ jobs:
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex (or .uf2) since others aren't needed
          tree
+         if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf; fi
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bootloader.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.partitions.bin
 
       - name: Commit compiled files
         run: |
