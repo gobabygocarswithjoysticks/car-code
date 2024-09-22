@@ -1,4 +1,7 @@
 #include <EEPROM.h>
+#ifdef ESP32
+#define LED_BUILTIN 2
+#endif
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
