@@ -19,12 +19,15 @@
       // set timeout with prototype function
       errorTimeout = setTimeout(() => {
         document.getElementById("status").innerHTML = "status: disconnected";
+        console.log("error timeout");
       }, 150);
+      console.log("loop");
       const text = await fetch('/status');
       document.getElementById("status").innerHTML = "status: " + text;
       clearTimeout(errorTimeout);
     } catch (e) {
       clearTimeout(errorTimeout);
+      console.log("error caught");
       console.log(e);
       document.getElementById("status").innerHTML = "status: disconnected";
     }
