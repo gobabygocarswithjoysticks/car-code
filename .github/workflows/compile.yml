@@ -146,7 +146,7 @@ jobs:
           - configName: "blink-esp32"
             code-dir: blink
             arduino-platform: "esp32:esp32 --additional-urls https://github.com/espressif/arduino-esp32/releases/download/3.0.5/package_esp32_dev_index.json"
-            fqbn: "esp32:esp32:ESP32 Dev Board"
+            fqbn: "'esp32:esp32:ESP32 Dev Board'"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
 
