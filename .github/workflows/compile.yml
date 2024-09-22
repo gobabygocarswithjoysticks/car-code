@@ -171,17 +171,17 @@ jobs:
          git pull # get the most recent state of the repo
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
-         # delete files other than programName.ino.hex (or .uf2) since others aren't needed
-         tree
-         if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bootloader.bin
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.partitions.bin
+         # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
+
+         # if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bootloader.bin
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
+         # rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.partitions.bin
 
       - name: Commit compiled files
         run: |
