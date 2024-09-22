@@ -10,3 +10,4 @@ blink-nanoOld, blink, nanoOldBootloader, old nano
 blink-nanoNew, blink, nano, new nano or uno
 blink-rpiPico, blink, RPIPICO, rpi pico
 blink-rpiPico-W, blink, RPIPICOW, rpi pico W
+blink-esp32, blink, ESP, ESP32
