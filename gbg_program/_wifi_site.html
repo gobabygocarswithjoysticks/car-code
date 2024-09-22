@@ -18,7 +18,7 @@
     try {
       errorTimeout = setTimeout(() => {
         document.getElementById("status").innerHTML = "status: disconnected";
-      }, 150);
+      }, 125);
       const text = await fetch('/status');
       document.getElementById("status").innerHTML = "status: " + text;
       clearTimeout(errorTimeout);
