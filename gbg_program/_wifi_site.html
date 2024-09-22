@@ -14,21 +14,21 @@
 </body>
 <script>
   async function loop() {
-    var errorTimeout;
+    let errorTimeout;
+    let abortcontroller = new AbortController();
+    errorTimeout = setTimeout(() => {
+      abortcontroller.abort("aborted because timeout");
+    }, 400);
     try {
-      errorTimeout = setTimeout(() => {
-        document.getElementById("status").innerHTML = "status: disconnected";
-      }, 125);
-      const fetched = await fetch('/status');
+      var fetched = await fetch('http://10.0.0.1/status', { signal: abortcontroller.signal });
       fetchedResponse = await fetched.text();
       document.getElementById("status").innerHTML = "status: " + fetchedResponse;
-      clearTimeout(errorTimeout);
     } catch (e) {
-      clearTimeout(errorTimeout);
-      document.getElementById("status").innerHTML = "status: disconnected";
+      document.getElementById("status").innerHTML = "status: Disconnected";
     }
+    clearTimeout(errorTimeout);
   }
-  setInterval(loop, 200);
+  setInterval(loop, 500);
 </script>
 
 </html>
