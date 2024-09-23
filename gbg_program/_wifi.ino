@@ -1,6 +1,6 @@
 // for rpi pico w
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
 
 #include <WiFi.h>
 #include <WebServer.h>

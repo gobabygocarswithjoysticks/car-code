@@ -24,7 +24,7 @@ void settingsMemory()
 
   errorCorrectionPerformed = false;
   EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
   if (errorCorrectionPerformed) {
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
   }
@@ -33,7 +33,7 @@ void settingsMemory()
   if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
     settingsMemoryKeyReadAddress = 0;
     EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
 #endif
     saveSettings();
@@ -62,7 +62,7 @@ void settingsSerial() {
         CONTROL_LEFT = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_LEFT);
       } else if (strcmp(k, "X_DEADZONE") == 0) {
-        X_DEADZONE = abs(atoi(v));
+        X_DEADZONE = _abs(atoi(v));
         sprintf(resultBuf, "%d", X_DEADZONE);
       } else if (strcmp(k, "CONTROL_UP") == 0) {
         CONTROL_UP = atoi(v);
@@ -74,34 +74,34 @@ void settingsSerial() {
         CONTROL_DOWN = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_DOWN);
       } else if (strcmp(k, "Y_DEADZONE") == 0) {
-        Y_DEADZONE = abs(atoi(v));
+        Y_DEADZONE = _abs(atoi(v));
         sprintf(resultBuf, "%d", Y_DEADZONE);
       } else if (strcmp(k, "ACCELERATION_FORWARD") == 0) {
-        ACCELERATION_FORWARD = abs(atof(v));
+        ACCELERATION_FORWARD = _abs(atof(v));
         dtostrf(ACCELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_FORWARD") == 0) {
-        DECELERATION_FORWARD = abs(atof(v));
+        DECELERATION_FORWARD = _abs(atof(v));
         dtostrf(DECELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "ACCELERATION_BACKWARD") == 0) {
-        ACCELERATION_BACKWARD = abs(atof(v));
+        ACCELERATION_BACKWARD = _abs(atof(v));
         dtostrf(ACCELERATION_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_BACKWARD") == 0) {
-        DECELERATION_BACKWARD = abs(atof(v));
+        DECELERATION_BACKWARD = _abs(atof(v));
         dtostrf(DECELERATION_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "ACCELERATION_TURNING") == 0) {
-        ACCELERATION_TURNING = abs(atof(v));
+        ACCELERATION_TURNING = _abs(atof(v));
         dtostrf(ACCELERATION_TURNING, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_TURNING") == 0) {
-        DECELERATION_TURNING = abs(atof(v));
+        DECELERATION_TURNING = _abs(atof(v));
         dtostrf(DECELERATION_TURNING, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_FORWARD") == 0) {
-        FASTEST_FORWARD = constrain(abs(atof(v)), 0, 1);
+        FASTEST_FORWARD = constrain(_abs(atof(v)), 0, 1);
         dtostrf(FASTEST_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_BACKWARD") == 0) {
-        FASTEST_BACKWARD = constrain(abs(atof(v)), 0, 1);
+        FASTEST_BACKWARD = constrain(_abs(atof(v)), 0, 1);
         dtostrf(FASTEST_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "TURN_SPEED") == 0) {
-        TURN_SPEED = constrain(abs(atof(v)), 0, 1);
+        TURN_SPEED = constrain(_abs(atof(v)), 0, 1);
         dtostrf(TURN_SPEED, 0, 4, resultBuf);
       } else if (strcmp(k, "SCALE_TURNING_WHEN_MOVING") == 0) {
         SCALE_TURNING_WHEN_MOVING = atof(v);
@@ -183,7 +183,7 @@ void settingsSerial() {
         RIGHT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_PULSE);
       } else if (strcmp(k, "START_MOTOR_PULSE_TIME") == 0) {
-        START_MOTOR_PULSE_TIME = max(atoi(v), 0);
+        START_MOTOR_PULSE_TIME = _max(atoi(v), 0);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
       } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);
@@ -278,7 +278,7 @@ void settingsSerial() {
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
       }
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
       else if (strcmp(k, "CAR_WIFI_NAME") == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
         sprintf(resultBuf, "%d", CAR_WIFI_NAME);
@@ -299,7 +299,7 @@ void settingsSerial() {
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
         EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
         EEPROM.commit();
 #endif
         delay(5000); // trigger wdt
@@ -394,14 +394,14 @@ void saveSettings()
   EEPROMwrite(addressW, driveButtons);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
 #endif
   EEPROMwrite(addressW, eepromCRC);
   // addressW equaled 177 on pico W on this line
 
-#if defined(ARDUINO_ARCH_MBED_RP2040) || defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040) || defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
   EEPROM.commit();
 #endif
 }
@@ -458,7 +458,7 @@ void recallSettings()
   EEPROMread(addressR, driveButtons);
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
 #endif
@@ -467,7 +467,7 @@ void recallSettings()
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
 
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
   if (errorCorrectionPerformed) {
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
   }
@@ -500,6 +500,8 @@ void recallSettings()
       Serial.println(F("{\"error\": \"eeprom failure\"}"));
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(200);
@@ -516,6 +518,8 @@ void recallSettings()
       delay(400);
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
@@ -526,6 +530,8 @@ void recallSettings()
 
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
@@ -536,6 +542,8 @@ void recallSettings()
 
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
@@ -552,6 +560,8 @@ void recallSettings()
       delay(200);
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
       delay(1000);
     }
@@ -606,6 +616,8 @@ void EEPROMread(unsigned int& address, T & value)
       wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
+#elif defined(ESP32)
+      //TODO: WDT
 #endif
 
     }

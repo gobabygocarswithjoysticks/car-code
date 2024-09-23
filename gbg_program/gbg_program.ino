@@ -14,7 +14,6 @@
         Drive controllers   -  control motors of the car to make it go
                 DriveController_TwoSideDrive     -   controls a car with two independent wheel motors
 */
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// "CONSTANTS" (change to calibrate and customize a car for a child) ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +82,20 @@ byte SPEED_KNOB_PIN = A1;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 
+#elif defined(ESP32)
+///// joystick reader pins /////
+byte JOY_X_PIN = 39;  // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = 35;  // Analog input pin that the forwards-backwards potentiometer is attached to
+
+///// drive controller pins /////
+byte LEFT_MOTOR_CONTROLLER_PIN = 18;
+byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
+
+byte SPEED_KNOB_PIN = 33;
+
+byte BUTTON_MODE_PIN = 23; // can turn button control mode on and off
+
+#define LED_BUILTIN 2
 #else
 byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
 byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
@@ -121,7 +134,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 boolean STEERING_OFF_SWITCH = false;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
 int8_t CAR_WIFI_NAME = 1;
 int32_t CAR_WIFI_PASSWORD = 12345678;
 #endif
@@ -131,10 +144,9 @@ int32_t CAR_WIFI_PASSWORD = 12345678;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
 boolean activatedByRemote = true;
 #endif
-
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
 //variables below this line aren't settings, don't change them.
@@ -166,7 +178,37 @@ float timeInterval;  // time in seconds (usually a small fraction of a second) b
 unsigned long lastMillisPrintedValues;
 
 ///// common types of motor controllers (ESCs) can be controlled with the Servo library /////
+#ifdef ESP32
+// tiny Servo library for ESP32
+#define SERVO_LEDC_RESOLUTION 32768 // 2^15
+class Servo {
+  protected:
+    byte pin;
+    boolean isAttached = false;
+  public:
+    Servo() {
+      isAttached = false;
+    }
+    void attach(byte _pin) {
+      isAttached = true;
+      pin = _pin;
+      ledcAttach(pin, 50, 15);//frequency, bits of resolution
+    }
+    void writeMicroseconds(int microseconds) {
+      if (isAttached)
+        ledcWrite(pin, microseconds * 1024 / 625); // microseconds * 50 / 1000000 * 2^15
+    }
+    void detach() {
+      ledcDetach(pin);
+      isAttached = false;
+    }
+    boolean attached() {
+      return isAttached;
+    }
+};
+#elif
 #include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/, used version 1.1.8
+#endif
 Servo leftMotorController;
 Servo rightMotorController;
 
@@ -184,11 +226,9 @@ ISR(WDT_vect) // Watchdog timer interrupt.
   wdt_reset();
   resetFunc();
 }
-#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
-// no include needed for pico
 #endif
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
 const int version_number = 12;  // for interaction with website
 #else
 const int version_number = 11;  // for interaction with website
@@ -206,7 +246,17 @@ boolean startupPulse;
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+#ifdef ESP32
+/*
+ ESP32 sends data on start at 115200. 
+ Switching to 250000 here was breaking the connection to the website. 
+ I can't make all cars use 115200 since that would break compatibility with old cars. 
+ This special case for esp32s (that the website has a checkbox for) is the best solution I could think of.
+ */
+  Serial.begin(115200);
+#else
   Serial.begin(250000);
+#endif  
   Serial.println();
   delay(50);
   digitalWrite(LED_BUILTIN, LOW);
@@ -223,6 +273,9 @@ void setup() {
   rp2040.wdt_begin(2000);
   rp2040.wdt_reset();
   EEPROM.begin(1024);
+#elif defined(ESP32)
+  EEPROM.begin(1024);
+  //TODO: WDT
 #endif
   //initialize variables
   joyXVal = 512;
@@ -255,10 +308,10 @@ void setup() {
 
   setupPins();
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   setupWifi();
-
 #endif
+
 }
 void setupPins() {
   pinMode(JOY_X_PIN, INPUT);
@@ -292,9 +345,11 @@ void loop()
   wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   rp2040.wdt_reset();
+#elif defined(ESP32)
+  //TODO: WDT
 #endif
 
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   runWifi();
 #endif
 
@@ -329,12 +384,12 @@ void loop()
     void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) // speedInput and turnInput are edited by this function
 
   */
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   if (activatedByRemote) {
 #endif
     turnProcessed = turnInput;
     speedProcessed = speedInput;
-#ifdef ARDUINO_RASPBERRY_PI_PICO_W
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
   } else {
     turnProcessed = 0;
     speedProcessed = 0;
@@ -387,7 +442,7 @@ void loop()
     if (JOY_CALIB_COUNT <= 0) {
       joyOK = true;
     }
-    if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
+    if (_abs(turnInput) < 0.001 && _abs(speedInput) < 0.001) {
       joystickCenterCounter++;
       if (joystickCenterCounter > JOY_CALIB_COUNT) {  // joystick must be centered for this long
         joyOK = true;
