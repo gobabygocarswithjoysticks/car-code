@@ -5,9 +5,9 @@ float InputProcessor_ReadKnob(byte SPEED_KNOB_PIN, int slowVal, int fastVal, int
 }
 
 void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) {
-  FASTEST_BACKWARD = _abs(FASTEST_BACKWARD);
-  FASTEST_FORWARD = _abs(FASTEST_FORWARD);
-  TURN_SPEED = _abs(TURN_SPEED);
+  FASTEST_BACKWARD = abs(FASTEST_BACKWARD);
+  FASTEST_FORWARD = abs(FASTEST_FORWARD);
+  TURN_SPEED = abs(TURN_SPEED);
   speedInput = twoMap(speedInput, -1, 0, 1, /**/ -FASTEST_BACKWARD * speedKnobScaler, 0, 0, FASTEST_FORWARD * speedKnobScaler, 0);
   speedInput = constrain(speedInput, -FASTEST_BACKWARD * speedKnobScaler, FASTEST_FORWARD * speedKnobScaler);
 
@@ -20,10 +20,10 @@ void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &s
 */
 
 float InputProcessor_LimitAccelerationFourSettings(float velocity, float velocityTarget, float scaler, float ACCELERATION_FORWARD, float DECELERATION_FORWARD, float ACCELERATION_BACKWARD, float DECELERATION_BACKWARD, float timeInterval) {
-  ACCELERATION_FORWARD = _max(ACCELERATION_FORWARD, 0) * scaler;
-  DECELERATION_FORWARD = _max(DECELERATION_FORWARD, 0) * scaler;
-  ACCELERATION_BACKWARD = _max(ACCELERATION_BACKWARD, 0) * scaler;
-  DECELERATION_BACKWARD = _max(DECELERATION_BACKWARD, 0) * scaler;
+  ACCELERATION_FORWARD = max(ACCELERATION_FORWARD, (float)0.0) * scaler;
+  DECELERATION_FORWARD = max(DECELERATION_FORWARD, (float)0.0) * scaler;
+  ACCELERATION_BACKWARD = max(ACCELERATION_BACKWARD, (float)0.0) * scaler;
+  DECELERATION_BACKWARD = max(DECELERATION_BACKWARD, (float)0.0) * scaler;
   if (velocity == 0) {
     velocity += constrain(velocityTarget - velocity, -ACCELERATION_BACKWARD * timeInterval, ACCELERATION_FORWARD * timeInterval);
   } else if (velocity > 0) {
@@ -40,8 +40,8 @@ float InputProcessor_LimitAccelerationFourSettings(float velocity, float velocit
   return velocity;
 }
 float InputProcessor_LimitAccelerationTwoSettings(float velocity, float velocityTarget, float scaler, float ACCELERATION, float DECELERATION, float timeInterval) {
-  ACCELERATION = _max(ACCELERATION, 0) * scaler;
-  DECELERATION = _max(DECELERATION, 0) * scaler;
+  ACCELERATION = max(ACCELERATION, (float)0.0) * scaler;
+  DECELERATION = max(DECELERATION, (float)0.0) * scaler;
   if (velocity == 0) {
     velocity += constrain(velocityTarget - velocity, -ACCELERATION * timeInterval, ACCELERATION * timeInterval);
   } else if (velocity > 0) {
@@ -59,11 +59,11 @@ float InputProcessor_LimitAccelerationTwoSettings(float velocity, float velocity
 }
 
 float InputProcessor_LimitAccelerationOneSetting(float velocity, float velocityTarget, float scaler, float CELERATION, float timeInterval) {
-  CELERATION = _max(CELERATION, 0) * scaler;
+  CELERATION = max(CELERATION, (float)0.0) * scaler;
   velocity += constrain(velocityTarget - velocity, -CELERATION * timeInterval, CELERATION * timeInterval);
   return velocity;
 }
 
 float InputProcessor_ScaleTurningWhenMoving(float stwm, float x, float y, float maxy) {
-  return x * _max(1.0 - (1.0 - stwm) * _abs(y) / (_abs(maxy) + 0.0001), 0.0);
+  return x * max(1.0 - (1.0 - stwm) * abs(y) / (abs(maxy) + 0.0001), 0.0);
 }

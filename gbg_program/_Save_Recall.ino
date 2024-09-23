@@ -62,7 +62,7 @@ void settingsSerial() {
         CONTROL_LEFT = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_LEFT);
       } else if (strcmp(k, "X_DEADZONE") == 0) {
-        X_DEADZONE = _abs(atoi(v));
+        X_DEADZONE = abs(atoi(v));
         sprintf(resultBuf, "%d", X_DEADZONE);
       } else if (strcmp(k, "CONTROL_UP") == 0) {
         CONTROL_UP = atoi(v);
@@ -74,34 +74,34 @@ void settingsSerial() {
         CONTROL_DOWN = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_DOWN);
       } else if (strcmp(k, "Y_DEADZONE") == 0) {
-        Y_DEADZONE = _abs(atoi(v));
+        Y_DEADZONE = abs(atoi(v));
         sprintf(resultBuf, "%d", Y_DEADZONE);
       } else if (strcmp(k, "ACCELERATION_FORWARD") == 0) {
-        ACCELERATION_FORWARD = _abs(atof(v));
+        ACCELERATION_FORWARD = abs(atof(v));
         dtostrf(ACCELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_FORWARD") == 0) {
-        DECELERATION_FORWARD = _abs(atof(v));
+        DECELERATION_FORWARD = abs(atof(v));
         dtostrf(DECELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "ACCELERATION_BACKWARD") == 0) {
-        ACCELERATION_BACKWARD = _abs(atof(v));
+        ACCELERATION_BACKWARD = abs(atof(v));
         dtostrf(ACCELERATION_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_BACKWARD") == 0) {
-        DECELERATION_BACKWARD = _abs(atof(v));
+        DECELERATION_BACKWARD = abs(atof(v));
         dtostrf(DECELERATION_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "ACCELERATION_TURNING") == 0) {
-        ACCELERATION_TURNING = _abs(atof(v));
+        ACCELERATION_TURNING = abs(atof(v));
         dtostrf(ACCELERATION_TURNING, 0, 4, resultBuf);
       } else if (strcmp(k, "DECELERATION_TURNING") == 0) {
-        DECELERATION_TURNING = _abs(atof(v));
+        DECELERATION_TURNING = abs(atof(v));
         dtostrf(DECELERATION_TURNING, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_FORWARD") == 0) {
-        FASTEST_FORWARD = constrain(_abs(atof(v)), 0, 1);
+        FASTEST_FORWARD = constrain(abs(atof(v)), 0, 1);
         dtostrf(FASTEST_FORWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "FASTEST_BACKWARD") == 0) {
-        FASTEST_BACKWARD = constrain(_abs(atof(v)), 0, 1);
+        FASTEST_BACKWARD = constrain(abs(atof(v)), 0, 1);
         dtostrf(FASTEST_BACKWARD, 0, 4, resultBuf);
       } else if (strcmp(k, "TURN_SPEED") == 0) {
-        TURN_SPEED = constrain(_abs(atof(v)), 0, 1);
+        TURN_SPEED = constrain(abs(atof(v)), 0, 1);
         dtostrf(TURN_SPEED, 0, 4, resultBuf);
       } else if (strcmp(k, "SCALE_TURNING_WHEN_MOVING") == 0) {
         SCALE_TURNING_WHEN_MOVING = atof(v);
@@ -183,7 +183,7 @@ void settingsSerial() {
         RIGHT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_PULSE);
       } else if (strcmp(k, "START_MOTOR_PULSE_TIME") == 0) {
-        START_MOTOR_PULSE_TIME = _max(atoi(v), 0);
+        START_MOTOR_PULSE_TIME = max(atoi(v), 0);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
       } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);

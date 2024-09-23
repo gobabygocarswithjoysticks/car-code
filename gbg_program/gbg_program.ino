@@ -14,6 +14,9 @@
         Drive controllers   -  control motors of the car to make it go
                 DriveController_TwoSideDrive     -   controls a car with two independent wheel motors
 */
+#ifdef ESP32 // for ESP32 compatibility
+#include <Arduino.h>
+#endif
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// "CONSTANTS" (change to calibrate and customize a car for a child) ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +209,7 @@ class Servo {
       return isAttached;
     }
 };
-#elif
+#else
 #include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/, used version 1.1.8
 #endif
 Servo leftMotorController;
@@ -247,16 +250,16 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
 #ifdef ESP32
-/*
- ESP32 sends data on start at 115200. 
- Switching to 250000 here was breaking the connection to the website. 
- I can't make all cars use 115200 since that would break compatibility with old cars. 
- This special case for esp32s (that the website has a checkbox for) is the best solution I could think of.
- */
+  /*
+    ESP32 sends data on start at 115200 from the bootloader (they can't be stopped from doing this).
+    Switching to 250000 here was breaking the connection to the website.
+    I can't make all cars use 115200 since that would break compatibility with old cars.
+    This special case for esp32s (that the website has a checkbox for) is the best solution I could think of.
+  */
   Serial.begin(115200);
 #else
   Serial.begin(250000);
-#endif  
+#endif
   Serial.println();
   delay(50);
   digitalWrite(LED_BUILTIN, LOW);
@@ -442,7 +445,7 @@ void loop()
     if (JOY_CALIB_COUNT <= 0) {
       joyOK = true;
     }
-    if (_abs(turnInput) < 0.001 && _abs(speedInput) < 0.001) {
+    if (abs(turnInput) < 0.001 && abs(speedInput) < 0.001) {
       joystickCenterCounter++;
       if (joystickCenterCounter > JOY_CALIB_COUNT) {  // joystick must be centered for this long
         joyOK = true;

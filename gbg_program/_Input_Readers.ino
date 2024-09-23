@@ -3,7 +3,7 @@
   This function reads an axis of a joystick and scales the input (use two for a two axis joystick)
 */
 float InputReader_JoystickAxis(int reading, int neg, int cent, int pos, int deadzone) {
-  deadzone = _max(deadzone, 0);
+  deadzone = max(deadzone, 0);
   ////////// scale joystick values from adjustible range to -1 to 1
   float output = 0;
   if (neg < pos) {  //if the value for when the joystick is towards the left is less then the value for when the joystick is towards the right...
