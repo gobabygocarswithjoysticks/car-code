@@ -203,6 +203,7 @@ jobs:
          git status
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
+         git config pull.rebase false
          git pull
          git push
 
