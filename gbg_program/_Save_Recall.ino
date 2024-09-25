@@ -157,18 +157,27 @@ void settingsSerial() {
         pinMode(JOY_Y_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_Y_PIN);
       } else if (strcmp(k, "LEFT_MOTOR_CONTROLLER_PIN") == 0) {
+        // detach both because when swapping left and right we don't want both attached to the same pin
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+        rightMotorController.detach();
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         leftMotorController.detach();
         LEFT_MOTOR_CONTROLLER_PIN = atoi(v);
         leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", LEFT_MOTOR_CONTROLLER_PIN);
       } else if (strcmp(k, "RIGHT_MOTOR_CONTROLLER_PIN") == 0) {
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        leftMotorController.detach();
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         rightMotorController.detach();
         RIGHT_MOTOR_CONTROLLER_PIN = atoi(v);
         rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+        leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
       } else if (strcmp(k, "SPEED_KNOB_PIN") == 0) {
         SPEED_KNOB_PIN = atoi(v);
