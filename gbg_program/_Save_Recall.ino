@@ -311,8 +311,14 @@ void settingsSerial() {
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
         EEPROM.commit();
 #endif
+#ifdef ESP32
+        ESP.restart();
+#endif
         delay(5000); // trigger wdt
       } else if (strcmp(k, "REBOOT") == 0) {
+#ifdef ESP32
+        ESP.restart();
+#endif
         delay(5000); // trigger wdt
       } else if (strcmp(k, "G") == 0) {
         changedSomething = false;
@@ -509,8 +515,6 @@ void recallSettings()
       Serial.println(F("{\"error\": \"eeprom failure\"}"));
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(200);
@@ -527,8 +531,6 @@ void recallSettings()
       delay(400);
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
@@ -539,8 +541,6 @@ void recallSettings()
 
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
@@ -551,8 +551,6 @@ void recallSettings()
 
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
@@ -569,8 +567,6 @@ void recallSettings()
       delay(200);
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
       delay(1000);
     }
@@ -625,8 +621,6 @@ void EEPROMread(unsigned int& address, T & value)
       wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
       rp2040.wdt_reset();
-#elif defined(ESP32)
-      //TODO: WDT
 #endif
 
     }

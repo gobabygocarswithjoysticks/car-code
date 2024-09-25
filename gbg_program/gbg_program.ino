@@ -276,7 +276,6 @@ void setup() {
   EEPROM.begin(1024);
 #elif defined(ESP32)
   EEPROM.begin(1024);
-  //TODO: WDT
 #endif
   //initialize variables
   joyXVal = 512;
@@ -346,8 +345,6 @@ void loop()
   wdt_reset();
 #elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
   rp2040.wdt_reset();
-#elif defined(ESP32)
-  //TODO: WDT
 #endif
 
 #if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
@@ -464,11 +461,14 @@ void loop()
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
     }
-  }
-
-  if (movementAllowed) {
-    leftMotorController.writeMicroseconds(leftMotorWriteVal);
-    rightMotorController.writeMicroseconds(rightMotorWriteVal);
+  } else {
+    if (movementAllowed) {
+      leftMotorController.writeMicroseconds(leftMotorWriteVal);
+      rightMotorController.writeMicroseconds(rightMotorWriteVal);
+    } else {
+      leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+      rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+    }
   }
   //////////////////////////////////////////////////////////////////////////////////
 
