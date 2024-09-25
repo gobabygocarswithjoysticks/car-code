@@ -7,7 +7,6 @@
 
 const unsigned int repeat_space = 200; // space between each copy of a variable (larger than number of bytes needed for settings)
 
-
 byte bufP = 0;
 char buf[60] = { 0 }; // buffer to fill with Serial input
 

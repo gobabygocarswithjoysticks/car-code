@@ -68,7 +68,6 @@ boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read th
 int16_t SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
 int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
-
 //////////////////////////////////////////// PINS /////////////////////////////////////
 #if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
 ///// joystick reader pins /////
