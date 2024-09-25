@@ -163,6 +163,7 @@ void settingsSerial() {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         leftMotorController.detach();
         LEFT_MOTOR_CONTROLLER_PIN = atoi(v);
+        delay(10);
         leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
@@ -174,6 +175,7 @@ void settingsSerial() {
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         rightMotorController.detach();
         RIGHT_MOTOR_CONTROLLER_PIN = atoi(v);
+        delay(10);
         rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
@@ -192,7 +194,7 @@ void settingsSerial() {
         RIGHT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_PULSE);
       } else if (strcmp(k, "START_MOTOR_PULSE_TIME") == 0) {
-        START_MOTOR_PULSE_TIME = max(atoi(v), 0);
+        START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
       } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);

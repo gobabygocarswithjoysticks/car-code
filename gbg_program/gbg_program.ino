@@ -453,6 +453,7 @@ void loop()
   if (startupPulse && joyOK && delayedStartDone) {
     startupPulse = false;
     if (movementAllowed) {  // don't pulse if the website says don't move
+      delay(10);
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + LEFT_MOTOR_PULSE * (LEFT_MOTOR_SLOW > 0 ? 1 : -1));
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + RIGHT_MOTOR_PULSE * (RIGHT_MOTOR_SLOW > 0 ? 1 : -1));
     }
