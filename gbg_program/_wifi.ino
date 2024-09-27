@@ -48,13 +48,10 @@ void setupWifi() {
   });
 
   webServer.on("/remoteMode", []() {
-    for (int i = 0; i < webServer.args(); i++) {
-      Serial.print(webServer.argName(i));
-      Serial.print(",");
-      Serial.print(webServer.arg(i));
-      Serial.println();
-      webServer.send(200, "text/html", indexHTML);
+    if (webServer.args() == 1 && webServer.argName(0) == "mode") {
+      remoteMode = webServer.arg(0).toInt();
     }
+    webServer.send(200, "text/html", indexHTML);
   });
 
   webServer.begin();
