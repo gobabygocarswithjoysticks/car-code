@@ -68,7 +68,7 @@ void runWifiInput(float& speedInput, float& turnInput) {
       }
       break;
     case 1:
-      if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) { // timeout must be on in remote control mode (also enforced on website end)
         speedInput = 0;
         turnInput = 0;
       } else {

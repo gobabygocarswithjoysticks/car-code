@@ -13,21 +13,20 @@
   <div id="status" style="font-size: 50px;">status: </div>
   <br>
   <br>
-  <div>remote override mode</div>
+  <div style="font-size: x-large;">remote override mode</div>
   <input type="radio" id="ctl-car" name="remote-mode" value="0" checked
     onclick='document.getElementById("timeout").disabled=false;document.getElementById("timeout").checked=timeoutWasChecked;sendTimeout();sendRemoteMode(0);' />
-  <label for="ctl-car">car has control</label>
+  <label for="ctl-car" style="font-size: x-large;">car has control</label>
   <br>
   <input type="radio" id="ctl-remote" name="remote-mode" value="1"
     onclick='document.getElementById("timeout").disabled=true;timeoutWasChecked=document.getElementById("timeout").checked;document.getElementById("timeout").checked=true;sendTimeout();sendRemoteMode(1);' />
-  <label for="ctl-remote">remote has control</label>
+  <label for="ctl-remote" style="font-size: x-large;">remote has control</label>
   <br>
   <br>
-  <input type="checkbox" id='timeout' onclick='sendTimeout();' style='font-size: 100px;'>deactivate if signal
-  lost</button>
-  <br>
+  <input type="checkbox" id='timeout' onclick='sendTimeout();'></input>
+  <label for="timeout" style="font-size: larger;">deactivate if signal lost</label>
 
-  <div id="joyDiv" style="width:200px;height:200px;margin:100px"></div>
+  <div id="joyDiv" style="width:500px;height:500px;margin:200px;float: right;"></div>
 
 </body>
 <script>
