@@ -9,6 +9,8 @@ const unsigned long signalLossTimeout = 1100;
 IPAddress apIP(10, 0, 0, 1);
 WebServer webServer(80);
 
+char statusBuffer[20];
+
 void setupWifi() {
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
@@ -35,7 +37,8 @@ void setupWifi() {
       remoteFB = webServer.arg("fb").toFloat();
       remoteLR = webServer.arg("lr").toFloat();
     }
-    webServer.send(200, "text/plain", activatedByRemote ? "on" : "off");
+    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d}", activatedByRemote, deactivateIfRemoteDisconnects, remoteMode);
+    webServer.send(200, "application/json", statusBuffer);
   });
 
   webServer.on("/timeoutOn", []() {

@@ -51,8 +51,9 @@
 
     try {
       var fetched = await fetch('/status' + remoteData, { signal: abortcontroller.signal });
-      fetchedResponse = await fetched.text();
-      document.getElementById("status").innerHTML = "status: " + fetchedResponse;
+      fetchedResponse = await fetched.json();
+      console.log(fetchedResponse);
+      document.getElementById("status").innerHTML = "status: " + (fetchedResponse["a"] == 1 ? "on" : "off");
     } catch (e) {
       document.getElementById("status").innerHTML = "status: Disconnected";
     }
