@@ -54,10 +54,10 @@
       fetchedResponse = await fetched.json();
 
       let radios = document.getElementsByName("remote-mode");
-      let value = fetchedResponse["m"];
+      let value = parseInt(fetchedResponse["m"]);
 
       for (let i = 0, length = radios.length; i < length; i++) {
-        console.log(radios[i].value,value);
+        console.log(parseInt(radios[i].value), value);
         radios[i].checked = radios[i].value === value;
       }
 
