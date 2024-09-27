@@ -11,8 +11,27 @@
   <button onclick='fetch("/deactivate");' style='font-size: 200px; float: right;'>STOP</button>
   <br>
   <div id="status" style="font-size: 50px;">status: </div>
+  <br>
+  <br>
+  <div>remote override mode</div>
+  <input type="radio" id="ctl-car" name="remote-mode" value="0" checked
+    onclick='document.getElementById("timeout").disabled=false;document.getElementById("timeout").checked=timeoutWasChecked;sendTimeout();sendRemoteMode(0);' />
+  <label for="ctl-car">car has control</label>
+  <br>
+  <input type="radio" id="ctl-remote" name="remote-mode" value="1"
+    onclick='document.getElementById("timeout").disabled=true;timeoutWasChecked=document.getElementById("timeout").checked;document.getElementById("timeout").checked=true;sendTimeout();sendRemoteMode(1);' />
+  <label for="ctl-remote">remote has control</label>
+  <br>
+  <br>
+  <input type="checkbox" id='timeout' onclick='sendTimeout();' style='font-size: 100px;'>deactivate if signal
+  lost</button>
+  <br>
+
+
 </body>
 <script>
+  var timeoutWasChecked = false;
+
   async function loop() {
     let errorTimeout;
     let abortcontroller = new AbortController();
@@ -20,7 +39,7 @@
       abortcontroller.abort("aborted because timeout");
     }, 400);
     try {
-      var fetched = await fetch('http://10.0.0.1/status', { signal: abortcontroller.signal });
+      var fetched = await fetch('/status', { signal: abortcontroller.signal });
       fetchedResponse = await fetched.text();
       document.getElementById("status").innerHTML = "status: " + fetchedResponse;
     } catch (e) {
@@ -29,6 +48,21 @@
     clearTimeout(errorTimeout);
   }
   setInterval(loop, 500);
+
+  function sendTimeout() {
+    if (document.getElementById("timeout").checked) {
+      console.log("yes");
+      fetch("/timeoutOn");
+    } else {
+      console.log("no");
+      fetch("/timeoutOff");
+    }
+  }
+
+  function sendRemoteMode(mode) {
+    fetch("/remoteMode?mode=" + mode);
+  }
+
 </script>
 
 </html>

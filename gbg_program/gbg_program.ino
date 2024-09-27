@@ -146,6 +146,12 @@ const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print va
 
 #if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
 boolean activatedByRemote = true;
+
+boolean deactivateIfRemoteDisconnects = false;
+byte remoteMode = 0; //0 is car, 1 is remote
+float remoteFB = 0;
+float remoteLR = 0;
+unsigned long lastRemoteCommandMillis = 0;
 #endif
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -338,6 +344,7 @@ void setupPins() {
   rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
   delay(100);
 }
+
 void loop()
 {
 #ifdef AVR
@@ -367,6 +374,12 @@ void loop()
   if (ENABLE_BUTTON_CTRL) {
     InputReader_Buttons(!USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW), true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
   }
+
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+  if (joyOK) {
+    runWifiInput(speedInput, turnInput); // references, so the function can edit the values
+  }
+#endif
 
   ////////////////////////////// PUT INPUT PROCESSORS HERE ///////////////////////
   /**

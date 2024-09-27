@@ -1,6 +1,7 @@
 // for rpi pico w
-
 #if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+
+const unsigned long signalLossTimeout = 1100;
 
 #include <WiFi.h>
 #include <WebServer.h>
@@ -29,13 +30,61 @@ void setupWifi() {
     webServer.send(200);
   });
   webServer.on("/status", []() {
+    if (webServer.args() == 2 && webServer.argName(0) == "fb" && webServer.argName(1) == "lr") {
+      lastRemoteCommandMillis = millis();
+      remoteFB = webServer.arg("fb").toFloat();
+      remoteFB = webServer.arg("lr").toFloat();
+    }
     webServer.send(200, "text/plain", activatedByRemote ? "on" : "off");
   });
 
+  webServer.on("/timeoutOn", []() {
+    deactivateIfRemoteDisconnects = true;
+    webServer.send(200);
+  });
+  webServer.on("/timeoutOff", []() {
+    deactivateIfRemoteDisconnects = false;
+    webServer.send(200);
+  });
+
+  webServer.on("/remoteMode", []() {
+    for (int i = 0; i < webServer.args(); i++) {
+      Serial.print(webServer.argName(i));
+      Serial.print(",");
+      Serial.print(webServer.arg(i));
+      Serial.println();
+      webServer.send(200, "text/html", indexHTML);
+    }
+  });
+
   webServer.begin();
+
 }
+
+void runWifiInput(float& speedInput, float& turnInput) {
+  switch (remoteMode) {
+    default:
+    case 0: // car is driving
+      if (deactivateIfRemoteDisconnects && (millis() - lastRemoteCommandMillis > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      }
+      break;
+    case 1:
+      if (deactivateIfRemoteDisconnects && (millis() - lastRemoteCommandMillis > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      } else {
+        speedInput = remoteFB;
+        turnInput = remoteLR;
+      }
+      break;
+  }
+}
+
 
 void runWifi() {
   webServer.handleClient();
 }
+
 #endif
