@@ -33,7 +33,7 @@ void setupWifi() {
     if (webServer.args() == 2 && webServer.argName(0) == "fb" && webServer.argName(1) == "lr") {
       lastRemoteCommandMillis = millis();
       remoteFB = webServer.arg("fb").toFloat();
-      remoteFB = webServer.arg("lr").toFloat();
+      remoteLR = webServer.arg("lr").toFloat();
     }
     webServer.send(200, "text/plain", activatedByRemote ? "on" : "off");
   });
@@ -62,13 +62,13 @@ void runWifiInput(float& speedInput, float& turnInput) {
   switch (remoteMode) {
     default:
     case 0: // car is driving
-      if (deactivateIfRemoteDisconnects && (millis() - lastRemoteCommandMillis > signalLossTimeout)) {
+      if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
       }
       break;
     case 1:
-      if (deactivateIfRemoteDisconnects && (millis() - lastRemoteCommandMillis > signalLossTimeout)) {
+      if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
       } else {

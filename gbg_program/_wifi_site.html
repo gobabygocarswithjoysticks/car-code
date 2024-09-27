@@ -40,17 +40,15 @@
 
   const joystick = new JoyStick('joyDiv');
 
-  setInterval(loop, 500);
+  setInterval(loop, 250);
 
   async function loop() {
     var remoteData = "?fb=" + joystick.GetY() / 100.0 + "&lr=" + joystick.GetX() / 100.0;
-    console.log(remoteData);
-
     let errorTimeout;
     let abortcontroller = new AbortController();
     errorTimeout = setTimeout(() => {
       abortcontroller.abort("aborted because timeout");
-    }, 400);
+    }, 200);
 
     try {
       var fetched = await fetch('/status' + remoteData, { signal: abortcontroller.signal });
