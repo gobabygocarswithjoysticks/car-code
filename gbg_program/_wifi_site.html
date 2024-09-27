@@ -14,12 +14,10 @@
   <br>
   <br>
   <div style="font-size: x-large;">remote override mode</div>
-  <input type="radio" id="ctl-car" name="remote-mode" value="0" checked
-    onclick='document.getElementById("timeout").disabled=false;document.getElementById("timeout").checked=timeoutWasChecked;sendTimeout();sendRemoteMode(0);' />
+  <input type="radio" id="ctl-car" name="remote-mode" value="0" checked onclick='sendRemoteMode(0);' />
   <label for="ctl-car" style="font-size: x-large;">car has control</label>
   <br>
-  <input type="radio" id="ctl-remote" name="remote-mode" value="1"
-    onclick='document.getElementById("timeout").disabled=true;timeoutWasChecked=document.getElementById("timeout").checked;document.getElementById("timeout").checked=true;sendTimeout();sendRemoteMode(1);' />
+  <input type="radio" id="ctl-remote" name="remote-mode" value="1" onclick='sendRemoteMode(1);' />
   <label for="ctl-remote" style="font-size: x-large;">remote has control</label>
   <br>
   <br>
@@ -52,8 +50,24 @@
     try {
       var fetched = await fetch('/status' + remoteData, { signal: abortcontroller.signal });
       fetchedResponse = await fetched.json();
-      console.log(fetchedResponse);
+
+      let radios = document.getElementsByName("remote-mode");
+      let value = fetchedResponse["m"];
+
+      for (let i = 0, length = radios.length; i < length; i++) {
+        radios[i].checked = radios[i].value === value;
+      }
+
+      if (value === 1) {//modes that give a choice about deactivate when timeout
+        document.getElementById("timeout").disabled = false;
+      } else {
+        document.getElementById("timeout").disabled = true;
+      }
+
+      document.getElementById("timeout").checked = fetchedResponse["d"] == 1;
+
       document.getElementById("status").innerHTML = "status: " + (fetchedResponse["a"] == 1 ? "on" : "off");
+
     } catch (e) {
       document.getElementById("status").innerHTML = "status: Disconnected";
     }
