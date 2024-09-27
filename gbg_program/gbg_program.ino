@@ -368,6 +368,10 @@ void loop()
   */
   joyXVal = analogRead(JOY_X_PIN);
   joyYVal = analogRead(JOY_Y_PIN);
+#ifdef ESP32
+  joyXVal /= 4;
+  joyYVal /= 4;
+#endif
   turnInput = InputReader_JoystickAxis(joyXVal, CONTROL_LEFT, CONTROL_CENTER_X, CONTROL_RIGHT, X_DEADZONE);
   speedInput = InputReader_JoystickAxis(joyYVal, CONTROL_DOWN, CONTROL_CENTER_Y, CONTROL_UP, Y_DEADZONE);
 
