@@ -57,11 +57,10 @@
       let value = parseInt(fetchedResponse["m"]);
 
       for (let i = 0, length = radios.length; i < length; i++) {
-        console.log(parseInt(radios[i].value), value);
-        radios[i].checked = radios[i].value === value;
+        radios[i].checked = parseInt(radios[i].value) === value;
       }
 
-      if (value === 1) {/*modes that give a choice about deactivate when timeout*/
+      if (value === 0) {/*modes that give a choice about deactivate when timeout*/
         document.getElementById("timeout").disabled = false;
       } else {
         document.getElementById("timeout").disabled = true;
