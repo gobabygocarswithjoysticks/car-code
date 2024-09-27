@@ -68,7 +68,11 @@
 
       document.getElementById("timeout").checked = fetchedResponse["d"] == 1;
 
-      document.getElementById("status").innerHTML = "status: " + (fetchedResponse["a"] == 1 ? "on" : "off");
+      if (fetchedResponse["j"] == 1) {
+        document.getElementById("status").innerHTML = "status: " + (fetchedResponse["a"] == 1 ? "on" : "off");
+      } else {
+        document.getElementById("status").innerHTML = "status: " + "car joystick not calibrated";
+      }
 
     } catch (e) {
       document.getElementById("status").innerHTML = "status: Disconnected";

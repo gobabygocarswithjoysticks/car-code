@@ -37,7 +37,7 @@ void setupWifi() {
       remoteFB = webServer.arg("fb").toFloat();
       remoteLR = webServer.arg("lr").toFloat();
     }
-    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d}", activatedByRemote, deactivateIfRemoteDisconnects, remoteMode);
+    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d}", activatedByRemote, deactivateIfRemoteDisconnects, remoteMode, joyOK);
     webServer.send(200, "application/json", statusBuffer);
   });
 
