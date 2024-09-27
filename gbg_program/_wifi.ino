@@ -9,7 +9,7 @@ const unsigned long signalLossTimeout = 1100;
 IPAddress apIP(10, 0, 0, 1);
 WebServer webServer(80);
 
-char statusBuffer[20];
+char statusBuffer[40];
 
 void setupWifi() {
   WiFi.mode(WIFI_AP);
