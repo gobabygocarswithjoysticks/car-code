@@ -37,7 +37,14 @@ void setupWifi() {
       remoteFB = webServer.arg("fb").toFloat();
       remoteLR = webServer.arg("lr").toFloat();
     }
-    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d}", activatedByRemote, deactivateIfRemoteDisconnects, remoteMode, joyOK);
+    int reportedDeactivateIfRemoteDisconnects;
+    if (remoteMode == 0) {
+      reportedDeactivateIfRemoteDisconnects = deactivateIfRemoteDisconnects;
+    }
+    else {
+      reportedDeactivateIfRemoteDisconnects = true;
+    }
+    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK);
     webServer.send(200, "application/json", statusBuffer);
   });
 
@@ -71,8 +78,7 @@ void runWifiInput(float& speedInput, float& turnInput) {
       }
       break;
     case 1:
-      deactivateIfRemoteDisconnects = true; // timeout must be on in remote control mode (also enforced on website end)
-      if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+      if (true && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
       } else {
