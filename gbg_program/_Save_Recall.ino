@@ -238,6 +238,14 @@ void settingsSerial() {
           sprintf(resultBuf, "false");
       } else if (strcmp(k, "NUM_DRIVE_BUTTONS") == 0) {
         NUM_DRIVE_BUTTONS = constrain(atoi(v), 0, 6);
+        if (ENABLE_BUTTON_CTRL) {
+          if (USE_BUTTON_MODE_PIN) {
+            pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+          }
+          for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
+            pinMode(driveButtons[i].pin, INPUT_PULLUP);
+          }
+        }
         sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
       }
 
