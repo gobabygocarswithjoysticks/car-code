@@ -121,8 +121,19 @@ struct ButtonDriveConfig {
 // button control settings
 const byte maxNumDriveButtons = 6;
 byte NUM_DRIVE_BUTTONS = 0;
+#if defined(ESP32)
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
-  //pin, speed, turn (there must be numDriveButtons number of rows)
+  //pin, speed, turn (there must be maxNumDriveButtons number of rows)
+  {16, 1, 0}, //forwards
+  {17, 0, -1}, //left
+  {19, 0, 1}, //right
+  {20, 1, -1}, //LF
+  {22, 1, 1}, //RF
+  {25, -1, 0} //backwards
+};
+#else
+ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
+  //pin, speed, turn (there must be maxNumDriveButtons number of rows)
   {7, 1, 0}, //forwards
   {8, 0, -1}, //left
   {9, 0, 1}, //right
@@ -130,6 +141,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {11, 1, 1}, //RF
   {12, -1, 0} //backwards
 };
+#endif
 
 boolean STEERING_OFF_SWITCH = false;
 byte STEERING_OFF_SWITCH_PIN = 4;
