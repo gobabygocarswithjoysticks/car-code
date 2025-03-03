@@ -11,3 +11,4 @@ clear_eeprom-rpiPico, clear_eeprom, RPIPICO, rpi pico
 clear_eeprom-rpiPico-W, clear_eeprom, RPIPICOW, rpi pico W
 clear_eeprom-esp32, clear_eeprom, ESP, ESP32
 clear_eeprom-rpiPico2, clear_eeprom, RPIPICO, rpi pico 2
+clear_eeprom-rpiPico-2W, clear_eeprom, RPIPICOW, rpi pico 2W
