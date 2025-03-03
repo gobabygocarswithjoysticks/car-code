@@ -242,8 +242,9 @@ jobs:
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
          git checkout main
-         git pull --rebase
+         git pull
          git checkout -b ${{ matrix.configName }}
+         git pull
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
@@ -260,11 +261,12 @@ jobs:
       - name: Commit compiled files
         run: |
          git add .
+         git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
          echo 1
          git status #TODO: remove this line
          echo 2
-         git pull --rebase origin ${{ matrix.configName }}
+         git pull origin ${{ matrix.configName }}
          echo 3
          git status #TODO: remove this line
          echo 4
