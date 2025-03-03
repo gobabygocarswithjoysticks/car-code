@@ -63,6 +63,7 @@ jobs:
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
             additional-commands: arduino-cli lib install Servo
+            order: 1
 
           - configName: "standard-nanoNew"
             code-dir: gbg_program
@@ -71,6 +72,7 @@ jobs:
             board-upload: "nano"
             niceBoardName: "new nano or uno"
             additional-commands: arduino-cli lib install Servo
+            order: 2
 
           - configName: "standard-rpiPico"
             code-dir: gbg_program
@@ -79,6 +81,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 3
 
           - configName: "standard-rpiPico-W"
             code-dir: gbg_program
@@ -87,6 +90,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 4
 
           - configName: "standard-esp32"
             code-dir: gbg_program
@@ -95,6 +99,7 @@ jobs:
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
+            order: 5
            
           - configName: "standard-rpiPico-2"
             code-dir: gbg_program
@@ -103,6 +108,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 6
 
           - configName: "standard-rpiPico-2W"
             code-dir: gbg_program
@@ -111,6 +117,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 7
     
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
@@ -118,6 +125,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
+            order: 8
 
           - configName: "clear_eeprom-nanoNew"
             code-dir: clear_eeprom
@@ -125,6 +133,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
+            order: 9
 
           - configName: "clear_eeprom-rpiPico"
             code-dir: clear_eeprom
@@ -133,6 +142,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 10
 
           - configName: "clear_eeprom-rpiPico-W"
             code-dir: clear_eeprom
@@ -141,6 +151,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 11
 
           - configName: "clear_eeprom-esp32"
             code-dir: clear_eeprom
@@ -149,6 +160,7 @@ jobs:
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
+            order: 12
 
           - configName: "clear_eeprom-rpiPico2"
             code-dir: clear_eeprom
@@ -157,6 +169,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 13
 
           - configName: "clear_eeprom-rpiPico-2W"
             code-dir: clear_eeprom
@@ -165,6 +178,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 14
     
           - configName: "blink-nanoOld"
             code-dir: blink
@@ -172,6 +186,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
+            order: 15
 
           - configName: "blink-nanoNew"
             code-dir: blink
@@ -179,6 +194,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
+            order: 16
 
           - configName: "blink-rpiPico"
             code-dir: blink
@@ -187,6 +203,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 17
             
           - configName: "blink-rpiPico-W"
             code-dir: blink
@@ -195,6 +212,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 18
 
           - configName: "blink-esp32"
             code-dir: blink
@@ -203,6 +221,7 @@ jobs:
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
+            order: 19
 
           - configName: "blink-rpiPico2"
             code-dir: blink
@@ -211,6 +230,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
+            order: 20
             
           - configName: "blink-rpiPico-2W"
             code-dir: blink
@@ -219,11 +239,10 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            order: 21
 
 
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ toJson(matrix.include) }}
     steps:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v2.0.0
@@ -241,14 +260,14 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         if git ls-remote --exit-code --heads origin ${{ matrix.configName }}; then
-           git push origin --delete ${{ matrix.configName }}
+         if git ls-remote --exit-code --heads origin COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}; then
+           git push origin --delete COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
          fi
-         if git show-ref --verify --quiet refs/heads/${{ matrix.configName }}; then
-           git branch -D ${{ matrix.configName }}
+         if git show-ref --verify --quiet refs/heads/COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}; then
+           git branch -D COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
          fi
          git pull
-         git checkout -b ${{ matrix.configName }}
+         git checkout -b COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
          git config pull.rebase false
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
@@ -268,7 +287,7 @@ jobs:
          git add .
          git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push --set-upstream origin ${{ matrix.configName }}
+         git push --set-upstream origin COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
 
   merge-results:
     needs: compile-sketch
@@ -283,15 +302,14 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} #TODO: remove this line
-          echo $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[].configName')
-          for branch in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[].configName'); do
+
+          for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
             git merge origin/$branch --no-edit -m "BOT merge $branch"
           done
           git push
-          for branch in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[].configName'); do
-            git push origin --delete $branch
-          done
+#          for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
+#            git push origin --delete $branch
+#          done
       
   create-config-txt:
     needs: [merge-results, compile-sketch]
@@ -306,8 +324,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} #TODO: remove this line
-          for entry in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[] | "\(.configName), \(.code-dir), \(.board-upload), \(.niceBoardName)"'); do
+          for entry in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/COMPILE_||'); do
             echo $entry >> hex/configurations-info.txt
           done
           git add .
