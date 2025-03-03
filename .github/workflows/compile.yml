@@ -244,6 +244,7 @@ jobs:
          git checkout main
          git pull --rebase
          git checkout -b ${{ matrix.configName }}
+         git pull
          git status #TODO: remove this line
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} ${{ matrix.additional-parameters }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
