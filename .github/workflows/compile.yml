@@ -282,7 +282,7 @@ jobs:
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
          if [[ "${{ matrix.fqbn }}" == "esp32:esp32:esp32" ]]; then cd ./hex/${{ matrix.configName }}; wget "https://github.com/espressif/arduino-esp32/raw/refs/tags/3.1.3/tools/partitions/boot_app0.bin"; fi
 
-         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > hex/config-info_${{ matrix.order}}.txt
+         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > .hex/config-info-${{ matrix.order}}.txt
 
       - name: Commit compiled files
         run: |
