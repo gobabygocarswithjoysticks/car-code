@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  clear-file-for-saving-info:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,12 +23,6 @@ jobs:
           [ -d "./hex" ] && git rm -r ./hex
           git commit . -m "BOT delete old files" --allow-empty
           git push
-  process-website:
-    needs: clear-file-for-saving-info #run after
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: process file
         run: |
           git config --global user.name 'gbg-with-joysticks'
@@ -49,7 +43,7 @@ jobs:
           git commit . -m "BOT process website" --allow-empty
           git push
   compile-sketch:
-    needs: process-website #run after
+    needs: prepare #run after
     strategy:
       matrix:
         # list of programs to compile (can have multiple programs for multiple boards)
@@ -105,7 +99,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
-            board-upload: "RPIPICO"
+            board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
             order: 6
@@ -114,7 +108,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
-            board-upload: "RPIPICOW"
+            board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
             order: 7
@@ -166,7 +160,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
-            board-upload: "RPIPICO"
+            board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
             order: 13
@@ -175,7 +169,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
-            board-upload: "RPIPICOW"
+            board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
             order: 14
@@ -227,7 +221,7 @@ jobs:
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
-            board-upload: "RPIPICO"
+            board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
             order: 20
@@ -236,7 +230,7 @@ jobs:
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
-            board-upload: "RPIPICOW"
+            board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
             order: 21
@@ -326,12 +320,3 @@ jobs:
           for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
             git push origin --delete $branch
           done
-
-
-  compile-complete: # this job passes if the whole matrix passes
-    needs: [ merge-results ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compile Complete
-        run: |
-          echo complete!
