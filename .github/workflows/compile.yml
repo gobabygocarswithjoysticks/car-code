@@ -241,10 +241,9 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         git checkout main
          git pull
          git checkout -b ${{ matrix.configName }}
-         git pull
+         git pull origin ${{ matrix.configName }}
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
