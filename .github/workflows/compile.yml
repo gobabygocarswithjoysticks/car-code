@@ -260,14 +260,21 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         if git ls-remote --exit-code --heads origin COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}; then
-           git push origin --delete COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
-         fi
-         if git show-ref --verify --quiet refs/heads/COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}; then
-           git branch -D COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
-         fi
+         git checkout main
          git pull
-         git checkout -b COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
+         echo A
+         if git ls-remote --exit-code --heads origin COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}; then
+           git push origin --delete COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         fi
+         echo B
+         if git show-ref --verify --quiet refs/heads/COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}; then
+           git branch -D COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         fi
+         echo C
+         git pull
+         echo D
+         git checkout -b COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         echo E
          git config pull.rebase false
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
@@ -287,7 +294,7 @@ jobs:
          git add .
          git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push --set-upstream origin COMPILE_${{ matrix.order }}_${{ matrix.configName }}_${{ matrix.code-dir }}_${{ matrix.board-upload }}_${{ matrix.niceBoardName }}
+         git push --set-upstream origin COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
 
   merge-results:
     needs: compile-sketch
