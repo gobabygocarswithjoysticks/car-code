@@ -2,7 +2,9 @@
     This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
     Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions
-    Website that can upload and configure this code: https://gobabygocarswithjoysticks.github.io/programmer/
+    Website for uploading and configuring this code: https://gobabygocarswithjoysticks.github.io/programmer/
+
+    THIS PROGRAM IS COMPILED BY A GITHUB ACTION. IT WON'T COMPILE PROPERLY IN THE ARDUINO IDE BECAUSE PRE-PROCESSING AND #DEFINES WILL BE MISSING.
 
     This program has three types of functions that can be combined together to customize how the car drives.
         Input readers       -   get control inputs from the child
@@ -69,7 +71,7 @@ int16_t SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it
 int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
 //////////////////////////////////////////// PINS /////////////////////////////////////
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
 ///// joystick reader pins /////
 byte JOY_X_PIN = A2;  // Analog input pin that the left-right potentiometer is attached to
 byte JOY_Y_PIN = A0;  // Analog input pin that the forwards-backwards potentiometer is attached to
@@ -146,7 +148,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 boolean STEERING_OFF_SWITCH = false;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
 int32_t CAR_WIFI_PASSWORD = 12345678;
 #endif
@@ -156,7 +158,7 @@ int32_t CAR_WIFI_PASSWORD = 12345678;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
 boolean activatedByRemote = true;
 
 boolean deactivateIfRemoteDisconnects = false;
@@ -246,7 +248,7 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 }
 #endif
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
 const int version_number = 12;  // for interaction with website
 #else
 const int version_number = 11;  // for interaction with website
@@ -282,12 +284,13 @@ void setup() {
 #ifdef AVR
   cli();
   wdt_reset();
+  // set up Watchdog Timer
   WDTCSR |= (1 << WDCE) | (1 << WDE);
   WDTCSR = (1 << WDIE) | (0 << WDE) |
            (0 << WDP3) | (1 << WDP2) | (1 << WDP1) |
            (1 << WDP0);
   sei();
-#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#elif defined(IS_PICO)
   rp2040.wdt_begin(2000);
   rp2040.wdt_reset();
   EEPROM.begin(1024);
@@ -325,7 +328,7 @@ void setup() {
 
   setupPins();
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   setupWifi();
 #endif
 
@@ -361,11 +364,11 @@ void loop()
 {
 #ifdef AVR
   wdt_reset();
-#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#elif defined(IS_PICO)
   rp2040.wdt_reset();
 #endif
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   runWifi();
 #endif
 
@@ -391,7 +394,7 @@ void loop()
     InputReader_Buttons(!USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW), true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
   }
 
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   if (joyOK) {
     runWifiInput(speedInput, turnInput); // references, so the function can edit the values
   }
@@ -410,12 +413,12 @@ void loop()
     void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) // speedInput and turnInput are edited by this function
 
   */
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   if (activatedByRemote) {
 #endif
     turnProcessed = turnInput;
     speedProcessed = speedInput;
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   } else {
     turnProcessed = 0;
     speedProcessed = 0;

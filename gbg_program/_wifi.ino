@@ -1,5 +1,4 @@
-// for rpi pico w
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
 
 const unsigned long signalLossTimeout = 1100;
 

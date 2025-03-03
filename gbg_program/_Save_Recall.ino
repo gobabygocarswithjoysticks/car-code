@@ -23,7 +23,7 @@ void settingsMemory()
 
   errorCorrectionPerformed = false;
   EEPROMread(settingsMemoryKeyReadAddress, settingsMemoryKeyRead);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
+#if defined(FAKE_EEPROM)
   if (errorCorrectionPerformed) {
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
   }
@@ -32,7 +32,7 @@ void settingsMemory()
   if (settingsMemoryKeyRead != settings_memory_key) { // eeprom doesn't have the key value, use default instead of not yet programmed EEPROM
     settingsMemoryKeyReadAddress = 0;
     EEPROMwrite(settingsMemoryKeyReadAddress, settings_memory_key);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
+#if defined(FAKE_EEPROM)
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
 #endif
     saveSettings();
@@ -296,7 +296,7 @@ void settingsSerial() {
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
       }
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
       else if (strcmp(k, "CAR_WIFI_NAME") == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
         sprintf(resultBuf, "%d", CAR_WIFI_NAME);
@@ -317,7 +317,7 @@ void settingsSerial() {
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
         EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
+#if defined(FAKE_EEPROM)
         EEPROM.commit();
 #endif
 #ifdef ESP32
@@ -418,14 +418,14 @@ void saveSettings()
   EEPROMwrite(addressW, driveButtons);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
 #endif
   EEPROMwrite(addressW, eepromCRC);
   // addressW equaled 177 on pico W on this line
 
-#if defined(ARDUINO_ARCH_MBED_RP2040) || defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
+#if defined(FAKE_EEPROM)
   EEPROM.commit();
 #endif
 }
@@ -482,7 +482,7 @@ void recallSettings()
   EEPROMread(addressR, driveButtons);
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
-#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)
+#if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
 #endif
@@ -491,7 +491,7 @@ void recallSettings()
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
 
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040) || defined(ESP32)
+#if defined(FAKE_EEPROM)
   if (errorCorrectionPerformed) {
     EEPROM.commit(); // rp2040 EEPROM library requires this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)
   }
@@ -522,7 +522,7 @@ void recallSettings()
 #endif
     while (true) { // flash SOS forever
       Serial.println(F("{\"error\": \"eeprom failure\"}"));
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
@@ -538,7 +538,7 @@ void recallSettings()
       digitalWrite(LED_BUILTIN, LOW);
       delay(200);
       delay(400);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       digitalWrite(LED_BUILTIN, HIGH);
@@ -547,8 +547,7 @@ void recallSettings()
       delay(400);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(500);
-
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       digitalWrite(LED_BUILTIN, LOW);
@@ -557,8 +556,7 @@ void recallSettings()
       delay(500);
       digitalWrite(LED_BUILTIN, LOW);
       delay(400);
-
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       delay(400);
@@ -574,7 +572,7 @@ void recallSettings()
       delay(200);
       digitalWrite(LED_BUILTIN, LOW);
       delay(200);
-#if defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       delay(1000);
@@ -628,7 +626,7 @@ void EEPROMread(unsigned int& address, T & value)
       // correcting errors can take a while. don't let the watchdog timeout
 #ifdef AVR
       wdt_reset();
-#elif defined(ARDUINO_ARCH_MBED_RP2040)|| defined(ARDUINO_ARCH_RP2040)
+#elif defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
 

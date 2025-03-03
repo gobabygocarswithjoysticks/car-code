@@ -42,7 +42,7 @@ jobs:
           tr '\n' ' ' < ./gbg_program/_website.ino > ./gbg_program/_website.ino.tmp
           mv -f ./gbg_program/_website.ino.tmp ./gbg_program/_website.ino
 
-          sed -i 's:^:\/\/ Do not edit. Auto generated from _wifi_site.html \n#if defined(ARDUINO_RASPBERRY_PI_PICO_W) || defined(ESP32)\n  const char indexHTML[] = " :' ./gbg_program/_website.ino
+          sed -i 's:^:\/\/ Do not edit. Auto generated from _wifi_site.html \n#if defined(HAS_WIFI)\n  const char indexHTML[] = " :' ./gbg_program/_website.ino
           printf '"; \n#endif' >> ./gbg_program/_website.ino
 
           git add .
@@ -51,7 +51,6 @@ jobs:
   compile-sketch:
     needs: process-website #run after
     strategy:
-      max-parallel: 1 # since the actions edit files in the repo, only run one at a time.
       matrix:
         # list of programs to compile (can have multiple programs for multiple boards)
         # for additional-commands use | to separate multiple commands, to install library, use arduino-cli lib install <Library>
@@ -79,6 +78,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
 
           - configName: "standard-rpiPico-W"
             code-dir: gbg_program
@@ -86,6 +86,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
 
           - configName: "standard-esp32"
             code-dir: gbg_program
@@ -93,6 +94,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI
            
           - configName: "standard-rpiPico-2"
             code-dir: gbg_program
@@ -100,6 +102,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
 
           - configName: "standard-rpiPico-2W"
             code-dir: gbg_program
@@ -107,6 +110,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
     
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
@@ -128,6 +132,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
 
           - configName: "clear_eeprom-rpiPico-W"
             code-dir: clear_eeprom
@@ -135,6 +140,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
 
           - configName: "clear_eeprom-esp32"
             code-dir: clear_eeprom
@@ -142,6 +148,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI
 
           - configName: "clear_eeprom-rpiPico2"
             code-dir: clear_eeprom
@@ -149,13 +156,15 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
 
           - configName: "clear_eeprom-rpiPico-2W"
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
-            niceBoardName: "rpi pico 2W"
+            niceBoardName: "rpi pico 2 W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
     
           - configName: "blink-nanoOld"
             code-dir: blink
@@ -177,13 +186,15 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
             
           - configName: "blink-rpiPico-W"
             code-dir: blink
-            arduino-platform: "rp2040:rp2350 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
-            fqbn: "rp2040:rp2350:rpipicow"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
 
           - configName: "blink-esp32"
             code-dir: blink
@@ -191,6 +202,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI
 
           - configName: "blink-rpiPico2"
             code-dir: blink
@@ -198,16 +210,20 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
+            additional-commands: -DFAKE_EEPROM | -DIS_PICO
             
           - configName: "blink-rpiPico-2W"
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
-            niceBoardName: "rpi pico 2W"
+            niceBoardName: "rpi pico 2 W"
+            additional-commands: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
 
 
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ toJson(matrix.include) }}
     steps:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v2.0.0
@@ -241,15 +257,50 @@ jobs:
 
       - name: Commit compiled files
         run: |
-         git status
-         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" >> hex/configurations-info.txt
-         git status
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
          git push
 
+  merge-results:
+    needs: compile-sketch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Merge branches
+        run: |
+          git config --global user.name 'gbg-with-joysticks'
+          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+          git pull
+          for branch in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[].configName'); do
+            git merge origin/$branch --no-edit -m "BOT merge $branch"
+          done
+          git push
+      
+  create-config-txt:
+    needs: compile-sketch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: create config.txt
+        run: |
+          git config --global user.name 'gbg-with-joysticks'
+          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+          git pull
+          for entry in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[] | "\(.configName), \(.code-dir), \(.board-upload), \(.niceBoardName)"'); do
+            echo $entry >> hex/configurations-info.txt
+          done
+          git add .
+          git commit --allow-empty -m "BOT update configurations-info.txt"
+          git push
+
   compile-complete: # this job passes if the whole matrix passes
-    needs: [ compile-sketch ]
+    needs: [ create-config-txt ]
     runs-on: ubuntu-latest
     steps:
       - name: Compile Complete
