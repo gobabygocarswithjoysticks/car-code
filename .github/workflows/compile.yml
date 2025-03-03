@@ -305,9 +305,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||' # TODO: remove this line
           for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
-            echo "Merging $branch" # TODO: remove this line
             git merge origin/$branch --no-edit -m "BOT merge $branch"
           done
           git push
@@ -316,14 +314,11 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          git branch -r | grep 'origin/COMPILE_' | sed 's|origin/COMPILE_||' # TODO: remove this line
 
           for file in $(ls hex/config-info-* | sort -V); do
-            echo "Processing $file" # TODO: remove this line
             cat $file >> hex/configurations-info.txt
             rm $file
           done
-
 
           git add .
           git commit --allow-empty -m "BOT update configurations-info.txt"
