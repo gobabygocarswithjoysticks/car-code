@@ -272,11 +272,8 @@ jobs:
          echo 1
          git status #TODO: remove this line
          echo 2
-         git pull origin ${{ matrix.configName }}
-         echo 3
-         git status #TODO: remove this line
-         echo 4
          git push --set-upstream origin ${{ matrix.configName }}
+         echo 3
 
   merge-results:
     needs: compile-sketch
