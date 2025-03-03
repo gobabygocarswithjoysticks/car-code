@@ -241,7 +241,10 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         git pull # get the most recent state of the repo
+         git checkout main
+         git pull --rebase
+         git checkout -b ${{ matrix.configName }}
+         git status #TODO: remove this line
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} ${{ matrix.additional-parameters }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
@@ -257,10 +260,10 @@ jobs:
 
       - name: Commit compiled files
         run: |
-         git checkout -b ${{ matrix.configName }}
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push --set-upstream origin ${{ matrix.configName }}
+         git status #TODO: remove this line
+         git push
 
   merge-results:
     needs: compile-sketch
