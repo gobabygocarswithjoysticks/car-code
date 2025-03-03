@@ -248,7 +248,6 @@ jobs:
            git branch -D ${{ matrix.configName }}
          fi
          git pull
-         echo A #TODO: remove this line
          git checkout -b ${{ matrix.configName }}
          git config pull.rebase false
 
@@ -269,11 +268,7 @@ jobs:
          git add .
          git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         echo 1
-         git status #TODO: remove this line
-         echo 2
          git push --set-upstream origin ${{ matrix.configName }}
-         echo 3
 
   merge-results:
     needs: compile-sketch
@@ -297,7 +292,7 @@ jobs:
           done
       
   create-config-txt:
-    needs: merge-results
+    needs: [merge-results, compile-sketch]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -309,6 +304,7 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
+          echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }}
           for entry in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[] | "\(.configName), \(.code-dir), \(.board-upload), \(.niceBoardName)"'); do
             echo $entry >> hex/configurations-info.txt
           done
