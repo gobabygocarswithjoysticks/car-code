@@ -305,36 +305,36 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          for branch in $(git branch -r | grep 'origin/CONFIG_' | sed 's|origin/||'); do
+          git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||' # TODO: remove this line
+          for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
             echo "Merging $branch" # TODO: remove this line
             git merge origin/$branch --no-edit -m "BOT merge $branch"
           done
           git push
-      
-  create-config-txt:
-    needs: [merge-results, compile-sketch]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
       - name: create config.txt
         run: |
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          git branch -r | grep 'origin/CONFIG_' | sed 's|origin/CONFIG_||' # TODO: remove this line
+          git branch -r | grep 'origin/COMPILE_' | sed 's|origin/COMPILE_||' # TODO: remove this line
+
+          for file in $(ls hex/config-info-* | sort -V); do
+            echo "Processing $file" # TODO: remove this line
+            cat $file >> hex/configurations-info.txt
+            rm $file
+          done
+
+
           git add .
           git commit --allow-empty -m "BOT update configurations-info.txt"
           git push
-          #          for branch in $(git branch -r | grep 'origin/CONFIG_' | sed 's|origin/CONFIG_||'); do
-          #            git push origin --delete $branch
-          #          done
+          for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
+            git push origin --delete $branch
+          done
 
 
   compile-complete: # this job passes if the whole matrix passes
-    needs: [ create-config-txt ]
+    needs: [ merge-results ]
     runs-on: ubuntu-latest
     steps:
       - name: Compile Complete
