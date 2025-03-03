@@ -263,17 +263,17 @@ jobs:
          git checkout main
          git pull
          echo A
-         if git ls-remote --exit-code --heads origin COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}; then
-           git push origin --delete COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         if git ls-remote --exit-code --heads origin COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}; then
+           git push origin --delete COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}
          fi
          echo B
-         if git show-ref --verify --quiet refs/heads/COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}; then
-           git branch -D COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         if git show-ref --verify --quiet refs/heads/COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}; then
+           git branch -D COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}
          fi
          echo C
-         git pull
+         git status
          echo D
-         git checkout -b COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         git checkout -b COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}
          echo E
          git config pull.rebase false
 
@@ -294,7 +294,7 @@ jobs:
          git add .
          git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push --set-upstream origin COMPILE/${{ matrix.order }}/${{ matrix.configName }}/${{ matrix.code-dir }}/${{ matrix.board-upload }}/${{ matrix.niceBoardName }}
+         git push --set-upstream origin COMPILE.${{ matrix.order }}.${{ matrix.configName }}.${{ matrix.code-dir }}.${{ matrix.board-upload }}.${{ matrix.niceBoardName }}
 
   merge-results:
     needs: compile-sketch
