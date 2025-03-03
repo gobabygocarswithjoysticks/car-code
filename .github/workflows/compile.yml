@@ -263,7 +263,7 @@ jobs:
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
          git status #TODO: remove this line
-         git push
+         git push --set-upstream origin ${{ matrix.configName }}
 
   merge-results:
     needs: compile-sketch
@@ -282,6 +282,9 @@ jobs:
             git merge origin/$branch --no-edit -m "BOT merge $branch"
           done
           git push
+          for branch in $(echo ${{ fromJson(needs.compile-sketch.outputs.matrix) }} | jq -r '.[].configName'); do
+            git push origin --delete $branch
+          done
       
   create-config-txt:
     needs: merge-results
