@@ -241,8 +241,12 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         git branch -D ${{ matrix.configName }} || true
-         git push origin --delete ${{ matrix.configName }} || true
+         if git ls-remote --exit-code --heads origin ${{ matrix.configName }}; then
+           git push origin --delete ${{ matrix.configName }}
+         fi
+         if git show-ref --verify --quiet refs/heads/${{ matrix.configName }}; then
+           git branch -D ${{ matrix.configName }}
+         fi
          git pull
          git checkout -b ${{ matrix.configName }}
          git config pull.rebase false
