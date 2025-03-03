@@ -260,14 +260,14 @@ jobs:
         run: |
          git config --global user.name 'gbg-with-joysticks'
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-         if git ls-remote --exit-code --heads origin COMPILE_${{ matrix.configName }}; then
-           git push origin --delete COMPILE_${{ matrix.configName }}
+         if git ls-remote --exit-code --heads origin COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}; then
+           git push origin --delete COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}
          fi
-         if git show-ref --verify --quiet refs/heads/COMPILE_${{ matrix.configName }}; then
-           git branch -D COMPILE_${{ matrix.configName }}
+         if git show-ref --verify --quiet refs/heads/COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}; then
+           git branch -D COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}
          fi
          git pull
-         git checkout -b COMPILE_${{ matrix.configName }}
+         git checkout -b COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}
          git config pull.rebase false
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
@@ -287,7 +287,7 @@ jobs:
          git add .
          git reset .github/workflows/compile.yml
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push --set-upstream origin COMPILE_${{ matrix.configName }}
+         git push --set-upstream origin COMPILE_${{ matrix.order }}COMMA${{ matrix.configName }}COMMA${{ matrix.code-dir }}COMMA${{ matrix.board-upload }}COMMA${{ matrix.niceBoardName }}
 
   merge-results:
     needs: compile-sketch
@@ -306,9 +306,6 @@ jobs:
             git merge origin/$branch --no-edit -m "BOT merge $branch"
           done
           git push
-#          for branch in $(git branch -r | grep 'origin/CONFIG_' | sed 's|origin/CONFIG_||'); do
-#            git push origin --delete $branch
-#          done
       
   create-config-txt:
     needs: [merge-results, compile-sketch]
@@ -323,10 +320,14 @@ jobs:
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
           git pull
-          echo $(git branch -r | grep 'origin/CONFIG_' | sed 's|origin/||')
+          git branch -r | grep 'origin/CONFIG_' | sed 's|origin/CONFIG_||' # TODO: remove
           git add .
           git commit --allow-empty -m "BOT update configurations-info.txt"
           git push
+          #          for branch in $(git branch -r | grep 'origin/CONFIG_' | sed 's|origin/CONFIG_||'); do
+          #            git push origin --delete $branch
+          #          done
+
 
   compile-complete: # this job passes if the whole matrix passes
     needs: [ create-config-txt ]
