@@ -243,6 +243,7 @@ jobs:
          git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
          git pull
          git checkout -b ${{ matrix.configName }}
+         git config pull.rebase false
          git pull origin ${{ matrix.configName }}
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
