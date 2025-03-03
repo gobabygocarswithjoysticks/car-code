@@ -257,9 +257,10 @@ jobs:
 
       - name: Commit compiled files
         run: |
+         git checkout -b ${{ matrix.configName }}
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
-         git push
+         git push --set-upstream origin ${{ matrix.configName }}
 
   merge-results:
     needs: compile-sketch
@@ -280,7 +281,7 @@ jobs:
           git push
       
   create-config-txt:
-    needs: compile-sketch
+    needs: merge-results
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
