@@ -6,10 +6,9 @@ https://github.com/gobabygocarswithjoysticks/car-code
 
 Github for the website code: https://github.com/gobabygocarswithjoysticks/programmer
 
-The new standard code is in this directory: https://github.com/gobabygocarswithjoysticks/car-code/tree/main/gbg_program (you can edit and upload it yourself using the Arduino IDE).
+The new standard code is in this directory: https://github.com/gobabygocarswithjoysticks/car-code/tree/main/gbg_program
 
 Instructions for modifying go baby go cars to use this code can be found here: https://gobabygocarswithjoysticks.github.io/index/ 
-
 
 ### Acknowledgements
 * Arduino
