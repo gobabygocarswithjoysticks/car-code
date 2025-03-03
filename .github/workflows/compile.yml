@@ -78,7 +78,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
 
           - configName: "standard-rpiPico-W"
             code-dir: gbg_program
@@ -86,7 +86,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
 
           - configName: "standard-esp32"
             code-dir: gbg_program
@@ -94,7 +94,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
            
           - configName: "standard-rpiPico-2"
             code-dir: gbg_program
@@ -102,7 +102,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
 
           - configName: "standard-rpiPico-2W"
             code-dir: gbg_program
@@ -110,7 +110,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
     
           - configName: "clear_eeprom-nanoOld"
             code-dir: clear_eeprom
@@ -132,7 +132,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
 
           - configName: "clear_eeprom-rpiPico-W"
             code-dir: clear_eeprom
@@ -140,7 +140,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
 
           - configName: "clear_eeprom-esp32"
             code-dir: clear_eeprom
@@ -148,7 +148,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
 
           - configName: "clear_eeprom-rpiPico2"
             code-dir: clear_eeprom
@@ -156,7 +156,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
 
           - configName: "clear_eeprom-rpiPico-2W"
             code-dir: clear_eeprom
@@ -164,7 +164,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
     
           - configName: "blink-nanoOld"
             code-dir: blink
@@ -186,7 +186,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
             
           - configName: "blink-rpiPico-W"
             code-dir: blink
@@ -194,7 +194,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
 
           - configName: "blink-esp32"
             code-dir: blink
@@ -202,7 +202,7 @@ jobs:
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
 
           - configName: "blink-rpiPico2"
             code-dir: blink
@@ -210,7 +210,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico 2"
-            additional-parameters: -DFAKE_EEPROM | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO
             
           - configName: "blink-rpiPico-2W"
             code-dir: blink
@@ -218,7 +218,7 @@ jobs:
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM | -DHAS_WIFI | -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
 
 
     runs-on: ubuntu-latest
@@ -244,10 +244,8 @@ jobs:
          git checkout main
          git pull --rebase
          git checkout -b ${{ matrix.configName }}
-         git pull
-         git status #TODO: remove this line
 
-         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} ${{ matrix.additional-parameters }} # compile code in selected directory for selected board and drop hex files in corresponding hex/directory
+         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
 
          if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
@@ -263,7 +261,13 @@ jobs:
         run: |
          git add .
          git commit --allow-empty -m "BOT update compiled files for ${{ matrix.configName }}" # --allow-empty is needed in case the hex file hasn't changed
+         echo 1
          git status #TODO: remove this line
+         echo 2
+         git pull --rebase origin ${{ matrix.configName }}
+         echo 3
+         git status #TODO: remove this line
+         echo 4
          git push --set-upstream origin ${{ matrix.configName }}
 
   merge-results:
