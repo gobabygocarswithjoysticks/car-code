@@ -1,1 +1,0 @@
-clear_eeprom-rpiPico-2W, clear_eeprom, RPIPICOW, rpi pico 2 W
