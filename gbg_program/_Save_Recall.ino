@@ -494,7 +494,7 @@ void recallSettings()
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
   EEPROMread(addressR, USE_WIFI);
-  Serial.println(addressR);
+  Serial.println(addressR); //TODO: Delete this line
   Serial.println(addressR);
   Serial.println(addressR);
   Serial.println(addressR);

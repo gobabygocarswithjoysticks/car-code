@@ -269,7 +269,7 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #if defined(HAS_WIFI)
-const int version_number = 12;  // for interaction with website
+const int version_number = 13;  // for interaction with website
 #else
 const int version_number = 11;  // for interaction with website
 #endif
