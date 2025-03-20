@@ -70,6 +70,26 @@ boolean USE_SPEED_KNOB = false;  // true = use speed knob, false = don't read th
 int16_t SPEED_KNOB_SLOW_VAL = 1060;  // can be slightly out of range, so that it just gets really slow instead of stopping
 int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned fully towards "fast" setting
 
+#ifdef ESP32
+#define LED_SETUP pinMode(2, OUTPUT);
+#define LED_ON digitalWrite(2, HIGH);
+#define LED_OFF digitalWrite(2, LOW);
+#elif defined(IS_PICO) // pico
+#ifdef HAS_WIFI // pico 1W or 2W
+#define LED_SETUP pinMode(LED_BUILTIN, OUTPUT);
+#define LED_ON digitalWrite(LED_BUILTIN, HIGH);
+#define LED_OFF digitalWrite(LED_BUILTIN, LOW);
+#else // pico 1 or 2
+#define LED_SETUP pinMode(25, OUTPUT);
+#define LED_ON digitalWrite(25, HIGH);
+#define LED_OFF digitalWrite(25, LOW);
+#endif // end of pico
+#else // nano or uno
+#define LED_SETUP pinMode(LED_BUILTIN, OUTPUT);
+#define LED_ON digitalWrite(LED_BUILTIN, HIGH);
+#define LED_OFF digitalWrite(LED_BUILTIN, LOW);
+#endif
+
 //////////////////////////////////////////// PINS /////////////////////////////////////
 #if defined(IS_PICO)
 ///// joystick reader pins /////
@@ -97,8 +117,7 @@ byte SPEED_KNOB_PIN = 33;
 
 byte BUTTON_MODE_PIN = 23; // can turn button control mode on and off
 
-#define LED_BUILTIN 2
-#else
+#else // nano or uno
 byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
 byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
@@ -264,8 +283,8 @@ long joystickCenterCounter;
 boolean startupPulse;
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
+  SETUP_LED;
+  LED_ON;
 #ifdef ESP32
   /*
     ESP32 sends data on start at 115200 from the bootloader (they can't be stopped from doing this).
@@ -279,7 +298,7 @@ void setup() {
 #endif
   Serial.println();
   delay(50);
-  digitalWrite(LED_BUILTIN, LOW);
+  LED_OFF;
 
 #ifdef AVR
   cli();

@@ -514,7 +514,7 @@ void recallSettings()
     }
 #endif
 
-    pinMode(LED_BUILTIN, OUTPUT);
+    LED_SETUP;
     delay(50);
 
 #ifdef AVR
@@ -525,52 +525,52 @@ void recallSettings()
 #if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
       delay(400);
 #if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(500);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(400);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(500);
 #if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(400);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(500);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(400);
 #if defined(IS_PICO)
       rp2040.wdt_reset();
 #endif
       delay(400);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(200);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_OFF;
       delay(200);
 #if defined(IS_PICO)
       rp2040.wdt_reset();
@@ -618,10 +618,10 @@ void EEPROMread(unsigned int& address, T & value)
       EEPROM.write(address + repeat_space * 2, *p);
 
       errorCorrectionPerformed = true;
-      pinMode(LED_BUILTIN, OUTPUT);
-      digitalWrite(LED_BUILTIN, LOW);
+      LED_SETUP;
+      LED_OFF;
       delay(100);
-      digitalWrite(LED_BUILTIN, HIGH);
+      LED_ON;
       delay(50);
       // correcting errors can take a while. don't let the watchdog timeout
 #ifdef AVR
