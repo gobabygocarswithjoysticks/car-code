@@ -29,7 +29,7 @@ void setup()
 #endif
     for (int i = 0; i < EEPROM.length(); i++) {
         EEPROM.write(i, 255);
-        delay(1);
+        delay(2);
     }
 #if defined(FAKE_EEPROM)
     EEPROM.commit(); // rp2040 and esp32 EEPROM libraries require this to be used to write the updated data to the flash that is simulating EEPROM (flash has more limited cycles)

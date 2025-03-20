@@ -131,6 +131,7 @@ void printSettings() {
 #if defined(HAS_WIFI)
   checksumPrintFlashString(F("\"CAR_WIFI_NAME\": "));  serialChecksum += Serial.print(CAR_WIFI_NAME); checksumPrintComma();
   checksumPrintFlashString(F("\"CAR_WIFI_PASSWORD\": "));  serialChecksum += Serial.print(CAR_WIFI_PASSWORD); checksumPrintComma();
+  checksumPrintFlashString(F("\"USE_WIFI\": "));  serialChecksum += Serial.print((USE_WIFI ? "true" : "false")); checksumPrintComma();
 #endif
 
   checksumPrintFlashString(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
