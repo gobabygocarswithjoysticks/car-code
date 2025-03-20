@@ -283,7 +283,7 @@ long joystickCenterCounter;
 boolean startupPulse;
 
 void setup() {
-  SETUP_LED;
+  LED_SETUP;
   LED_ON;
 #ifdef ESP32
   /*

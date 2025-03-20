@@ -654,3 +654,4 @@ uint32_t crc_update(uint32_t crc, byte data)
   crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
   return crc;
 }
+
