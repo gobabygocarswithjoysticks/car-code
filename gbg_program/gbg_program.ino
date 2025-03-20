@@ -170,6 +170,7 @@ byte STEERING_OFF_SWITCH_PIN = 4;
 #if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
 int32_t CAR_WIFI_PASSWORD = 12345678;
+boolean USE_WIFI = true;
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -433,11 +434,11 @@ void loop()
 
   */
 #if defined(HAS_WIFI)
-  if (activatedByRemote) {
+  if (activatedByRemote||!USE_WIFI) {
 #endif
     turnProcessed = turnInput;
     speedProcessed = speedInput;
-#if defined(HAS_WIFI)
+#if defined(HAS_WIFI) //using wifi and not activated by remote
   } else {
     turnProcessed = 0;
     speedProcessed = 0;

@@ -11,6 +11,9 @@ WebServer webServer(80);
 char statusBuffer[40];
 
 void setupWifi() {
+  if(!USE_WIFI) {
+    return;
+  }
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
   char nameBuffer[10];
@@ -68,6 +71,9 @@ void setupWifi() {
 }
 
 void runWifiInput(float& speedInput, float& turnInput) {
+  if(!USE_WIFI) {
+    return;
+  }
   switch (remoteMode) {
     default:
     case 0: // car is driving
@@ -90,6 +96,9 @@ void runWifiInput(float& speedInput, float& turnInput) {
 
 
 void runWifi() {
+  if(!USE_WIFI) {
+    return;
+  }
   webServer.handleClient();
 }
 

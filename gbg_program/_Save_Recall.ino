@@ -306,6 +306,13 @@ void settingsSerial() {
         CAR_WIFI_PASSWORD = constrain(CAR_WIFI_PASSWORD, 0, 999999999);
         sprintf(resultBuf, "%d", CAR_WIFI_PASSWORD);
       }
+      else if (strcmp(k,"USE_WIFI") == 0) {
+        USE_WIFI = atoi(v);
+        if (USE_WIFI)
+          sprintf(resultBuf, "true");
+        else
+          sprintf(resultBuf, "false");
+      }
 #endif
       else if (strcmp(k, "SAVE") == 0) {
         saveSettings();
@@ -421,6 +428,7 @@ void saveSettings()
 #if defined(HAS_WIFI)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
+  EEPROMwrite(addressW, USE_WIFI);
 #endif
   EEPROMwrite(addressW, eepromCRC);
   // addressW equaled 177 on pico W on this line
@@ -485,6 +493,12 @@ void recallSettings()
 #if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
+  EEPROMread(addressR, USE_WIFI);
+  Serial.println(addressR);
+  Serial.println(addressR);
+  Serial.println(addressR);
+  Serial.println(addressR);
+  Serial.println(addressR);
 #endif
 
   uint32_t tempEepromCRC = eepromCRC;
