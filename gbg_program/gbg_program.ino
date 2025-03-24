@@ -249,8 +249,12 @@ class Servo {
 #else
 #include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/, used version 1.1.8
 #endif
+#ifdef IS_PCB
+#error pcb
+#else
 Servo leftMotorController;
 Servo rightMotorController;
+#endif
 
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).

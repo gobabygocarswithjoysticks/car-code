@@ -51,6 +51,7 @@ jobs:
         # board-upload must match a board type as defined by https://github.com/dbuezas/arduino-web-uploader
         include:
           - configName: "standard-nanoOld"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
@@ -60,6 +61,7 @@ jobs:
             order: 1
 
           - configName: "standard-nanoNew"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
@@ -69,6 +71,7 @@ jobs:
             order: 2
 
           - configName: "standard-rpiPico"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
@@ -78,6 +81,7 @@ jobs:
             order: 3
 
           - configName: "standard-rpiPico-W"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
@@ -87,6 +91,7 @@ jobs:
             order: 4
 
           - configName: "standard-esp32"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "esp32:esp32 --additional-urls https://github.com/espressif/arduino-esp32/releases/download/3.1.3/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
@@ -96,6 +101,7 @@ jobs:
             order: 5
            
           - configName: "standard-rpiPico-2"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
@@ -105,6 +111,7 @@ jobs:
             order: 6
 
           - configName: "standard-rpiPico-2W"
+            code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
@@ -112,128 +119,182 @@ jobs:
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
             order: 7
-    
-          - configName: "clear_eeprom-nanoOld"
-            code-dir: clear_eeprom
-            arduino-platform: "arduino:avr"
-            fqbn: "arduino:avr:nano"
-            board-upload: "nanoOldBootloader"
-            niceBoardName: "old nano"
+
+          - configName: "PCB-rpiPico"
+            code-name: PCB_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico"
+            board-upload: "RPIPICO"
+            niceBoardName: "rpi pico"
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
             order: 8
 
+          - configName: "PCB-rpiPico-W"
+            code-name: PCB_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipicow"
+            board-upload: "RPIPICOW"
+            niceBoardName: "rpi pico W"
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB
+            order: 9
+
+          - configName: "PCB-rpiPico-2"
+            code-name: PCB_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico2"
+            board-upload: "RPIPICO2"
+            niceBoardName: "rpi pico 2"
+            additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
+            order: 10
+
+          - configName: "PCB-rpiPico-2W"
+            code-name: PCB_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            fqbn: "rp2040:rp2040:rpipico2w"
+            board-upload: "RPIPICO2W"
+            niceBoardName: "rpi pico 2 W"
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB
+            order: 11
+    
+          - configName: "clear_eeprom-nanoOld"
+            code-name: clear_eeprom
+            code-dir: clear_eeprom
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
+            order: 12
+
           - configName: "clear_eeprom-nanoNew"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            order: 9
+            order: 13
 
           - configName: "clear_eeprom-rpiPico"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 10
+            order: 14
 
           - configName: "clear_eeprom-rpiPico-W"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 11
+            order: 15
 
           - configName: "clear_eeprom-esp32"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "esp32:esp32 --additional-urls https://github.com/espressif/arduino-esp32/releases/download/3.1.3/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
-            order: 12
+            order: 16
 
           - configName: "clear_eeprom-rpiPico2"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 13
+            order: 17
 
           - configName: "clear_eeprom-rpiPico-2W"
+            code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 14
+            order: 18
     
           - configName: "blink-nanoOld"
+            code-name: blink
             code-dir: blink
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            order: 15
+            order: 19
 
           - configName: "blink-nanoNew"
+            code-name: blink
             code-dir: blink
             arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            order: 16
+            order: 20
 
           - configName: "blink-rpiPico"
+            code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 17
+            order: 21
             
           - configName: "blink-rpiPico-W"
+            code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 18
+            order: 22
 
           - configName: "blink-esp32"
+            code-name: blink
             code-dir: blink
             arduino-platform: "esp32:esp32 --additional-urls https://github.com/espressif/arduino-esp32/releases/download/3.1.3/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
-            order: 19
+            order: 23
 
           - configName: "blink-rpiPico2"
+            code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 20
+            order: 24
             
           - configName: "blink-rpiPico-2W"
+            code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 21
+            order: 25
 
 
     runs-on: ubuntu-latest
@@ -266,17 +327,17 @@ jobs:
 
          arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
 
-         echo "${{ matrix.configName }}, ${{ matrix.code-dir }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > ./hex/config-info-${{ matrix.order}}.txt
+         echo "${{ matrix.configName }}, ${{ matrix.code-name }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > ./hex/config-info-${{ matrix.order}}.txt
 
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
 
-         if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
+         if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.bin; fi
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.elf
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.eep
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.with_bootloader.bin
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.with_bootloader.hex
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.map
+         rm -f hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.merged.bin
          if [[ "${{ matrix.fqbn }}" == "esp32:esp32:esp32" ]]; then cd ./hex/${{ matrix.configName }}; wget "https://github.com/espressif/arduino-esp32/raw/refs/tags/3.1.3/tools/partitions/boot_app0.bin"; fi
 
       - name: Commit compiled files
