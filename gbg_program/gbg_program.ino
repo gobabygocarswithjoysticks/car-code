@@ -168,7 +168,7 @@ const byte maxNumDriveButtons = 6;
 #if defined(ESP32)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
-byte NUM_DRIVE_BUTTONS = 0;
+byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
   {16, 1, 0}, //forwards
@@ -194,7 +194,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 #else
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
-byte NUM_DRIVE_BUTTONS = 0;
+byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
   {7, 1, 0}, //forwards
