@@ -75,9 +75,16 @@ int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned full
 #define LED_ON digitalWrite(2, HIGH);
 #define LED_OFF digitalWrite(2, LOW);
 #elif defined(IS_PCB)
-#define LED_SETUP pinMode(13, OUTPUT);
-#define LED_ON digitalWrite(13, HIGH);
-#define LED_OFF digitalWrite(13, LOW);
+#ifdef HAS_WIFI // pico 1W or 2W
+#define LED_SETUP pinMode(LED_BUILTIN, OUTPUT); pinMode(13, OUTPUT);
+#define LED_ON digitalWrite(LED_BUILTIN, HIGH); digitalWrite(13, HIGH);
+#define LED_OFF digitalWrite(LED_BUILTIN, LOW); digitalWrite(13, LOW);
+#else // pico 1 or 2
+#define LED_SETUP pinMode(25, OUTPUT); pinMode(13, OUTPUT);
+#define LED_ON digitalWrite(25, HIGH); digitalWrite(13, HIGH);
+#define LED_OFF digitalWrite(25, LOW); digitalWrite(13, LOW);
+#endif // end of pico
+
 #elif defined(IS_PICO) // pico
 #ifdef HAS_WIFI // pico 1W or 2W
 #define LED_SETUP pinMode(LED_BUILTIN, OUTPUT);
@@ -118,7 +125,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 
 byte SPEED_KNOB_PIN = 28;
 
-byte BUTTON_MODE_PIN = 0; // can turn button control mode on and off
+byte BUTTON_MODE_PIN = 8; // can turn button control mode on and off
 byte STEERING_OFF_SWITCH_PIN = 7;
 
 #elif defined(ESP32)
@@ -172,8 +179,8 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {25, -1, 0} //backwards
 };
 #elif defined(IS_PCB)
-boolean ENABLE_BUTTON_CTRL = true;
-boolean USE_BUTTON_MODE_PIN = true;
+boolean ENABLE_BUTTON_CTRL = false;
+boolean USE_BUTTON_MODE_PIN = false;
 byte NUM_DRIVE_BUTTONS = 4;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -593,6 +600,13 @@ void loop()
     speedToDrive = constrain(speedToDrive, -speedKnobScaler, speedKnobScaler);
     turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
   }
+
+  if(abs(turnToDrive)>=0.001||abs(speedToDrive)>=0.001){
+    LED_ON;
+  }else{
+    LED_OFF;
+  }
+
   ////////////////////////////// PUT THE DRIVE CONTROLLER HERE //////////////////////
   /**
     void DriveController_TwoSideDrive(float turnToDrive, float speedToDrive, int& leftMotorWrite, int& rightMotorWrite, int LEFT_MOTOR_CENTER, int LEFT_MOTOR_SLOW, int LEFT_MOTOR_FAST, int RIGHT_MOTOR_CENTER, int RIGHT_MOTOR_SLOW, int RIGHT_MOTOR_FAST)
@@ -617,7 +631,7 @@ void loop()
       joystickCenterCounter = 0;
     }
   }
-
+  
   if (startupPulse && joyOK && delayedStartDone) {
     startupPulse = false;
     if (movementAllowed) {  // don't pulse if the website says don't move
