@@ -102,8 +102,12 @@ void printSettings() {
   checksumPrintFlashString(F("\"SPEED_KNOB_PIN\": "));  serialChecksum += Serial.print(SPEED_KNOB_PIN); checksumPrintComma();
   checksumPrintFlashString(F("\"JOY_X_PIN\": "));  serialChecksum += Serial.print(JOY_X_PIN); checksumPrintComma();
   checksumPrintFlashString(F("\"JOY_Y_PIN\": "));  serialChecksum += Serial.print(JOY_Y_PIN); checksumPrintComma();
+#ifdef IS_PCB
+  checksumPrintFlashString(F("\"SWAP_MOTORS\": "));  serialChecksum += Serial.print(SWAP_MOTORS); checksumPrintComma();
+#else
   checksumPrintFlashString(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(LEFT_MOTOR_CONTROLLER_PIN); checksumPrintComma();
   checksumPrintFlashString(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); checksumPrintComma();
+#endif
   checksumPrintFlashString(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print((ENABLE_STARTUP_PULSE ? "true" : "false")); checksumPrintComma();
   checksumPrintFlashString(F("\"LEFT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(LEFT_MOTOR_PULSE); checksumPrintComma();
   checksumPrintFlashString(F("\"RIGHT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_PULSE); checksumPrintComma();

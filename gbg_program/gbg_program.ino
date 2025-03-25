@@ -74,6 +74,10 @@ int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned full
 #define LED_SETUP pinMode(2, OUTPUT);
 #define LED_ON digitalWrite(2, HIGH);
 #define LED_OFF digitalWrite(2, LOW);
+#elif defined(IS_PCB)
+#define LED_SETUP pinMode(13, OUTPUT);
+#define LED_ON digitalWrite(13, HIGH);
+#define LED_OFF digitalWrite(13, LOW);
 #elif defined(IS_PICO) // pico
 #ifdef HAS_WIFI // pico 1W or 2W
 #define LED_SETUP pinMode(LED_BUILTIN, OUTPUT);
@@ -93,16 +97,29 @@ int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned full
 //////////////////////////////////////////// PINS /////////////////////////////////////
 #if defined(IS_PICO)
 ///// joystick reader pins /////
-byte JOY_X_PIN = A2;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A0;  // Analog input pin that the forwards-backwards potentiometer is attached to
+byte JOY_X_PIN = 26;  // Analog input pin that the left-right potentiometer is attached to
+byte JOY_Y_PIN = 27;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
-byte LEFT_MOTOR_CONTROLLER_PIN = 3;
-byte RIGHT_MOTOR_CONTROLLER_PIN = 4;
+#ifdef(IS_PCB)
+byte LEFT_MOTOR_1_PIN = 22;
+byte LEFT_MOTOR_EN_PIN = 21;
+byte LEFT_MOTOR_2_PIN = 20;
+byte RIGHT_MOTOR_EN_PIN = 18;
+byte RIGHT_MOTOR_2_PIN = 17;
+byte RIGHT_MOTOR_1_PIN = 16;
+boolean SWAP_MOTORS = false;
+#define LEFT_MOTOR_CONTROLLER_PIN LEFT_MOTOR_EN_PIN, LEFT_MOTOR_1_PIN, LEFT_MOTOR_2_PIN
+#define RIGHT_MOTOR_CONTROLLER_PIN RIGHT_MOTOR_EN_PIN, RIGHT_MOTOR_1_PIN, RIGHT_MOTOR_2_PIN
+#else
+byte LEFT_MOTOR_CONTROLLER_PIN = 19;
+byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
+#endif
 
-byte SPEED_KNOB_PIN = A1;
+byte SPEED_KNOB_PIN = 28;
 
-byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
+byte BUTTON_MODE_PIN = 0; // can turn button control mode on and off
+byte STEERING_OFF_SWITCH_PIN = 7;
 
 #elif defined(ESP32)
 ///// joystick reader pins /////
@@ -116,6 +133,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 byte SPEED_KNOB_PIN = 33;
 
 byte BUTTON_MODE_PIN = 23; // can turn button control mode on and off
+byte STEERING_OFF_SWITCH_PIN = 4;
 
 #else // nano or uno
 byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
@@ -128,6 +146,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 byte SPEED_KNOB_PIN = A3;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
+byte STEERING_OFF_SWITCH_PIN = 4;
 #endif
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
@@ -141,8 +160,8 @@ struct ButtonDriveConfig {
 };
 // button control settings
 const byte maxNumDriveButtons = 6;
-byte NUM_DRIVE_BUTTONS = 0;
 #if defined(ESP32)
+byte NUM_DRIVE_BUTTONS = 0;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
   {16, 1, 0}, //forwards
@@ -152,7 +171,19 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {22, 1, 1}, //RF
   {25, -1, 0} //backwards
 };
+#elif defined(IS_PCB)
+byte NUM_DRIVE_BUTTONS = 4;
+ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
+  //pin, speed, turn (there must be maxNumDriveButtons number of rows)
+  {1, 1, 0}, //forwards
+  {2, 0, -1}, //left
+  {3, 0, 1}, //right
+  {4, -1, 0}, //backwards
+  {5, 1, 1}, //RF
+  {6, 1, -1} //LF
+};
 #else
+byte NUM_DRIVE_BUTTONS = 0;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
   {7, 1, 0}, //forwards
@@ -165,7 +196,6 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 #endif
 
 boolean STEERING_OFF_SWITCH = false;
-byte STEERING_OFF_SWITCH_PIN = 4;
 
 #if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
@@ -246,20 +276,77 @@ class Servo {
       return isAttached;
     }
 };
+#elif defined(IS_PCB)
+// H-bridge motor control library that matches the Servo library
+class Servo {
+  protected:
+    byte pinEn;
+    byte pin1;
+    byte pin2;
+    boolean isAttached = false;
+  public:
+    Servo() {
+      isAttached = false;
+    }
+    void attach(byte _pinEn, byte _pin1, byte _pin2) {
+      isAttached = true;
+      pinEn = _pin;
+      pin1 = _pin1;
+      pin2 = _pin2;
+      pinMode(pinEn, OUTPUT);
+      digitalWrite(pinEn, LOW);
+      pinMode(pin1, OUTPUT);
+      digitalWrite(pin1, LOW);
+      pinMode(pin2, OUTPUT);
+      digitalWrite(pin2, LOW);
+    }
+    void writeMicroseconds(int microseconds) {
+      if (isAttached){
+        microseconds=constrain(microseconds,1000,2000);
+        if(microseconds>1500){
+          digitalWrite(pin2, LOW);
+          digitalWrite(pin1, HIGH);
+          analogWrite(pinEn, constrain((microseconds-1500)*255/500,0,255));
+        }else if(microseconds<1500){
+          digitalWrite(pin1, LOW);
+          digitalWrite(pin2, HIGH);
+          analogWrite(pinEn, constrain((1500-microseconds)*255/500,0,255));
+        }else{
+          analogWrite(pinEn, 0);
+          digitalWrite(pin1, LOW);
+          digitalWrite(pin2, LOW);
+        }
+      }
+    }
+    void detach() {
+      digitalWrite(pinEn, LOW);
+      digitalWrite(pin1, LOW);
+      digitalWrite(pin2, LOW);
+      pinMode(pinEn, INPUT);
+      pinMode(pin1, INPUT);
+      pinMode(pin2, INPUT);
+      isAttached = false;
+    }
+    boolean attached() {
+      return isAttached;
+    }
+};
 #else
 #include <Servo.h>  // https://www.arduino.cc/reference/en/libraries/servo/, used version 1.1.8
 #endif
-#ifdef IS_PCB
-#error pcb
-#else
+
 Servo leftMotorController;
 Servo rightMotorController;
-#endif
 
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
 //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
 //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
+#ifdef IS_PCB
+const byte settings_memory_key = 12;
+#else
 const byte settings_memory_key = 11;
+#endif
+
 #include <EEPROM.h> // used version 2.0
 
 #ifdef AVR
@@ -272,10 +359,18 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 }
 #endif
 
+#ifdef IS_PCB
+#if defined(HAS_WIFI)
+const int version_number = 15;  // for interaction with website
+#else
+const int version_number = 14;  // for interaction with website
+#endif
+#else
 #if defined(HAS_WIFI)
 const int version_number = 13;  // for interaction with website
 #else
 const int version_number = 11;  // for interaction with website
+#endif
 #endif
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
@@ -375,12 +470,26 @@ void setupPins() {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
 
+#ifdef IS_PCB
+  // PCB
+  if(SWAP_MOTORS){
+    leftMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+    rightMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);  
+  }else{ // normal
+    leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+    rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+  }
+  leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);//tell the motor controller to not move
+  rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
+
+#else
   ///// ESCs controlled with the Servo library need to be "attached" to the pin the ESC is wired to
   leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
   rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
 
   leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);//tell the motor controller to not move
   rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);//tell the motor controller to not move
+#endif
   delay(100);
 }
 

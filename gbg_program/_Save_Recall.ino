@@ -155,6 +155,25 @@ void settingsSerial() {
         JOY_Y_PIN = atoi(v);
         pinMode(JOY_Y_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_Y_PIN);
+#ifdef IS_PCB
+      } else if (strcmp(k, "SWAP_MOTORS") == 0) {
+        SWAP_MOTORS = atoi(v);
+        if (SWAP_MOTORS)
+          sprintf(resultBuf, "true");
+        else
+          sprintf(resultBuf, "false");
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+        leftMotorController.detach();
+        rightMotorController.detach();
+        if (SWAP_MOTORS) {
+          leftMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+          rightMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+        } else {
+          leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+          rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
+        }
+#else // not pcb
       } else if (strcmp(k, "LEFT_MOTOR_CONTROLLER_PIN") == 0) {
         // detach both because when swapping left and right we don't want both attached to the same pin
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
@@ -180,6 +199,7 @@ void settingsSerial() {
         leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
+#endif
       } else if (strcmp(k, "SPEED_KNOB_PIN") == 0) {
         SPEED_KNOB_PIN = atoi(v);
         pinMode(SPEED_KNOB_PIN, INPUT);
@@ -409,8 +429,12 @@ void saveSettings()
 
   EEPROMwrite(addressW, JOY_X_PIN);
   EEPROMwrite(addressW, JOY_Y_PIN);
+#ifdef IS_PCB
+  EEPROMwrite(addressW, SWAP_MOTORS);
+#else
   EEPROMwrite(addressW, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMwrite(addressW, RIGHT_MOTOR_CONTROLLER_PIN);
+#endif
   EEPROMwrite(addressW, SPEED_KNOB_PIN);
 
   EEPROMwrite(addressW, LEFT_MOTOR_PULSE);
@@ -474,8 +498,12 @@ void recallSettings()
 
   EEPROMread(addressR, JOY_X_PIN);
   EEPROMread(addressR, JOY_Y_PIN);
+#ifdef IS_PCB
+  EEPROMread(addressR, SWAP_MOTORS);
+#else
   EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
+#endif
   EEPROMread(addressR, SPEED_KNOB_PIN);
 
   EEPROMread(addressR, LEFT_MOTOR_PULSE);
