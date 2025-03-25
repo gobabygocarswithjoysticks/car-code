@@ -101,7 +101,7 @@ byte JOY_X_PIN = 26;  // Analog input pin that the left-right potentiometer is a
 byte JOY_Y_PIN = 27;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
-#ifdef(IS_PCB)
+#ifdef IS_PCB
 byte LEFT_MOTOR_1_PIN = 22;
 byte LEFT_MOTOR_EN_PIN = 21;
 byte LEFT_MOTOR_2_PIN = 20;
