@@ -290,7 +290,7 @@ class Servo {
     }
     void attach(byte _pinEn, byte _pin1, byte _pin2) {
       isAttached = true;
-      pinEn = _pin;
+      pinEn = _pinEn;
       pin1 = _pin1;
       pin2 = _pin2;
       pinMode(pinEn, OUTPUT);
