@@ -150,7 +150,6 @@ byte STEERING_OFF_SWITCH_PIN = 4;
 #endif
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
-boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
 //// needed for button control settings
 struct ButtonDriveConfig {
@@ -161,6 +160,7 @@ struct ButtonDriveConfig {
 // button control settings
 const byte maxNumDriveButtons = 6;
 #if defined(ESP32)
+boolean ENABLE_BUTTON_CTRL = false;
 byte NUM_DRIVE_BUTTONS = 0;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -172,6 +172,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {25, -1, 0} //backwards
 };
 #elif defined(IS_PCB)
+boolean ENABLE_BUTTON_CTRL = true;
 byte NUM_DRIVE_BUTTONS = 4;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -183,6 +184,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {6, 1, -1} //LF
 };
 #else
+boolean ENABLE_BUTTON_CTRL = false;
 byte NUM_DRIVE_BUTTONS = 0;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
