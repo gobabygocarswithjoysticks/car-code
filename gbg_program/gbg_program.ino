@@ -406,6 +406,10 @@ void setupRCControl(){
   attachPCINT(digitalPinToPCINT(TURN_RC_PIN), turnRCISR, CHANGE);
   attachPCINT(digitalPinToPCINT(SPEED_RC_PIN), speedRCISR, CHANGE);
 }
+void detachRCControl(){
+  detachPCINT(digitalPinToPCINT(TURN_RC_PIN));
+  detachPCINT(digitalPinToPCINT(SPEED_RC_PIN));
+}
 #endif
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
