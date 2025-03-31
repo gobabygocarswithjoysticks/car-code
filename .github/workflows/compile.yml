@@ -57,7 +57,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            additional-commands: arduino-cli lib install Servo
+            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
             order: 1
 
           - configName: "standard-nanoNew"
@@ -67,7 +67,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            additional-commands: arduino-cli lib install Servo
+            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
             order: 2
 
           - configName: "standard-rpiPico"
@@ -159,6 +159,29 @@ jobs:
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB
             order: 11
+
+          - configName: "RC-standard-nanoOld"
+            code-name: RC_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nanoOldBootloader"
+            niceBoardName: "old nano"
+            additional-parameters: -DRC_CONTROL
+            additional-commands: arduino-cli lib install Servo
+            order: 12
+
+          - configName: "RC-standard-nanoNew"
+            code-name: RC_gbg_program
+            code-dir: gbg_program
+            arduino-platform: "arduino:avr"
+            fqbn: "arduino:avr:nano"
+            board-upload: "nano"
+            niceBoardName: "new nano or uno"
+            additional-parameters: -DRC_CONTROL
+            additional-commands: arduino-cli lib install Servo
+            order: 13
+
     
           - configName: "clear_eeprom-nanoOld"
             code-name: clear_eeprom
@@ -167,7 +190,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            order: 12
+            order: 14
 
           - configName: "clear_eeprom-nanoNew"
             code-name: clear_eeprom
@@ -176,7 +199,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            order: 13
+            order: 15
 
           - configName: "clear_eeprom-rpiPico"
             code-name: clear_eeprom
@@ -186,7 +209,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 14
+            order: 16
 
           - configName: "clear_eeprom-rpiPico-W"
             code-name: clear_eeprom
@@ -196,7 +219,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 15
+            order: 17
 
           - configName: "clear_eeprom-esp32"
             code-name: clear_eeprom
@@ -206,7 +229,7 @@ jobs:
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
-            order: 16
+            order: 18
 
           - configName: "clear_eeprom-rpiPico2"
             code-name: clear_eeprom
@@ -216,7 +239,7 @@ jobs:
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 17
+            order: 19
 
           - configName: "clear_eeprom-rpiPico-2W"
             code-name: clear_eeprom
@@ -226,7 +249,7 @@ jobs:
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 18
+            order: 20
     
           - configName: "blink-nanoOld"
             code-name: blink
@@ -235,7 +258,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            order: 19
+            order: 21
 
           - configName: "blink-nanoNew"
             code-name: blink
@@ -244,7 +267,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            order: 20
+            order: 22
 
           - configName: "blink-rpiPico"
             code-name: blink
@@ -254,7 +277,7 @@ jobs:
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 21
+            order: 23
             
           - configName: "blink-rpiPico-W"
             code-name: blink
@@ -264,7 +287,7 @@ jobs:
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 22
+            order: 24
 
           - configName: "blink-esp32"
             code-name: blink
@@ -274,7 +297,7 @@ jobs:
             board-upload: "ESP"
             niceBoardName: "ESP32"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
-            order: 23
+            order: 25
 
           - configName: "blink-rpiPico2"
             code-name: blink
@@ -284,7 +307,7 @@ jobs:
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 24
+            order: 26
             
           - configName: "blink-rpiPico-2W"
             code-name: blink
@@ -294,8 +317,7 @@ jobs:
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 25
-
+            order: 27
 
     runs-on: ubuntu-latest
     steps:

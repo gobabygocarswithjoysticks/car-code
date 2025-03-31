@@ -95,6 +95,7 @@ int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned full
 #define LED_ON digitalWrite(25, HIGH);
 #define LED_OFF digitalWrite(25, LOW);
 #endif // end of pico
+
 #else // nano or uno
 #define LED_SETUP pinMode(LED_BUILTIN, OUTPUT);
 #define LED_ON digitalWrite(LED_BUILTIN, HIGH);
@@ -154,6 +155,13 @@ byte SPEED_KNOB_PIN = A3;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 byte STEERING_OFF_SWITCH_PIN = 4;
+
+#ifdef RC_CONTROL
+boolean USE_RC_CONTROL=true;
+byte SPEED_RC_PIN=8;
+byte TURN_RC_PIN=11;
+#endif
+
 #endif
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
@@ -227,6 +235,11 @@ byte remoteMode = 0; //0 is car, 1 is remote
 float remoteFB = 0;
 float remoteLR = 0;
 unsigned long lastRemoteCommandMillis = 0;
+#endif
+
+#ifdef RC_CONTROL
+#include <PinChangeInterrupt.h>
+
 #endif
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
