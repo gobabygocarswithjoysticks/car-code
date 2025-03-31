@@ -42,6 +42,11 @@ jobs:
           git add .
           git commit . -m "BOT process website" --allow-empty
           git push
+
+          for branch in $(git branch -r | grep 'origin/COMPILE_' | sed 's|origin/||'); do
+            git push origin --delete $branch
+          done
+
   compile-sketch:
     needs: prepare #run after
     strategy:
