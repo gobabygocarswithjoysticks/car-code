@@ -237,11 +237,6 @@ float remoteLR = 0;
 unsigned long lastRemoteCommandMillis = 0;
 #endif
 
-#ifdef RC_CONTROL
-#include "PinChangeInterrupt.h"
-
-#endif
-
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
 //variables below this line aren't settings, don't change them.
 ///// joystick reader variables /////
@@ -397,6 +392,22 @@ const int version_number = 11;  // for interaction with website
 #endif
 #endif
 
+#ifdef RC_CONTROL
+#include <PinChangeInterrupt.h>
+
+void turnRCISR(void){
+}
+void speedRCISR(void){
+}
+
+void setupRCControl(){
+  pinMode(SPEED_RC_PIN, INPUT_PULLUP);
+  pinMode(TURN_RC_PIN, INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(TURN_RC_PIN), turnRCISR, CHANGE);
+  attachPCINT(digitalPinToPCINT(SPEED_RC_PIN), speedRCISR, CHANGE);
+}
+#endif
+
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
 boolean movementAllowed;
@@ -440,6 +451,7 @@ void setup() {
 #elif defined(ESP32)
   EEPROM.begin(1024);
 #endif
+
   //initialize variables
   joyXVal = 512;
   joyYVal = 512;
@@ -470,6 +482,11 @@ void setup() {
   printSettings();  // do it again to increase the chance of a valid message going through
 
   setupPins();
+
+#ifdef RC_CONTROL
+  setupRCControl();
+#endif
+
 
 #if defined(HAS_WIFI)
   setupWifi();
