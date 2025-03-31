@@ -238,7 +238,7 @@ unsigned long lastRemoteCommandMillis = 0;
 #endif
 
 #ifdef RC_CONTROL
-#include <PinChangeInterrupt.h>
+#include "PinChangeInterrupt.h"
 
 #endif
 
