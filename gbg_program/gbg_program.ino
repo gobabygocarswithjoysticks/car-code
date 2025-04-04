@@ -397,6 +397,7 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #ifdef RC_CONTROL
+#define rcTimeoutMicros 40000 // 40ms timeout for RC control
 #include <PinChangeInterrupt.h>
 unsigned long lastTurnRisingMicros = 0;
 unsigned long lastSpeedRisingMicros = 0;
