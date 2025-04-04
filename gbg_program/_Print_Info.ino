@@ -69,44 +69,44 @@ boolean printVariables(int interval) {
 void printSettings() {
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   serialChecksum = 0;
-  checksumPrintFlashString(F("{\"current settings, version:\": ")); serialChecksum += Serial.print(version_number); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_RIGHT\": "));  serialChecksum += Serial.print(CONTROL_RIGHT); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_CENTER_X\": "));  serialChecksum += Serial.print(CONTROL_CENTER_X); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_LEFT\": "));  serialChecksum += Serial.print(CONTROL_LEFT); checksumPrintComma();
-  checksumPrintFlashString(F("\"X_DEADZONE\": "));  serialChecksum += Serial.print(X_DEADZONE); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_UP\": "));  serialChecksum += Serial.print(CONTROL_UP); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_CENTER_Y\": "));  serialChecksum += Serial.print(CONTROL_CENTER_Y); checksumPrintComma();
-  checksumPrintFlashString(F("\"CONTROL_DOWN\": "));  serialChecksum += Serial.print(CONTROL_DOWN); checksumPrintComma();
-  checksumPrintFlashString(F("\"Y_DEADZONE\": "));  serialChecksum += Serial.print(Y_DEADZONE); checksumPrintComma();
-  checksumPrintFlashString(F("\"ACCELERATION_FORWARD\": "));  serialChecksum += Serial.print(ACCELERATION_FORWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"DECELERATION_FORWARD\": "));  serialChecksum += Serial.print(DECELERATION_FORWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"ACCELERATION_BACKWARD\": "));  serialChecksum += Serial.print(ACCELERATION_BACKWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"DECELERATION_BACKWARD\": "));  serialChecksum += Serial.print(DECELERATION_BACKWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"ACCELERATION_TURNING\": "));  serialChecksum += Serial.print(ACCELERATION_TURNING, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"DECELERATION_TURNING\": "));  serialChecksum += Serial.print(DECELERATION_TURNING, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"FASTEST_FORWARD\": "));  serialChecksum += Serial.print(FASTEST_FORWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"FASTEST_BACKWARD\": "));  serialChecksum += Serial.print(FASTEST_BACKWARD, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"TURN_SPEED\": "));  serialChecksum += Serial.print(TURN_SPEED, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"SCALE_TURNING_WHEN_MOVING\": "));  serialChecksum += Serial.print(SCALE_TURNING_WHEN_MOVING, 4); checksumPrintComma();
-  checksumPrintFlashString(F("\"REVERSE_TURN_IN_REVERSE\": "));  serialChecksum += Serial.print(REVERSE_TURN_IN_REVERSE ? "true" : "false"); checksumPrintComma();
-  checksumPrintFlashString(F("\"LEFT_MOTOR_CENTER\": "));  serialChecksum += Serial.print(LEFT_MOTOR_CENTER); checksumPrintComma();
-  checksumPrintFlashString(F("\"LEFT_MOTOR_SLOW\": "));  serialChecksum += Serial.print(LEFT_MOTOR_SLOW); checksumPrintComma();
-  checksumPrintFlashString(F("\"LEFT_MOTOR_FAST\": "));  serialChecksum += Serial.print(LEFT_MOTOR_FAST); checksumPrintComma();
-  checksumPrintFlashString(F("\"RIGHT_MOTOR_CENTER\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_CENTER); checksumPrintComma();
-  checksumPrintFlashString(F("\"RIGHT_MOTOR_SLOW\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_SLOW); checksumPrintComma();
-  checksumPrintFlashString(F("\"RIGHT_MOTOR_FAST\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_FAST); checksumPrintComma();
-  checksumPrintFlashString(F("\"USE_SPEED_KNOB\": "));  serialChecksum += Serial.print(USE_SPEED_KNOB ? "true" : "false"); checksumPrintComma();
-  checksumPrintFlashString(F("\"SPEED_KNOB_SLOW_VAL\": "));  serialChecksum += Serial.print(SPEED_KNOB_SLOW_VAL); checksumPrintComma();
-  checksumPrintFlashString(F("\"SPEED_KNOB_FAST_VAL\": "));  serialChecksum += Serial.print(SPEED_KNOB_FAST_VAL); checksumPrintComma();
-  checksumPrintFlashString(F("\"SCALE_ACCEL_WITH_SPEED\": "));  serialChecksum += Serial.print(SCALE_ACCEL_WITH_SPEED ? "true" : "false"); checksumPrintComma();
-  checksumPrintFlashString(F("\"SPEED_KNOB_PIN\": "));  serialChecksum += Serial.print(SPEED_KNOB_PIN); checksumPrintComma();
-  checksumPrintFlashString(F("\"JOY_X_PIN\": "));  serialChecksum += Serial.print(JOY_X_PIN); checksumPrintComma();
-  checksumPrintFlashString(F("\"JOY_Y_PIN\": "));  serialChecksum += Serial.print(JOY_Y_PIN); checksumPrintComma();
+  prnt(F("\"current settings, version\": "), version_number);
+  prnt(F("\"CONTROL_RIGHT\": "), CONTROL_RIGHT);
+  prnt(F("\"CONTROL_CENTER_X\": "), CONTROL_CENTER_X);
+  prnt(F("\"CONTROL_LEFT\": "), CONTROL_LEFT);
+  prnt(F("\"X_DEADZONE\": "), X_DEADZONE);
+  prnt(F("\"CONTROL_UP\": "), CONTROL_UP);
+  prnt(F("\"CONTROL_CENTER_Y\": "), CONTROL_CENTER_Y);
+  prnt(F("\"CONTROL_DOWN\": "), CONTROL_DOWN);
+  prnt(F("\"Y_DEADZONE\": "), Y_DEADZONE);
+  prnt(F("\"ACCELERATION_FORWARD\": "), ACCELERATION_FORWARD);
+  prnt(F("\"DECELERATION_FORWARD\": "), DECELERATION_FORWARD);
+  prnt(F("\"ACCELERATION_BACKWARD\": "), ACCELERATION_BACKWARD);
+  prnt(F("\"DECELERATION_BACKWARD\": "), DECELERATION_BACKWARD);
+  prnt(F("\"ACCELERATION_TURNING\": "), ACCELERATION_TURNING);
+  prnt(F("\"DECELERATION_TURNING\": "), DECELERATION_TURNING);
+  prnt(F("\"FASTEST_FORWARD\": "), FASTEST_FORWARD);
+  prnt(F("\"FASTEST_BACKWARD\": "), FASTEST_BACKWARD);
+  prnt(F("\"TURN_SPEED\": "), TURN_SPEED);
+  prnt(F("\"SCALE_TURNING_WHEN_MOVING\": "), SCALE_TURNING_WHEN_MOVING);
+  prnt(F("\"REVERSE_TURN_IN_REVERSE\": "), REVERSE_TURN_IN_REVERSE ? "true" : "false");
+  prnt(F("\"LEFT_MOTOR_CENTER\": "), LEFT_MOTOR_CENTER);
+  prnt(F("\"LEFT_MOTOR_SLOW\": "), LEFT_MOTOR_SLOW);
+  prnt(F("\"LEFT_MOTOR_FAST\": "), LEFT_MOTOR_FAST);
+  prnt(F("\"RIGHT_MOTOR_CENTER\": "), RIGHT_MOTOR_CENTER);
+  prnt(F("\"RIGHT_MOTOR_SLOW\": "), RIGHT_MOTOR_SLOW);
+  prnt(F("\"RIGHT_MOTOR_FAST\": "), RIGHT_MOTOR_FAST);
+  prnt(F("\"USE_SPEED_KNOB\": "), USE_SPEED_KNOB ? "true" : "false");
+  prnt(F("\"SPEED_KNOB_SLOW_VAL\": "), SPEED_KNOB_SLOW_VAL);
+  prnt(F("\"SPEED_KNOB_FAST_VAL\": "), SPEED_KNOB_FAST_VAL);
+  prnt(F("\"SCALE_ACCEL_WITH_SPEED\": "), SCALE_ACCEL_WITH_SPEED ? "true" : "false");
+  prnt(F("\"SPEED_KNOB_PIN\": "), SPEED_KNOB_PIN);
+  prnt(F("\"JOY_X_PIN\": "), JOY_X_PIN);
+  prnt(F("\"JOY_Y_PIN\": "), JOY_Y_PIN);
 #ifdef IS_PCB
-  checksumPrintFlashString(F("\"SWAP_MOTORS\": "));  serialChecksum += Serial.print(SWAP_MOTORS); checksumPrintComma();
+  prnt(F("\"SWAP_MOTORS\": "), SWAP_MOTORS ? "true" : "false");
 #else
-  checksumPrintFlashString(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(LEFT_MOTOR_CONTROLLER_PIN); checksumPrintComma();
-  checksumPrintFlashString(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_CONTROLLER_PIN); checksumPrintComma();
+  prnt(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "), LEFT_MOTOR_CONTROLLER_PIN);
+  prnt(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "), RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
   prnt(F("\"ENABLE_STARTUP_PULSE\": "), ENABLE_STARTUP_PULSE ? "true" : "false");
   prnt(F("\"LEFT_MOTOR_PULSE\": "), LEFT_MOTOR_PULSE);
@@ -117,45 +117,33 @@ void printSettings() {
   prnt(F("\"USE_BUTTON_MODE_PIN\": "), USE_BUTTON_MODE_PIN ? "true" : "false");
   prnt(F("\"BUTTON_MODE_PIN\": "), BUTTON_MODE_PIN);
   prnt(F("\"NUM_DRIVE_BUTTONS\": "), NUM_DRIVE_BUTTONS);
-  // checksumPrintFlashString(F("\"ENABLE_STARTUP_PULSE\": "));  serialChecksum += Serial.print((ENABLE_STARTUP_PULSE ? "true" : "false")); checksumPrintComma();
-  // checksumPrintFlashString(F("\"LEFT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(LEFT_MOTOR_PULSE); checksumPrintComma();
-  // checksumPrintFlashString(F("\"RIGHT_MOTOR_PULSE\": "));  serialChecksum += Serial.print(RIGHT_MOTOR_PULSE); checksumPrintComma();
-  // checksumPrintFlashString(F("\"START_MOTOR_PULSE_TIME\": "));  serialChecksum += Serial.print(START_MOTOR_PULSE_TIME); checksumPrintComma();
-  // checksumPrintFlashString(F("\"JOY_CALIB_COUNT\": "));  serialChecksum += Serial.print(JOY_CALIB_COUNT); checksumPrintComma();
-  // checksumPrintFlashString(F("\"ENABLE_BUTTON_CTRL\": "));  serialChecksum += Serial.print((ENABLE_BUTTON_CTRL ? "true" : "false")); checksumPrintComma();
-  // checksumPrintFlashString(F("\"USE_BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print((USE_BUTTON_MODE_PIN ? "true" : "false")); checksumPrintComma();
-  // checksumPrintFlashString(F("\"BUTTON_MODE_PIN\": "));  serialChecksum += Serial.print(BUTTON_MODE_PIN); checksumPrintComma();
-  // checksumPrintFlashString(F("\"NUM_DRIVE_BUTTONS\": "));  serialChecksum += Serial.print(NUM_DRIVE_BUTTONS); checksumPrintComma();
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
-    checksumPrintFlashString(F("\"DRIVE_BUTTON_"));
+    serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
     serialChecksum += Serial.print(db + 1);
-    checksumPrintFlashString(F("\": ["));
+    serialChecksum += Serial.print(F("\": ["));
     serialChecksum += Serial.print(driveButtons[db].pin);
-    checksumPrintFlashString(F(","));
+    serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].speed, 4);
-    checksumPrintFlashString(F(","));
+    serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
-    checksumPrintFlashString(F("], "));
+    serialChecksum += Serial.print("], ");
   }
-  checksumPrintFlashString(F("\"STEERING_OFF_SWITCH\": "));  serialChecksum += Serial.print((STEERING_OFF_SWITCH ? "true" : "false")); checksumPrintComma();
-  checksumPrintFlashString(F("\"STEERING_OFF_SWITCH_PIN\": "));  serialChecksum += Serial.print(STEERING_OFF_SWITCH_PIN); checksumPrintComma();
+  prnt(F("\"STEERING_OFF_SWITCH\": "), STEERING_OFF_SWITCH ? "true" : "false");
+  prnt(F("\"STEERING_OFF_SWITCH_PIN\": "), STEERING_OFF_SWITCH_PIN);
 
 #if defined(RC_CONTROL)
   prnt(F("\"USE_RC_CONTROL\": "), USE_RC_CONTROL ? "true" : "false");
   prnt(F("\"SPEED_RC_PIN\": "), SPEED_RC_PIN);
   prnt(F("\"TURN_RC_PIN\": "), TURN_RC_PIN);
-  // checksumPrintFlashString(F("\"USE_RC_CONTROL\": "));  serialChecksum += Serial.print((USE_RC_CONTROL ? "true" : "false")); checksumPrintComma();
-  // checksumPrintFlashString(F("\"SPEED_RC_PIN\": "));  serialChecksum += Serial.print(SPEED_RC_PIN); checksumPrintComma();
-  // checksumPrintFlashString(F("\"TURN_RC_PIN\": "));  serialChecksum += Serial.print(TURN_RC_PIN); checksumPrintComma();
 #endif 
 #if defined(HAS_WIFI)
-  checksumPrintFlashString(F("\"CAR_WIFI_NAME\": "));  serialChecksum += Serial.print(CAR_WIFI_NAME); checksumPrintComma();
-  checksumPrintFlashString(F("\"CAR_WIFI_PASSWORD\": "));  serialChecksum += Serial.print(CAR_WIFI_PASSWORD); checksumPrintComma();
-  checksumPrintFlashString(F("\"USE_WIFI\": "));  serialChecksum += Serial.print((USE_WIFI ? "true" : "false")); checksumPrintComma();
+  prnt(F("\"CAR_WIFI_NAME\": "), CAR_WIFI_NAME);
+  prnt(F("\"CAR_WIFI_PASSWORD\": "), CAR_WIFI_PASSWORD);
+  prnt(F("\"USE_WIFI\": "), USE_WIFI ? "true" : "false");
 #endif
 
-  checksumPrintFlashString(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
+  serialChecksum+=Serial.print(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
   Serial.println("}");
 
 }
@@ -167,14 +155,7 @@ void prnt(const __FlashStringHelper *fsh, T value) {
   serialChecksum += Serial.print(", ");
 }
 
-void checksumPrintComma() {
-  serialChecksum += Serial.print(", ");
-}
-void checksumPrintFlashString(const __FlashStringHelper *ifsh) {
-  serialChecksum += Serial.print(ifsh);
-}
-
-static int count_digits (int n) {
+int count_digits (int n) {
   if (n < 0) {
     n = -n;
   }
