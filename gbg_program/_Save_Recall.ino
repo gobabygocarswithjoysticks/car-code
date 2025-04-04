@@ -110,9 +110,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_REVERSE_TURN_IN_REVERSE]) == 0) {
         REVERSE_TURN_IN_REVERSE = atoi(v);
         if (REVERSE_TURN_IN_REVERSE)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CENTER]) == 0) {
         LEFT_MOTOR_CENTER = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_CENTER);
@@ -134,9 +134,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_USE_SPEED_KNOB]) == 0) {
         USE_SPEED_KNOB = atoi(v);
         if (USE_SPEED_KNOB)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_SLOW_VAL]) == 0) {
         SPEED_KNOB_SLOW_VAL = atoi(v);
         sprintf(resultBuf, "%d", SPEED_KNOB_SLOW_VAL);
@@ -146,9 +146,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_SCALE_ACCEL_WITH_SPEED]) == 0) {
         SCALE_ACCEL_WITH_SPEED = atoi(v);
         if (SCALE_ACCEL_WITH_SPEED)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_PIN]) == 0) {
         SPEED_KNOB_PIN = atoi(v);
         pinMode(SPEED_KNOB_PIN, INPUT);
@@ -165,9 +165,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_SWAP_MOTORS]) == 0) {
         SWAP_MOTORS = atoi(v);
         if (SWAP_MOTORS)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         leftMotorController.detach();
@@ -210,9 +210,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_ENABLE_STARTUP_PULSE]) == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);
         if (ENABLE_STARTUP_PULSE)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_PULSE]) == 0) {
         LEFT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_PULSE);
@@ -236,9 +236,9 @@ void settingsSerial() {
           }
         }
         if (ENABLE_BUTTON_CTRL)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_USE_BUTTON_MODE_PIN]) == 0) {
         USE_BUTTON_MODE_PIN = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
@@ -250,9 +250,9 @@ void settingsSerial() {
           }
         }
         if (USE_BUTTON_MODE_PIN)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_BUTTON_MODE_PIN]) == 0) {
           BUTTON_MODE_PIN = atoi(v);
           pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
@@ -304,10 +304,10 @@ void settingsSerial() {
         STEERING_OFF_SWITCH = atoi(v);
         if (STEERING_OFF_SWITCH) {
           pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         }
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       }
       else if (strcmp_P(k, SETTING[S_STEERING_OFF_SWITCH_PIN]) == 0) {
         STEERING_OFF_SWITCH_PIN = atoi(v);
@@ -319,11 +319,11 @@ void settingsSerial() {
         USE_RC_CONTROL = atoi(v);
         if (USE_RC_CONTROL) {
           detachRCControl();
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
           setupRCControl();
         } else {
           detachRCControl();
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
         }
       } else if (strcmp_P(k, SETTING[S_SPEED_RC_PIN]) == 0) {
         detachRCControl();
@@ -350,9 +350,9 @@ void settingsSerial() {
       else if (strcmp_P(k, SETTING[S_USE_WIFI]) == 0) {
         USE_WIFI = atoi(v);
         if (USE_WIFI)
-          sprintf(resultBuf, STRUE);
+          sprintf(resultBuf, "true");
         else
-          sprintf(resultBuf, SFALSE);
+          sprintf(resultBuf, "false");
       }
 #endif
       else if (strcmp(k, "SAVE") == 0) {

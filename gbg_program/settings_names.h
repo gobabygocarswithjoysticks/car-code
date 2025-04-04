@@ -3,12 +3,6 @@
 
 #define FV(x) (__FlashStringHelper*)(x)
 
-const char strue[] PROGMEM = "true";
-const char sfalse[] PROGMEM = "false";
-
-#define STRUE FV(strue)
-#define SFALSE FV(sfalse)
-
 const char control_right[] PROGMEM = "CONTROL_RIGHT";
 const char control_center_x[] PROGMEM = "CONTROL_CENTER_X";
 const char control_left[] PROGMEM = "CONTROL_LEFT";
@@ -60,9 +54,9 @@ const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
 const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
 #ifdef RC_CONTROL
-const char use_rc_control[] PROGMEM = "USE_RC_CONTROL";
-const char speed_rc_pin[] PROGMEM = "SPEED_RC_PIN";
-const char turn_rc_pin[] PROGMEM = "TURN_RC_PIN";
+const char use_rc_control[] PROGMEM = "USE_RC";
+const char speed_rc_pin[] PROGMEM = "RC_SPEED_PIN";
+const char turn_rc_pin[] PROGMEM = "RC_TURN_PIN";
 #endif
 #ifdef HAS_WIFI
 const char car_wifi_name[] PROGMEM = "CAR_WIFI_NAME";
