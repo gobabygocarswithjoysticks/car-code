@@ -105,10 +105,10 @@ void printSettings() {
   prnt(FV(SETTING[S_JOY_Y_PIN]), JOY_Y_PIN);
 
 #ifdef IS_PCB
-  prnt(F("\"SWAP_MOTORS\": "), SWAP_MOTORS ? "true" : "false");
+  prnt(FV(SETTING[S_SWAP_MOTORS]), SWAP_MOTORS ? "true" : "false");
 #else
-  prnt(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "), LEFT_MOTOR_CONTROLLER_PIN);
-  prnt(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "), RIGHT_MOTOR_CONTROLLER_PIN);
+  prnt(FV(SETTING[S_LEFT_MOTOR_CONTROLLER_PIN]), LEFT_MOTOR_CONTROLLER_PIN);
+  prnt(FV(SETTING[S_RIGHT_MOTOR_CONTROLLER_PIN]), RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
   prnt(FV(SETTING[S_ENABLE_STARTUP_PULSE]), ENABLE_STARTUP_PULSE ? "true" : "false");
   prnt(FV(SETTING[S_LEFT_MOTOR_PULSE]), LEFT_MOTOR_PULSE);
@@ -135,14 +135,14 @@ void printSettings() {
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
 
 #if defined(RC_CONTROL)
-  prnt(F("\"USE_RC_CONTROL\": "), USE_RC_CONTROL ? "true" : "false");
-  prnt(F("\"SPEED_RC_PIN\": "), SPEED_RC_PIN);
-  prnt(F("\"TURN_RC_PIN\": "), TURN_RC_PIN);
+  prnt(FV(SETTING[S_USE_RC_CONTROL]), USE_RC_CONTROL ? "true" : "false");
+  prnt(FV(SETTING[S_SPEED_RC_PIN]), SPEED_RC_PIN);
+  prnt(FV(SETTING[S_TURN_RC_PIN]), TURN_RC_PIN);
 #endif 
 #if defined(HAS_WIFI)
-  prnt(F("\"CAR_WIFI_NAME\": "), CAR_WIFI_NAME);
-  prnt(F("\"CAR_WIFI_PASSWORD\": "), CAR_WIFI_PASSWORD);
-  prnt(F("\"USE_WIFI\": "), USE_WIFI ? "true" : "false");
+  prnt(FV(SETTING[S_CAR_WIFI_NAME]), CAR_WIFI_NAME);
+  prnt(FV(SETTING[S_CAR_WIFI_PASSWORD]), CAR_WIFI_PASSWORD);
+  prnt(FV(SETTING[S_USE_WIFI]), USE_WIFI ? "true" : "false");
 #endif
 
   serialChecksum+=Serial.print(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
