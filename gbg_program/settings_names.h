@@ -3,6 +3,12 @@
 
 #define FV(x) (__FlashStringHelper*)(x)
 
+const char strue[] PROGMEM = "true";
+const char sfalse[] PROGMEM = "false";
+
+#define STRUE FV(strue)
+#define SFALSE FV(sfalse)
+
 const char control_right[] PROGMEM = "CONTROL_RIGHT";
 const char control_center_x[] PROGMEM = "CONTROL_CENTER_X";
 const char control_left[] PROGMEM = "CONTROL_LEFT";
