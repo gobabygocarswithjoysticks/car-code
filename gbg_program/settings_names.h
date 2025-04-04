@@ -36,7 +36,7 @@ const char speed_knob_pin[] PROGMEM = "SPEED_KNOB_PIN";
 const char joy_x_pin[] PROGMEM = "JOY_X_PIN";
 const char joy_y_pin[] PROGMEM = "JOY_Y_PIN";
 
-const char* SETTING[] PROGMEM = {
+const char* const SETTING[] PROGMEM = {
   control_right,
   control_center_x,
   control_left,
