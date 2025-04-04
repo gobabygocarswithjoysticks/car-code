@@ -136,7 +136,7 @@ void printSettings() {
   checksumPrintFlashString(F("\"USE_RC_CONTROL\": "));  serialChecksum += Serial.print((USE_RC_CONTROL ? "true" : "false")); checksumPrintComma();
   checksumPrintFlashString(F("\"SPEED_RC_PIN\": "));  serialChecksum += Serial.print(SPEED_RC_PIN); checksumPrintComma();
   checksumPrintFlashString(F("\"TURN_RC_PIN\": "));  serialChecksum += Serial.print(TURN_RC_PIN); checksumPrintComma();
-#endif
+#endif 
 #if defined(HAS_WIFI)
   checksumPrintFlashString(F("\"CAR_WIFI_NAME\": "));  serialChecksum += Serial.print(CAR_WIFI_NAME); checksumPrintComma();
   checksumPrintFlashString(F("\"CAR_WIFI_PASSWORD\": "));  serialChecksum += Serial.print(CAR_WIFI_PASSWORD); checksumPrintComma();

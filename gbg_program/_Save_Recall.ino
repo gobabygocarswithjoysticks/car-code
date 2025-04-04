@@ -546,6 +546,7 @@ void recallSettings()
   EEPROMread(addressR, driveButtons);
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
+
 #if defined(RC_CONTROL)
   EEPROMread(addressR, USE_RC_CONTROL);
   EEPROMread(addressR, SPEED_RC_PIN);

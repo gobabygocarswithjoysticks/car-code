@@ -385,7 +385,7 @@ ISR(WDT_vect) // Watchdog timer interrupt.
     #ifdef RC_CONTROL
       const int version_number = 16;  // nano or uno with RC control
       const byte settings_memory_key = 16;
-    #else
+    #else // standard nano or uno
       // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
       const int version_number = 11;  // nano or uno
       //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
@@ -434,7 +434,7 @@ void detachRCControl(){
 
 void runRCInput(float &speed, float &turn){
   // if(remoteMode==1){
-    if(micros()-lastTurnPulseMicros>rcTimeoutMicros || micros()-lastSpeedPulseMicros>rcTimeoutMicros){
+    if(micros()-lastTurnRisingMicros>rcTimeoutMicros || micros()-lastSpeedRisingMicros>rcTimeoutMicros){
       turnInput=0;
       speedInput=0;
     }else{ // receiving valid signal
