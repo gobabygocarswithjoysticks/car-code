@@ -357,15 +357,6 @@ class Servo {
 Servo leftMotorController;
 Servo rightMotorController;
 
-//if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-//new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
-//change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-#ifdef IS_PCB
-const byte settings_memory_key = 12;
-#else
-const byte settings_memory_key = 11;
-#endif
-
 #include <EEPROM.h> // used version 2.0
 
 #ifdef AVR
@@ -379,25 +370,55 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #ifdef IS_PCB
-#if defined(HAS_WIFI)
-const int version_number = 15;  // for interaction with website
+  #if defined(HAS_WIFI)
+    const int version_number = 15;  // pcb with picoW or pico2W
+    const byte settings_memory_key = 15;
+  #else
+    const int version_number = 14;  // pcb with pico or pico2
+    const byte settings_memory_key = 14;
+  #endif
 #else
-const int version_number = 14;  // for interaction with website
-#endif
-#else
-#if defined(HAS_WIFI)
-const int version_number = 13;  // for interaction with website
-#else
-const int version_number = 11;  // for interaction with website
-#endif
+  #if defined(HAS_WIFI)
+    const int version_number = 13;  // esp32, picoW or pico2W
+    const byte settings_memory_key = 13;
+  #else // not pcb or wifi-capable
+    #ifdef RC_CONTROL
+      const int version_number = 16;  // nano or uno with RC control
+      const byte settings_memory_key = 16;
+    #else
+      // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
+      const int version_number = 11;  // nano or uno
+      //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
+      //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
+      //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
+      const byte settings_memory_key = 11;
+    #endif
+  #endif
 #endif
 
 #ifdef RC_CONTROL
 #include <PinChangeInterrupt.h>
+unsigned long lastTurnRisingMicros = 0;
+unsigned long lastSpeedRisingMicros = 0;
+float remoteTurn = 0;
+float remoteSpeed = 0;
+byte remoteMode = 0; //0 is car, 1 is remote
 
 void turnRCISR(void){
+  if (digitalRead(TURN_RC_PIN) == HIGH) {
+    lastTurnRisingMicros = micros();
+  } else {
+    turnInput = ((micros() - lastTurnRisingMicros) - 1500) / 500.0;
+    turnInput = constrain(turnInput, -1, 1);
+  }
 }
 void speedRCISR(void){
+  if (digitalRead(SPEED_RC_PIN) == HIGH) {
+    lastSpeedRisingMicros = micros();
+  } else {
+    speedInput = ((micros() - lastSpeedRisingMicros) - 1500) / 500.0;
+    speedInput = constrain(speedInput, -1, 1);
+  }
 }
 
 void setupRCControl(){
@@ -409,6 +430,18 @@ void setupRCControl(){
 void detachRCControl(){
   detachPCINT(digitalPinToPCINT(TURN_RC_PIN));
   detachPCINT(digitalPinToPCINT(SPEED_RC_PIN));
+}
+
+void runRCInput(float &speed, float &turn){
+  // if(remoteMode==1){
+    if(micros()-lastTurnPulseMicros>rcTimeoutMicros || micros()-lastSpeedPulseMicros>rcTimeoutMicros){
+      turnInput=0;
+      speedInput=0;
+    }else{ // receiving valid signal
+      speed=remoteSpeed;
+      turn=remoteTurn;
+    }
+  // }
 }
 #endif
 
@@ -490,7 +523,6 @@ void setup() {
 #ifdef RC_CONTROL
   setupRCControl();
 #endif
-
 
 #if defined(HAS_WIFI)
   setupWifi();
@@ -575,6 +607,12 @@ void loop()
 #if defined(HAS_WIFI)
   if (joyOK) {
     runWifiInput(speedInput, turnInput); // references, so the function can edit the values
+  }
+#endif
+
+#if defined(RC_CONTROL)
+  if(joyOK){
+    runRCInput(speedInput, turnInput); // references, so the function can edit the values
   }
 #endif
 
