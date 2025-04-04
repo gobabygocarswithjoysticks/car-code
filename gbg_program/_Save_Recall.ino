@@ -268,8 +268,7 @@ void settingsSerial() {
           }
         }
         sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
-      } else if (strcmp_P(k, SETTING[S_DRIVE_BUTTONS]) == 0) {
-
+      } else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
         int db = atoi(v); // which row of the driveButtons array?
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
           db--; // convert from array indices starting at 1 to starting at 0

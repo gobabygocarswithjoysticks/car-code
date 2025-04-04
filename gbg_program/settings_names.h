@@ -44,7 +44,6 @@ const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
 const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
 const char button_mode_pin[] PROGMEM = "BUTTON_MODE_PIN";
 const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
-const char drive_buttons[] PROGMEM = "DRIVE_BUTTONS";
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
 const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
 
@@ -90,7 +89,6 @@ const char* const SETTING[] PROGMEM = {
   use_button_mode_pin,
   button_mode_pin,
   num_drive_buttons,
-  drive_buttons,
   steering_off_switch,
   steering_off_switch_pin
 };
@@ -137,7 +135,6 @@ enum {
   S_USE_BUTTON_MODE_PIN,
   S_BUTTON_MODE_PIN,
   S_NUM_DRIVE_BUTTONS,
-  S_DRIVE_BUTTONS,
   S_STEERING_OFF_SWITCH,
   S_STEERING_OFF_SWITCH_PIN,
   S_NUM

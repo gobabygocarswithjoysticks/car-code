@@ -110,15 +110,15 @@ void printSettings() {
   prnt(F("\"LEFT_MOTOR_CONTROLLER_PIN\": "), LEFT_MOTOR_CONTROLLER_PIN);
   prnt(F("\"RIGHT_MOTOR_CONTROLLER_PIN\": "), RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-  prnt(F("\"ENABLE_STARTUP_PULSE\": "), ENABLE_STARTUP_PULSE ? "true" : "false");
-  prnt(F("\"LEFT_MOTOR_PULSE\": "), LEFT_MOTOR_PULSE);
-  prnt(F("\"RIGHT_MOTOR_PULSE\": "), RIGHT_MOTOR_PULSE);
-  prnt(F("\"START_MOTOR_PULSE_TIME\": "), START_MOTOR_PULSE_TIME);
-  prnt(F("\"JOY_CALIB_COUNT\": "), JOY_CALIB_COUNT);
-  prnt(F("\"ENABLE_BUTTON_CTRL\": "), ENABLE_BUTTON_CTRL ? "true" : "false");
-  prnt(F("\"USE_BUTTON_MODE_PIN\": "), USE_BUTTON_MODE_PIN ? "true" : "false");
-  prnt(F("\"BUTTON_MODE_PIN\": "), BUTTON_MODE_PIN);
-  prnt(F("\"NUM_DRIVE_BUTTONS\": "), NUM_DRIVE_BUTTONS);
+  prnt(FV(SETTING[S_ENABLE_STARTUP_PULSE]), ENABLE_STARTUP_PULSE ? "true" : "false");
+  prnt(FV(SETTING[S_LEFT_MOTOR_PULSE]), LEFT_MOTOR_PULSE);
+  prnt(FV(SETTING[S_RIGHT_MOTOR_PULSE]), RIGHT_MOTOR_PULSE);
+  prnt(FV(SETTING[S_START_MOTOR_PULSE_TIME]), START_MOTOR_PULSE_TIME);
+  prnt(FV(SETTING[S_JOY_CALIB_COUNT]), JOY_CALIB_COUNT);
+  prnt(FV(SETTING[S_ENABLE_BUTTON_CTRL]), ENABLE_BUTTON_CTRL ? "true" : "false");
+  prnt(FV(SETTING[S_USE_BUTTON_MODE_PIN]), USE_BUTTON_MODE_PIN ? "true" : "false");
+  prnt(FV(SETTING[S_BUTTON_MODE_PIN]), BUTTON_MODE_PIN);
+  prnt(FV(SETTING[S_NUM_DRIVE_BUTTONS]), NUM_DRIVE_BUTTONS);
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
     serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
@@ -131,8 +131,8 @@ void printSettings() {
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
     serialChecksum += Serial.print("], ");
   }
-  prnt(F("\"STEERING_OFF_SWITCH\": "), STEERING_OFF_SWITCH ? "true" : "false");
-  prnt(F("\"STEERING_OFF_SWITCH_PIN\": "), STEERING_OFF_SWITCH_PIN);
+  prnt(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH ? "true" : "false");
+  prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
 
 #if defined(RC_CONTROL)
   prnt(F("\"USE_RC_CONTROL\": "), USE_RC_CONTROL ? "true" : "false");
