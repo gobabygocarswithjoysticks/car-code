@@ -162,7 +162,7 @@ void settingsSerial() {
         pinMode(JOY_Y_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_Y_PIN);
 #ifdef IS_PCB
-      } else if (strcmp(k, "SWAP_MOTORS") == 0) {
+      } else if (strcmp_P(k, SETTING[S_SWAP_MOTORS]) == 0) {
         SWAP_MOTORS = atoi(v);
         if (SWAP_MOTORS)
           sprintf(resultBuf, "true");
@@ -180,7 +180,7 @@ void settingsSerial() {
           rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
         }
 #else // not pcb
-      } else if (strcmp(k, "LEFT_MOTOR_CONTROLLER_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CONTROLLER_PIN]) == 0) {
         // detach both because when swapping left and right we don't want both attached to the same pin
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         rightMotorController.detach();
@@ -193,7 +193,7 @@ void settingsSerial() {
         rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", LEFT_MOTOR_CONTROLLER_PIN);
-      } else if (strcmp(k, "RIGHT_MOTOR_CONTROLLER_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_CONTROLLER_PIN]) == 0) {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         leftMotorController.detach();
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
@@ -315,7 +315,7 @@ void settingsSerial() {
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
       }
 #if defined(RC_CONTROL)
-      else if (strcmp(k, "USE_RC_CONTROL") == 0) {
+      else if (strcmp_P(k, SETTING[S_USE_RC_CONTROL]) == 0) {
         USE_RC_CONTROL = atoi(v);
         if (USE_RC_CONTROL) {
           detachRCControl();
@@ -325,12 +325,12 @@ void settingsSerial() {
           detachRCControl();
           sprintf(resultBuf, "false");
         }
-      } else if (strcmp(k, "SPEED_RC_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[S_SPEED_RC_PIN]) == 0) {
         detachRCControl();
         SPEED_RC_PIN = atoi(v);
         setupRCControl();
         sprintf(resultBuf, "%d", SPEED_RC_PIN);
-      } else if (strcmp(k, "TURN_RC_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[S_TURN_RC_PIN]) == 0) {
         detachRCControl();
         TURN_RC_PIN = atoi(v);
         setupRCControl();
@@ -338,16 +338,16 @@ void settingsSerial() {
       }
 #endif
 #if defined(HAS_WIFI)
-      else if (strcmp(k, "CAR_WIFI_NAME") == 0) {
+      else if (strcmp_P(k, SETTING[S_CAR_WIFI_NAME]) == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
         sprintf(resultBuf, "%d", CAR_WIFI_NAME);
       }
-      else if (strcmp(k, "CAR_WIFI_PASSWORD") == 0) {
+      else if (strcmp_P(k, SETTING[S_CAR_WIFI_PASSWORD]) == 0) {
         CAR_WIFI_PASSWORD = atoi(v);
         CAR_WIFI_PASSWORD = constrain(CAR_WIFI_PASSWORD, 0, 999999999);
         sprintf(resultBuf, "%d", CAR_WIFI_PASSWORD);
       }
-      else if (strcmp(k,"USE_WIFI") == 0) {
+      else if (strcmp_P(k, SETTING[S_USE_WIFI]) == 0) {
         USE_WIFI = atoi(v);
         if (USE_WIFI)
           sprintf(resultBuf, "true");
