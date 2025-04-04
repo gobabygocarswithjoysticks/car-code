@@ -6,20 +6,20 @@ boolean printVariables(int interval) {
   if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
     lastMillisPrintedValues = millis();
     serialChecksum = 0;
-    checksumPrintFlashString(F("{\"current values, millis:\": ")); serialChecksum += Serial.print(millis()); checksumPrintComma();
-    checksumPrintFlashString(F("\"joyXVal\": ")); serialChecksum += Serial.print(joyXVal); checksumPrintComma();
-    checksumPrintFlashString(F("\"joyYVal\": ")); serialChecksum += Serial.print(joyYVal); checksumPrintComma();
-    checksumPrintFlashString(F("\"turnInput\": ")); serialChecksum += Serial.print(turnInput, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"speedInput\": ")); serialChecksum += Serial.print(speedInput, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"turnProcessed\": ")); serialChecksum += Serial.print(turnProcessed, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"speedProcessed\": ")); serialChecksum += Serial.print(speedProcessed, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"turnToDrive\": ")); serialChecksum += Serial.print(turnToDrive, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"speedToDrive\": ")); serialChecksum += Serial.print(speedToDrive, 4); checksumPrintComma();
-    checksumPrintFlashString(F("\"leftMotorWriteVal\": ")); serialChecksum += Serial.print(leftMotorWriteVal); checksumPrintComma();
-    checksumPrintFlashString(F("\"rightMotorWriteVal\": ")); serialChecksum += Serial.print(rightMotorWriteVal); checksumPrintComma();
-    checksumPrintFlashString(F("\"speedKnobVal\": ")); serialChecksum += Serial.print(speedKnobVal); checksumPrintComma();
-    checksumPrintFlashString(F("\"movementAllowed\": ")); serialChecksum += Serial.print(movementAllowed ? "true" : "false"); checksumPrintComma();
-    checksumPrintFlashString(F("\"joyOK\": ")); serialChecksum += Serial.print(joyOK ? "true" : "false"); checksumPrintComma();
+    prnt(F("{\"current values, millis\": "), millis());
+    prnt(F("\"joyXVal\": "), joyXVal);
+    prnt(F("\"joyYVal\": "), joyYVal);
+    prnt(F("\"turnInput\": "), turnInput);
+    prnt(F("\"speedInput\": "), speedInput);
+    prnt(F("\"turnProcessed\": "), turnProcessed);
+    prnt(F("\"speedProcessed\": "), speedProcessed);
+    prnt(F("\"turnToDrive\": "), turnToDrive);
+    prnt(F("\"speedToDrive\": "), speedToDrive);
+    prnt(F("\"leftMotorWriteVal\": "), leftMotorWriteVal);
+    prnt(F("\"rightMotorWriteVal\": "), rightMotorWriteVal);
+    prnt(F("\"speedKnobVal\": "), speedKnobVal);
+    prnt(F("\"movementAllowed\": "), movementAllowed ? "true" : "false");
+    prnt(F("\"joyOK\": "), joyOK ? "true" : "false");
     int buttonBits = 0;
     if (ENABLE_BUTTON_CTRL) {
       int button;
@@ -43,8 +43,8 @@ boolean printVariables(int interval) {
         bitSet(buttonBits, button); // extra MSB set to 1, to indicate the size of maxNumDriveButtons
       }
     }
-    checksumPrintFlashString(F("\"buttons\": ")); serialChecksum += Serial.print(buttonBits); checksumPrintComma();
-    checksumPrintFlashString(F("\"b_m_p\": "));
+    prnt(F("\"buttons\": "), buttonBits);
+    serialChecksum += Serial.print(F("\"b_m_p\": "));
     if (ENABLE_BUTTON_CTRL) {
       if (USE_BUTTON_MODE_PIN) {
         if (digitalRead(BUTTON_MODE_PIN) == LOW)
@@ -58,8 +58,8 @@ boolean printVariables(int interval) {
       serialChecksum += Serial.print("\"B\"");
     }
 
-    checksumPrintComma();
-    checksumPrintFlashString(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1 /*closing bracket*/ + count_digits(serialChecksum));
+    serialChecksum += Serial.print(F("\", CHECKSUM\": "));
+    Serial.print(serialChecksum + 1 /*closing bracket*/ + count_digits(serialChecksum));
     Serial.println("}");
     return true;
   }
