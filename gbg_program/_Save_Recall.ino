@@ -107,53 +107,57 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_SCALE_TURNING_WHEN_MOVING]) == 0) {
         SCALE_TURNING_WHEN_MOVING = atof(v);
         dtostrf(SCALE_TURNING_WHEN_MOVING, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_ACCELERATION_TURNING]) == 0) {
-        SCALE_ACCEL_WITH_SPEED = atoi(v);
-        if (SCALE_ACCEL_WITH_SPEED)
-          sprintf(resultBuf, "true");
-        else
-          sprintf(resultBuf, "false");
       } else if (strcmp_P(k, SETTING[S_REVERSE_TURN_IN_REVERSE]) == 0) {
         REVERSE_TURN_IN_REVERSE = atoi(v);
         if (REVERSE_TURN_IN_REVERSE)
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
-      } else if (strcmp_P(k, SETTING[S_ENABLE_STARTUP_PULSE]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CENTER]) == 0) {
         LEFT_MOTOR_CENTER = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_CENTER);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CENTER]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_SLOW]) == 0) {
         LEFT_MOTOR_SLOW = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_SLOW);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_SLOW]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_FAST]) == 0) {
         LEFT_MOTOR_FAST = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_FAST);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_FAST]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_CENTER]) == 0) {
         RIGHT_MOTOR_CENTER = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CENTER);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_CENTER]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_SLOW]) == 0) {
         RIGHT_MOTOR_SLOW = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_SLOW);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_SLOW]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_FAST]) == 0) {
         RIGHT_MOTOR_FAST = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_FAST);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_FAST]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_USE_SPEED_KNOB]) == 0) {
         USE_SPEED_KNOB = atoi(v);
         if (USE_SPEED_KNOB)
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
-      } else if (strcmp_P(k, SETTING[S_USE_SPEED_KNOB]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_SLOW_VAL]) == 0) {
         SPEED_KNOB_SLOW_VAL = atoi(v);
         sprintf(resultBuf, "%d", SPEED_KNOB_SLOW_VAL);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_SLOW_VAL]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_FAST_VAL]) == 0) {
         SPEED_KNOB_FAST_VAL = atoi(v);
         sprintf(resultBuf, "%d", SPEED_KNOB_FAST_VAL);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_FAST_VAL]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_SCALE_ACCEL_WITH_SPEED]) == 0) {
+        SCALE_ACCEL_WITH_SPEED = atoi(v);
+        if (SCALE_ACCEL_WITH_SPEED)
+          sprintf(resultBuf, "true");
+        else
+          sprintf(resultBuf, "false");
+      } else if (strcmp(k, "SPEED_KNOB_PIN") == 0) {
+        SPEED_KNOB_PIN = atoi(v);
+        pinMode(SPEED_KNOB_PIN, INPUT);
+        sprintf(resultBuf, "%d", SPEED_KNOB_PIN);
+      } else if (strcmp_P(k, SETTING[S_JOY_X_PIN]) == 0) {
         JOY_X_PIN = atoi(v);
         pinMode(JOY_X_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_X_PIN);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_PIN]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_JOY_Y_PIN]) == 0) {
         JOY_Y_PIN = atoi(v);
         pinMode(JOY_Y_PIN, INPUT);
         sprintf(resultBuf, "%d", JOY_Y_PIN);
@@ -202,13 +206,14 @@ void settingsSerial() {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-      } else if (strcmp(k, "SPEED_KNOB_PIN") == 0) {
-        SPEED_KNOB_PIN = atoi(v);
-        pinMode(SPEED_KNOB_PIN, INPUT);
-        sprintf(resultBuf, "%d", SPEED_KNOB_PIN);
-      }
-
-      else if (strcmp(k, "LEFT_MOTOR_PULSE") == 0) {
+     
+      } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
+        ENABLE_STARTUP_PULSE = atoi(v);
+        if (ENABLE_STARTUP_PULSE)
+          sprintf(resultBuf, "true");
+        else
+          sprintf(resultBuf, "false");
+      } else if (strcmp(k, "LEFT_MOTOR_PULSE") == 0) {
         LEFT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_PULSE);
       } else if (strcmp(k, "RIGHT_MOTOR_PULSE") == 0) {
@@ -217,19 +222,9 @@ void settingsSerial() {
       } else if (strcmp(k, "START_MOTOR_PULSE_TIME") == 0) {
         START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
-      } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
-        ENABLE_STARTUP_PULSE = atoi(v);
-        if (ENABLE_STARTUP_PULSE)
-          sprintf(resultBuf, "true");
-        else
-          sprintf(resultBuf, "false");
       } else if (strcmp(k, "JOY_CALIB_COUNT") == 0) {
         JOY_CALIB_COUNT = atoi(v);
         sprintf(resultBuf, "%d", JOY_CALIB_COUNT);
-      } else if (strcmp(k, "BUTTON_MODE_PIN") == 0) {
-        BUTTON_MODE_PIN = atoi(v);
-        pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
-        sprintf(resultBuf, "%d", BUTTON_MODE_PIN);
       } else if (strcmp(k, "ENABLE_BUTTON_CTRL") == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
@@ -258,6 +253,10 @@ void settingsSerial() {
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
+      } else if (strcmp(k, "BUTTON_MODE_PIN") == 0) {
+          BUTTON_MODE_PIN = atoi(v);
+          pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+          sprintf(resultBuf, "%d", BUTTON_MODE_PIN);  
       } else if (strcmp(k, "NUM_DRIVE_BUTTONS") == 0) {
         NUM_DRIVE_BUTTONS = constrain(atoi(v), 0, 6);
         if (ENABLE_BUTTON_CTRL) {
@@ -269,9 +268,7 @@ void settingsSerial() {
           }
         }
         sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
-      }
-
-      else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
+      } else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
 
         int db = atoi(v); // which row of the driveButtons array?
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
