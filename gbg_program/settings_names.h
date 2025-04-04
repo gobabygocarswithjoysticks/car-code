@@ -35,6 +35,18 @@ const char scale_accel_with_speed[] PROGMEM = "SCALE_ACCEL_WITH_SPEED";
 const char speed_knob_pin[] PROGMEM = "SPEED_KNOB_PIN";
 const char joy_x_pin[] PROGMEM = "JOY_X_PIN";
 const char joy_y_pin[] PROGMEM = "JOY_Y_PIN";
+const char enable_startup_pulse[] PROGMEM = "ENABLE_STARTUP_PULSE";
+const char left_motor_pulse[] PROGMEM = "LEFT_MOTOR_PULSE";
+const char right_motor_pulse[] PROGMEM = "RIGHT_MOTOR_PULSE";
+const char start_motor_pulse_time[] PROGMEM = "START_MOTOR_PULSE_TIME";
+const char joy_calib_count[] PROGMEM = "JOY_CALIB_COUNT";
+const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
+const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
+const char button_mode_pin[] PROGMEM = "BUTTON_MODE_PIN";
+const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
+const char drive_buttons[] PROGMEM = "DRIVE_BUTTONS";
+const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
+const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
 
 const char* const SETTING[] PROGMEM = {
   control_right,
@@ -68,7 +80,19 @@ const char* const SETTING[] PROGMEM = {
   scale_accel_with_speed,
   speed_knob_pin,
   joy_x_pin,
-  joy_y_pin
+  joy_y_pin,
+  enable_startup_pulse,
+  left_motor_pulse,
+  right_motor_pulse,
+  start_motor_pulse_time,
+  joy_calib_count,
+  enable_button_ctrl,
+  use_button_mode_pin,
+  button_mode_pin,
+  num_drive_buttons,
+  drive_buttons,
+  steering_off_switch,
+  steering_off_switch_pin
 };
 
 enum {
@@ -103,7 +127,20 @@ enum {
   S_SCALE_ACCEL_WITH_SPEED,
   S_SPEED_KNOB_PIN,
   S_JOY_X_PIN,
-  S_JOY_Y_PIN
+  S_JOY_Y_PIN,
+  S_ENABLE_STARTUP_PULSE,
+  S_LEFT_MOTOR_PULSE,
+  S_RIGHT_MOTOR_PULSE,
+  S_START_MOTOR_PULSE_TIME,
+  S_JOY_CALIB_COUNT,
+  S_ENABLE_BUTTON_CTRL,
+  S_USE_BUTTON_MODE_PIN,
+  S_BUTTON_MODE_PIN,
+  S_NUM_DRIVE_BUTTONS,
+  S_DRIVE_BUTTONS,
+  S_STEERING_OFF_SWITCH,
+  S_STEERING_OFF_SWITCH_PIN,
+  S_NUM
 };
 
 #endif // SETTINGS_NAMES_H

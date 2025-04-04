@@ -207,25 +207,25 @@ void settingsSerial() {
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
      
-      } else if (strcmp(k, "ENABLE_STARTUP_PULSE") == 0) {
+      } else if (strcmp_P(k, SETTING[ENABLE_STARTUP_PULSE]) == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);
         if (ENABLE_STARTUP_PULSE)
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
-      } else if (strcmp(k, "LEFT_MOTOR_PULSE") == 0) {
+      } else if (strcmp_P(k, SETTING[LEFT_MOTOR_PULSE]) == 0) {
         LEFT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_PULSE);
-      } else if (strcmp(k, "RIGHT_MOTOR_PULSE") == 0) {
+      } else if (strcmp_P(k, SETTING[RIGHT_MOTOR_PULSE]) == 0) {
         RIGHT_MOTOR_PULSE = atoi(v);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_PULSE);
-      } else if (strcmp(k, "START_MOTOR_PULSE_TIME") == 0) {
+      } else if (strcmp_P(k, SETTING[START_MOTOR_PULSE_TIME]) == 0) {
         START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
-      } else if (strcmp(k, "JOY_CALIB_COUNT") == 0) {
+      } else if (strcmp_P(k, SETTING[JOY_CALIB_COUNT]) == 0) {
         JOY_CALIB_COUNT = atoi(v);
         sprintf(resultBuf, "%d", JOY_CALIB_COUNT);
-      } else if (strcmp(k, "ENABLE_BUTTON_CTRL") == 0) {
+      } else if (strcmp_P(k, SETTING[ENABLE_BUTTON_CTRL]) == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
           if (USE_BUTTON_MODE_PIN) {
@@ -239,7 +239,7 @@ void settingsSerial() {
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
-      } else if (strcmp(k, "USE_BUTTON_MODE_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[USE_BUTTON_MODE_PIN]) == 0) {
         USE_BUTTON_MODE_PIN = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
           if (USE_BUTTON_MODE_PIN) {
@@ -253,11 +253,11 @@ void settingsSerial() {
           sprintf(resultBuf, "true");
         else
           sprintf(resultBuf, "false");
-      } else if (strcmp(k, "BUTTON_MODE_PIN") == 0) {
+      } else if (strcmp_P(k, SETTING[BUTTON_MODE_PIN]) == 0) {
           BUTTON_MODE_PIN = atoi(v);
           pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
           sprintf(resultBuf, "%d", BUTTON_MODE_PIN);  
-      } else if (strcmp(k, "NUM_DRIVE_BUTTONS") == 0) {
+      } else if (strcmp_P(k, SETTING[NUM_DRIVE_BUTTONS]) == 0) {
         NUM_DRIVE_BUTTONS = constrain(atoi(v), 0, 6);
         if (ENABLE_BUTTON_CTRL) {
           if (USE_BUTTON_MODE_PIN) {
@@ -268,7 +268,7 @@ void settingsSerial() {
           }
         }
         sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
-      } else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
+      } else if (strcmp_P(k, SETTING[DRIVE_BUTTONS]) == 0) {
 
         int db = atoi(v); // which row of the driveButtons array?
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
@@ -301,7 +301,7 @@ void settingsSerial() {
         }
         changedSomething = false;
       }
-      else if (strcmp(k, "STEERING_OFF_SWITCH") == 0) {
+      else if (strcmp_P(k, SETTING[STEERING_OFF_SWITCH]) == 0) {
         STEERING_OFF_SWITCH = atoi(v);
         if (STEERING_OFF_SWITCH) {
           pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
@@ -310,7 +310,7 @@ void settingsSerial() {
         else
           sprintf(resultBuf, "false");
       }
-      else if (strcmp(k, "STEERING_OFF_SWITCH_PIN") == 0) {
+      else if (strcmp_P(k, SETTING[STEERING_OFF_SWITCH_PIN]) == 0) {
         STEERING_OFF_SWITCH_PIN = atoi(v);
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
