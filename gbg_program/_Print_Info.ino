@@ -7,7 +7,7 @@ boolean printVariables(int interval) {
   if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
     lastMillisPrintedValues = millis();
     serialChecksum = 1; Serial.print("{");
-    prnt(F("current values, millis"), millis());
+    prnt(F("current values, millis:"), millis());
     prnt(F("joyXVal"), joyXVal);
     prnt(F("joyYVal"), joyYVal);
     prnt(F("turnInput"), turnInput);
