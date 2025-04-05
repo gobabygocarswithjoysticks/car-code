@@ -280,12 +280,12 @@ void settingsSerial() {
           pinMode(driveButtons[db].pin, INPUT_PULLUP);
 
           Serial.print(F("{\"result\": \"change\""));
-          Serial.print(", ");
+          Serial.print(",");
           Serial.print(F("\"setting\": \""));
           Serial.print("DRIVE_BUTTON_");
           Serial.print(db + 1);
-          Serial.print("\", ");
-          Serial.print(F("\"value\": ["));
+          Serial.print("\",");
+          Serial.print(F("\"value\":["));
 
           Serial.print(driveButtons[db].pin);
           Serial.print(",");

@@ -6,8 +6,8 @@ boolean printVariables(int interval) {
     return false;
   if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
     lastMillisPrintedValues = millis();
-    serialChecksum = Serial.print(F("{\"current values\": "));
-    serialChecksum += Serial.print(millis());
+    serialChecksum = 1; Serial.print("{");
+    prnt(F("current values, millis"), millis());
     prnt(F("joyXVal"), joyXVal);
     prnt(F("joyYVal"), joyYVal);
     prnt(F("turnInput"), turnInput);
@@ -45,7 +45,7 @@ boolean printVariables(int interval) {
       }
     }
     prnt(F("buttons"), buttonBits);
-    serialChecksum += Serial.print(F("\"b_m_p\": "));
+    serialChecksum += Serial.print(F("\"b_m_p\":"));
     if (ENABLE_BUTTON_CTRL) {
       if (USE_BUTTON_MODE_PIN) {
         if (digitalRead(BUTTON_MODE_PIN) == LOW)
@@ -59,7 +59,7 @@ boolean printVariables(int interval) {
       serialChecksum += Serial.print("\"B\"");
     }
 
-    serialChecksum += Serial.print(F("\", CHECKSUM\": "));
+    serialChecksum += Serial.print(F("\",CHECKSUM\":"));
     Serial.print(serialChecksum + 1 /*closing bracket*/ + count_digits(serialChecksum));
     Serial.println("}");
     return true;
@@ -124,13 +124,13 @@ void printSettings() {
   for (byte db = 0; db < maxNumDriveButtons; db++) {
     serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
     serialChecksum += Serial.print(db + 1);
-    serialChecksum += Serial.print(F("\": ["));
+    serialChecksum += Serial.print(F("\":["));
     serialChecksum += Serial.print(driveButtons[db].pin);
     serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].speed, 4);
     serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
-    serialChecksum += Serial.print("], ");
+    serialChecksum += Serial.print("],");
   }
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH ? "true" : "false");
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
@@ -146,7 +146,7 @@ void printSettings() {
   prnt(FV(SETTING[S_USE_WIFI]), USE_WIFI ? "true" : "false");
 #endif
 
-  serialChecksum+=Serial.print(F("\"CHECKSUM\": ")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
+  serialChecksum+=Serial.print(F("\"CHECKSUM\":")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
   Serial.println("}");
 
 }
@@ -155,9 +155,9 @@ template <typename T>
 void prnt(const __FlashStringHelper *fsh, T value) {
   serialChecksum += Serial.print("\"");
   serialChecksum += Serial.print(fsh);
-  serialChecksum += Serial.print("\": ");
+  serialChecksum += Serial.print("\":");
   serialChecksum += Serial.print(value);
-  serialChecksum += Serial.print(", ");
+  serialChecksum += Serial.print(",");
 }
 
 int count_digits (int n) {
