@@ -122,15 +122,15 @@ void printSettings() {
   prnt(FV(SETTING[S_NUM_DRIVE_BUTTONS]), NUM_DRIVE_BUTTONS);
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
-    serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
+    printAndAppendToChecksum(F("\"DRIVE_BUTTON_"));
     serialChecksum += Serial.print(db + 1);
-    serialChecksum += Serial.print(F("\":["));
+    printAndAppendToChecksum(F("\":["));
     serialChecksum += Serial.print(driveButtons[db].pin);
-    serialChecksum += Serial.print(",");
+    printAndAppendToChecksum(F(","));
     serialChecksum += Serial.print(driveButtons[db].speed, 4);
-    serialChecksum += Serial.print(",");
+    printAndAppendToChecksum(F(","));
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
-    serialChecksum += Serial.print("],");
+    printAndAppendToChecksum(F("],"));
   }
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH ? "true" : "false");
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
@@ -153,11 +153,16 @@ void printSettings() {
 
 template <typename T>
 void prnt(const __FlashStringHelper *fsh, T value) {
-  serialChecksum += Serial.print("\"");
+  serialChecksum += 4;
+  Serial.print("\"");
   serialChecksum += Serial.print(fsh);
-  serialChecksum += Serial.print("\":");
+  Serial.print("\":");
   serialChecksum += Serial.print(value);
-  serialChecksum += Serial.print(",");
+  Serial.print(",");
+}
+
+void printAndAppendToChecksum(const __FlashStringHelper *fsh) {
+  serialChecksum += Serial.print(fsh);
 }
 
 int count_digits (int n) {
