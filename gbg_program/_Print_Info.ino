@@ -6,21 +6,21 @@ boolean printVariables(int interval) {
     return false;
   if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
     lastMillisPrintedValues = millis();
-    serialChecksum = 0;
-    prnt(F("{\"current values, millis\": "), millis());
-    prnt(F("\"joyXVal\": "), joyXVal);
-    prnt(F("\"joyYVal\": "), joyYVal);
-    prnt(F("\"turnInput\": "), turnInput);
-    prnt(F("\"speedInput\": "), speedInput);
-    prnt(F("\"turnProcessed\": "), turnProcessed);
-    prnt(F("\"speedProcessed\": "), speedProcessed);
-    prnt(F("\"turnToDrive\": "), turnToDrive);
-    prnt(F("\"speedToDrive\": "), speedToDrive);
-    prnt(F("\"leftMotorWriteVal\": "), leftMotorWriteVal);
-    prnt(F("\"rightMotorWriteVal\": "), rightMotorWriteVal);
-    prnt(F("\"speedKnobVal\": "), speedKnobVal);
-    prnt(F("\"movementAllowed\": "), movementAllowed ? "true" : "false");
-    prnt(F("\"joyOK\": "), joyOK ? "true" : "false");
+    serialChecksum = Serial.print(F("{\"current values\": "));
+    serialChecksum += Serial.print(millis());
+    prnt(F("joyXVal"), joyXVal);
+    prnt(F("joyYVal"), joyYVal);
+    prnt(F("turnInput"), turnInput);
+    prnt(F("speedInput"), speedInput);
+    prnt(F("turnProcessed"), turnProcessed);
+    prnt(F("speedProcessed"), speedProcessed);
+    prnt(F("turnToDrive"), turnToDrive);
+    prnt(F("speedToDrive"), speedToDrive);
+    prnt(F("leftMotorWriteVal"), leftMotorWriteVal);
+    prnt(F("rightMotorWriteVal"), rightMotorWriteVal);
+    prnt(F("speedKnobVal"), speedKnobVal);
+    prnt(F("movementAllowed"), movementAllowed ? "true" : "false");
+    prnt(F("joyOK"), joyOK ? "true" : "false");
     int buttonBits = 0;
     if (ENABLE_BUTTON_CTRL) {
       int button;
@@ -44,7 +44,7 @@ boolean printVariables(int interval) {
         bitSet(buttonBits, button); // extra MSB set to 1, to indicate the size of maxNumDriveButtons
       }
     }
-    prnt(F("\"buttons\": "), buttonBits);
+    prnt(F("buttons"), buttonBits);
     serialChecksum += Serial.print(F("\"b_m_p\": "));
     if (ENABLE_BUTTON_CTRL) {
       if (USE_BUTTON_MODE_PIN) {
@@ -70,7 +70,8 @@ boolean printVariables(int interval) {
 void printSettings() {
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   serialChecksum = 0;
-  prnt(F("\"current settings, version\": "), version_number);
+  
+  prnt(F("current settings, version"), version_number);
   prnt(FV(SETTING[S_CONTROL_RIGHT]), CONTROL_RIGHT);
   prnt(FV(SETTING[S_CONTROL_CENTER_X]), CONTROL_CENTER_X);
   prnt(FV(SETTING[S_CONTROL_LEFT]), CONTROL_LEFT);
@@ -123,7 +124,9 @@ void printSettings() {
   for (byte db = 0; db < maxNumDriveButtons; db++) {
     serialChecksum += Serial.print(F("\"DRIVE_BUTTON_"));
     serialChecksum += Serial.print(db + 1);
-    prnt(F("\": ["), driveButtons[db].pin);
+    serialChecksum += Serial.print(F("\": ["));
+    serialChecksum += Serial.print(driveButtons[db].pin);
+    serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].speed, 4);
     serialChecksum += Serial.print(",");
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
@@ -150,7 +153,9 @@ void printSettings() {
 
 template <typename T>
 void prnt(const __FlashStringHelper *fsh, T value) {
+  serialChecksum += Serial.print("\"");
   serialChecksum += Serial.print(fsh);
+  serialChecksum += Serial.print("\": ");
   serialChecksum += Serial.print(value);
   serialChecksum += Serial.print(", ");
 }
