@@ -417,21 +417,23 @@ void speedRCISR(void){
 void RCISR(byte whichRCInput){
   if(digitalRead(RC_PIN[whichRCInput]) == HIGH){
     lastRisingMicros[whichRCInput] = micros();
-  }else{
+  }else if((micros() - lastRisingMicros[whichRCInput]) < rcTimeoutMicros){
     remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500) / 500.0;
     remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -1, 1);
+  }else{ // signal is too old, set to 0
+    remoteInput[whichRCInput] = 0;
   }
 }
 
 void setupRCControl(){
-  pinMode(SPEED_RC_PIN, INPUT_PULLUP);
-  pinMode(TURN_RC_PIN, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(TURN_RC_PIN), turnRCISR, CHANGE);
-  attachPCINT(digitalPinToPCINT(SPEED_RC_PIN), speedRCISR, CHANGE);
+  pinMode(RC_PIN[SPEED_RC], INPUT_PULLUP);
+  pinMode(RC_PIN[TURN_RC], INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]), turnRCISR, CHANGE);
+  attachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]), speedRCISR, CHANGE);
 }
 void detachRCControl(){
-  detachPCINT(digitalPinToPCINT(TURN_RC_PIN));
-  detachPCINT(digitalPinToPCINT(SPEED_RC_PIN));
+  detachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]));
+  detachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]));
 }
 
 void runRCInput(float &speed, float &turn){
