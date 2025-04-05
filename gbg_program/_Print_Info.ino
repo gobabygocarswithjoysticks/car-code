@@ -134,8 +134,8 @@ void printSettings() {
 
 #if defined(RC_CONTROL)
   prnt(FV(SETTING[S_USE_RC_CONTROL]), USE_RC_CONTROL ? "true" : "false");
-  prnt(FV(SETTING[S_SPEED_RC_PIN]), SPEED_RC_PIN);
-  prnt(FV(SETTING[S_TURN_RC_PIN]), TURN_RC_PIN);
+  prnt(FV(SETTING[S_SPEED_RC_PIN]), RC_PIN[TURN_RC]);
+  prnt(FV(SETTING[S_TURN_RC_PIN]), RC_PIN[SPEED_RC]);
 #endif 
 #if defined(HAS_WIFI)
   prnt(FV(SETTING[S_CAR_WIFI_NAME]), CAR_WIFI_NAME);

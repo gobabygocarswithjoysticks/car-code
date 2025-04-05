@@ -157,9 +157,13 @@ byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 byte STEERING_OFF_SWITCH_PIN = 4;
 
 #ifdef RC_CONTROL
-boolean USE_RC_CONTROL=true;
-byte SPEED_RC_PIN=8;
-byte TURN_RC_PIN=11;
+enum {
+  TURN_RC = 0,
+  SPEED_RC,
+  NUM_RC_INPUTS
+};
+boolean USE_RC_CONTROL = true;
+byte RC_PIN[NUM_RC_INPUTS] = {8, 11};
 #endif
 
 #endif
@@ -399,26 +403,23 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #ifdef RC_CONTROL
 #define rcTimeoutMicros 40000 // 40ms timeout for RC control
 #include <PinChangeInterrupt.h>
-unsigned long lastTurnRisingMicros = 0;
-unsigned long lastSpeedRisingMicros = 0;
-float remoteTurn = 0;
-float remoteSpeed = 0;
-byte remoteMode = 0; //0 is car, 1 is remote
+
+unsigned long lastRisingMicros[NUM_RC_INPUTS];
+float remoteInput[NUM_RC_INPUTS];
 
 void turnRCISR(void){
-  if (digitalRead(TURN_RC_PIN) == HIGH) {
-    lastTurnRisingMicros = micros();
-  } else {
-    turnInput = ((micros() - lastTurnRisingMicros) - 1500) / 500.0;
-    turnInput = constrain(turnInput, -1, 1);
-  }
+  RCISR(TURN_RC);
 }
 void speedRCISR(void){
-  if (digitalRead(SPEED_RC_PIN) == HIGH) {
-    lastSpeedRisingMicros = micros();
-  } else {
-    speedInput = ((micros() - lastSpeedRisingMicros) - 1500) / 500.0;
-    speedInput = constrain(speedInput, -1, 1);
+  RCISR(SPEED_RC);
+}
+
+void RCISR(byte whichRCInput){
+  if(digitalRead(RC_PIN[whichRCInput]) == HIGH){
+    lastRisingMicros[whichRCInput] = micros();
+  }else{
+    remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500) / 500.0;
+    remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -1, 1);
   }
 }
 
@@ -435,14 +436,17 @@ void detachRCControl(){
 
 void runRCInput(float &speed, float &turn){
   // if(remoteMode==1){
-    if(micros()-lastTurnRisingMicros>rcTimeoutMicros || micros()-lastSpeedRisingMicros>rcTimeoutMicros){
-      turnInput=0;
-      speedInput=0;
-    }else{ // receiving valid signal
-      speed=remoteSpeed;
-      turn=remoteTurn;
+  bool validSignal = true;
+  for(byte i=0;i<NUM_RC_INPUTS;i++){
+    if(micros()-lastRisingMicros[i]>rcTimeoutMicros){
+      validSignal = false;
     }
-  // }
+  }
+  if(validSignal){
+    speed=remoteInput[SPEED_RC];
+    turn=remoteInput[TURN_RC];
+  }else{ // receiving invalid signal
+  }
 }
 #endif
 
