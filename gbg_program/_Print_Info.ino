@@ -146,7 +146,8 @@ void printSettings() {
   prnt(FV(SETTING[S_USE_WIFI]), USE_WIFI ? "true" : "false");
 #endif
 
-  serialChecksum+=Serial.print(F("\"CHECKSUM\":")); Serial.print(serialChecksum + 1/*closing bracket*/ + count_digits(serialChecksum));
+  printAndAppendToChecksum(F("\"CHECKSUM\":")); 
+  Serial.print(serialChecksum + count_digits(serialChecksum));
   Serial.println("}");
 
 }
