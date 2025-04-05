@@ -369,7 +369,14 @@ jobs:
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.map
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.merged.bin
-         if [[ "${{ matrix.code-name }}" == "PCB_gbg_program" ]]; then mv hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.uf2 hex/${{ matrix.configName }}/${{ matrix.code-name }}.ino.uf2; fi
+
+         # Rename files if matrix.code-name is not equal to matrix.code-dir
+         if [[ "${{ matrix.code-name }}" != "${{ matrix.code-dir }}" ]]; then
+         for file in ./hex/${{ matrix.configName }}/*${{ matrix.code-dir }}*; do
+           mv "$file" "${file//${{ matrix.code-dir }}/${{ matrix.code-name }}}"
+         done
+         fi
+ 
          if [[ "${{ matrix.fqbn }}" == "esp32:esp32:esp32" ]]; then cd ./hex/${{ matrix.configName }}; wget "https://github.com/espressif/arduino-esp32/raw/refs/tags/3.1.3/tools/partitions/boot_app0.bin"; fi
 
       - name: Commit compiled files
