@@ -356,7 +356,7 @@ jobs:
          git checkout -b COMPILE_${{ matrix.configName }}
          git config pull.rebase false
 
-         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-properties compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
+         arduino-cli compile ${{ matrix.code-dir }} --fqbn ${{ matrix.fqbn }} --output-dir ./hex/${{ matrix.configName }} --build-property compiler.cpp.extra_flags="${{ matrix.additional-parameters }}"
 
          echo "${{ matrix.configName }}, ${{ matrix.code-name }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > ./hex/config-info-${{ matrix.order}}.txt
 
