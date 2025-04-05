@@ -69,7 +69,7 @@ boolean printVariables(int interval) {
 
 void printSettings() {
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  serialChecksum = 0;
+  serialChecksum = 2; // starting and ending brackets
   Serial.print(F("{"));
   prnt(F("current settings, version"), version_number);
   prnt(FV(SETTING[S_CONTROL_RIGHT]), CONTROL_RIGHT);
@@ -147,7 +147,7 @@ void printSettings() {
 #endif
 
   printAndAppendToChecksum(F("\"CHECKSUM\":")); 
-  Serial.print(serialChecksum + count_digits(serialChecksum));
+  Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
   Serial.println("}");
 
 }
@@ -159,20 +159,9 @@ void prnt(const __FlashStringHelper *fsh, T value) {
   serialChecksum += Serial.print(fsh);
   Serial.print("\":");
   serialChecksum += Serial.print(value);
-  Serial.print(",");
+  Serial.print(", ");
 }
 
 void printAndAppendToChecksum(const __FlashStringHelper *fsh) {
   serialChecksum += Serial.print(fsh);
-}
-
-int count_digits (int n) {
-  if (n < 0) {
-    n = -n;
-  }
-  if (n < 10) return 1;
-  if (n < 100) return 2;
-  if (n < 1000) return 3;
-  if (n < 10000) return 4;
-  return 5;
 }
