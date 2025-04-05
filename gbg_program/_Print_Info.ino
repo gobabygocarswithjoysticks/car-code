@@ -60,7 +60,7 @@ boolean printVariables(int interval) {
     }
 
     serialChecksum += Serial.print(F("\",CHECKSUM\":"));
-    Serial.print(serialChecksum + 1 /*closing bracket*/ + count_digits(serialChecksum));
+    Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
     Serial.println("}");
     return true;
   }
