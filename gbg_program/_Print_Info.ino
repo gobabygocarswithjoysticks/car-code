@@ -71,7 +71,7 @@ void printSettings() {
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   serialChecksum = 2; // starting and ending brackets
   Serial.print(F("{"));
-  prnt(F("current settings, version"), version_number);
+  prnt(F("current settings, version:"), version_number);
   prnt(FV(SETTING[S_CONTROL_RIGHT]), CONTROL_RIGHT);
   prnt(FV(SETTING[S_CONTROL_CENTER_X]), CONTROL_CENTER_X);
   prnt(FV(SETTING[S_CONTROL_LEFT]), CONTROL_LEFT);
