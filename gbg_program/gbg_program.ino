@@ -156,6 +156,8 @@ byte SPEED_KNOB_PIN = A3;
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 byte STEERING_OFF_SWITCH_PIN = 4;
 
+#endif
+
 #ifdef RC_CONTROL
 enum {
   TURN_RC = 0,
@@ -164,8 +166,6 @@ enum {
 };
 boolean USE_RC_CONTROL = true;
 byte RC_PIN[NUM_RC_INPUTS] = {8, 11};
-#endif
-
 #endif
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
