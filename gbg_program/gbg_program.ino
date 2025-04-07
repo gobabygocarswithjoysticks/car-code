@@ -402,7 +402,10 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef RC_CONTROL
 #define rcTimeoutMicros 40000 // 40ms timeout for RC control
+#ifdef IS_PICO
+#else
 #include <PinChangeInterrupt.h>
+#endif
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 float remoteInput[NUM_RC_INPUTS];
@@ -428,12 +431,22 @@ void RCISR(byte whichRCInput){
 void setupRCControl(){
   pinMode(RC_PIN[SPEED_RC], INPUT_PULLUP);
   pinMode(RC_PIN[TURN_RC], INPUT_PULLUP);
+  #ifdef IS_PICO
+  attachInterrupt(RC_PIN[TURN_RC], turnRCISR, CHANGE);
+  attachInterrupt(RC_PIN[SPEED_RC], speedRCISR, CHANGE);
+  #else
   attachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]), turnRCISR, CHANGE);
   attachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]), speedRCISR, CHANGE);
+  #endif
 }
 void detachRCControl(){
+  #ifdef IS_PICO
+  detachInterrupt(RC_PIN[TURN_RC]);
+  detachInterrupt(RC_PIN[SPEED_RC]);
+  #else
   detachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]));
   detachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]));
+  #endif
 }
 
 void runRCInput(float &speed, float &turn){
