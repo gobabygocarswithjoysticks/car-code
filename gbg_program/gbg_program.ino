@@ -697,7 +697,11 @@ void loop()
     if(movementAllowed){
       LED_ON;
     }else{
-      millis()%200<100?LED_ON:LED_OFF;
+      if((millis()%200<100)){
+        LED_ON;
+      }else{
+        LED_OFF;
+      }
     }
   }else{
     LED_OFF;
