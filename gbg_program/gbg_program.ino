@@ -1,4 +1,4 @@
-/*
+ /*
     This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
     https://github.com/gobabygocarswithjoysticks/car-code
     Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions
@@ -22,14 +22,14 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///// joystick input reader constants /////
-int16_t CONTROL_RIGHT = 42;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
-int16_t CONTROL_CENTER_X = 492;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
-int16_t CONTROL_LEFT = 950;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
+int16_t CONTROL_RIGHT = 60;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
+int16_t CONTROL_CENTER_X = 542;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
+int16_t CONTROL_LEFT = 987;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
 int16_t X_DEADZONE = 50;         // radius around center where joystick is considered centered
 
-int16_t CONTROL_UP = 927;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
-int16_t CONTROL_CENTER_Y = 495;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
-int16_t CONTROL_DOWN = 43;       // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
+int16_t CONTROL_UP = 936;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
+int16_t CONTROL_CENTER_Y = 455;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
+int16_t CONTROL_DOWN = 44;       // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
 int16_t Y_DEADZONE = 50;         // radius around center where joystick is considered centered
 
 ///// input processor constants /////
@@ -694,7 +694,11 @@ void loop()
   }
 
   if(abs(turnToDrive)>=0.001||abs(speedToDrive)>=0.001){
-    LED_ON;
+    if(movementAllowed){
+      LED_ON;
+    }else{
+      millis()%200<100?LED_ON:LED_OFF;
+    }
   }else{
     LED_OFF;
   }
