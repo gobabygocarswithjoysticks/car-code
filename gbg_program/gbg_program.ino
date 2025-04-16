@@ -697,7 +697,7 @@ void loop()
     if(joyOK){
       LED_ON;
     }else{
-      if((millis()%200)<100){
+      if((millis()%150)<75){
         LED_ON;
       }else{
         LED_OFF;
