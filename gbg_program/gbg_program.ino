@@ -694,10 +694,10 @@ void loop()
   }
 
   if(abs(turnToDrive)>=0.001||abs(speedToDrive)>=0.001){
-    if(movementAllowed){
+    if(joyOK){
       LED_ON;
     }else{
-      if((millis()%200<100)){
+      if((millis()%200)<100){
         LED_ON;
       }else{
         LED_OFF;
