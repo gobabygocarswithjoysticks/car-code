@@ -335,7 +335,7 @@ class Servo {
           analogWrite(pinEn, 255);
           analogWrite(pin2, constrain((1500-microseconds)*255/500,0,255));
         }else{
-          analogWrite(pinEn, 0);
+          analogWrite(pinEn, 255);
           analogWrite(pin1, 0);
           analogWrite(pin2, 0);
         }
