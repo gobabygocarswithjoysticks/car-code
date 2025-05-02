@@ -317,25 +317,22 @@ class Servo {
       pin1 = _pin1;
       pin2 = _pin2;
       pinMode(pinEn, OUTPUT);
-      digitalWrite(pinEn, LOW);
+      digitalWrite(pinEn, HIGH);
       pinMode(pin1, OUTPUT);
-      digitalWrite(pin1, LOW);
+      analogWrite(pin1, 0);
       pinMode(pin2, OUTPUT);
-      digitalWrite(pin2, LOW);
+      analogWrite(pin2, 0);
     }
     void writeMicroseconds(int microseconds) {
       if (isAttached){
         microseconds=constrain(microseconds,1000,2000);
         if(microseconds>1500){
           analogWrite(pin2, 0);
-          analogWrite(pinEn, 255);
           analogWrite(pin1, constrain((microseconds-1500)*255/500,0,255));
         }else if(microseconds<1500){
           analogWrite(pin1, 0);
-          analogWrite(pinEn, 255);
           analogWrite(pin2, constrain((1500-microseconds)*255/500,0,255));
         }else{
-          analogWrite(pinEn, 255);
           analogWrite(pin1, 0);
           analogWrite(pin2, 0);
         }
