@@ -327,17 +327,17 @@ class Servo {
       if (isAttached){
         microseconds=constrain(microseconds,1000,2000);
         if(microseconds>1500){
-          digitalWrite(pin2, LOW);
-          digitalWrite(pin1, HIGH);
-          analogWrite(pinEn, constrain((microseconds-1500)*255/500,0,255));
+          amalogWrite(pin2, 0);
+          analogWrite(pinEn, 255);
+          analogWrite(pin1, constrain((microseconds-1500)*255/500,0,255));
         }else if(microseconds<1500){
-          digitalWrite(pin1, LOW);
-          digitalWrite(pin2, HIGH);
-          analogWrite(pinEn, constrain((1500-microseconds)*255/500,0,255));
+          analogWrite(pin1, 0);
+          analogWrite(pinEn, 255);
+          analogWrite(pin2, constrain((1500-microseconds)*255/500,0,255));
         }else{
           analogWrite(pinEn, 0);
-          digitalWrite(pin1, LOW);
-          digitalWrite(pin2, LOW);
+          analogWrite(pin1, 0);
+          analogWrite(pin2, 0);
         }
       }
     }
