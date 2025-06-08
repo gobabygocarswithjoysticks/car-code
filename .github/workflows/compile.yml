@@ -80,7 +80,7 @@ jobs:
           - configName: "standard-rpiPico"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -90,7 +90,7 @@ jobs:
           - configName: "standard-rpiPico-W"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -110,7 +110,7 @@ jobs:
           - configName: "standard-rpiPico-2"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -120,7 +120,7 @@ jobs:
           - configName: "standard-rpiPico-2W"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -130,7 +130,7 @@ jobs:
           - configName: "PCB-rpiPico"
             code-name: PCB_gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -140,7 +140,7 @@ jobs:
           - configName: "PCB-rpiPico-W"
             code-name: PCB_gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -150,7 +150,7 @@ jobs:
           - configName: "PCB-rpiPico-2"
             code-name: PCB_gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -160,7 +160,7 @@ jobs:
           - configName: "PCB-rpiPico-2W"
             code-name: PCB_gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -192,7 +192,7 @@ jobs:
           - configName: "RC-standard-rpiPico"
             code-name: RC_gbg_program
             code-dir: gbg_program
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -220,7 +220,7 @@ jobs:
           - configName: "clear_eeprom-rpiPico"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -230,7 +230,7 @@ jobs:
           - configName: "clear_eeprom-rpiPico-W"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -250,7 +250,7 @@ jobs:
           - configName: "clear_eeprom-rpiPico2"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -260,7 +260,7 @@ jobs:
           - configName: "clear_eeprom-rpiPico-2W"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -288,7 +288,7 @@ jobs:
           - configName: "blink-rpiPico"
             code-name: blink
             code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -298,7 +298,7 @@ jobs:
           - configName: "blink-rpiPico-W"
             code-name: blink
             code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -318,7 +318,7 @@ jobs:
           - configName: "blink-rpiPico2"
             code-name: blink
             code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -328,7 +328,7 @@ jobs:
           - configName: "blink-rpiPico-2W"
             code-name: blink
             code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.4.4/package_rp2040_index.json"
+            arduino-platform: "rp2040:rp2040 --additional-urls https://github.com/earlephilhower/arduino-pico/releases/download/4.5.4/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
