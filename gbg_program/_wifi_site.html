@@ -70,7 +70,7 @@
       document.getElementById("timeout").checked = fetchedResponse["d"] == 1;
 
       if (fetchedResponse["j"] == 1) {
-        document.getElementById("status").innerHTML = + (fetchedResponse["a"] == 1 ? "on" : "off");
+        document.getElementById("status").innerHTML = (fetchedResponse["a"] == 1 ? "on" : "off");
       } else {
         document.getElementById("status").innerHTML = "center car joystick to start car";
       }
