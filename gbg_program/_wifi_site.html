@@ -10,7 +10,8 @@
   <button onclick='fetch("/activate");' style='font-size: 100px;'>GO</button>
   <button onclick='fetch("/deactivate");' style='font-size: 200px; float: right;'>STOP</button>
   <br>
-  <div id="status" style="font-size: 50px;">status: </div>
+  <div style="font-size: 50px;">status:</div>
+  <div id="status" style="font-size: 50px;">loading</div>
   <br>
   <br>
   <div style="font-size: x-large;">remote override mode</div>
@@ -69,13 +70,13 @@
       document.getElementById("timeout").checked = fetchedResponse["d"] == 1;
 
       if (fetchedResponse["j"] == 1) {
-        document.getElementById("status").innerHTML = "status: " + (fetchedResponse["a"] == 1 ? "on" : "off");
+        document.getElementById("status").innerHTML = + (fetchedResponse["a"] == 1 ? "on" : "off");
       } else {
-        document.getElementById("status").innerHTML = "status: " + "center car joystick to start car";
+        document.getElementById("status").innerHTML = "center car joystick to start car";
       }
 
     } catch (e) {
-      document.getElementById("status").innerHTML = "status: Disconnected";
+      document.getElementById("status").innerHTML = "Disconnected";
     }
     clearTimeout(errorTimeout);
   }
