@@ -388,64 +388,6 @@ ISR(WDT_vect) // Watchdog timer interrupt.
   #endif
 #endif
 
-unsigned long lastRisingMicros[NUM_RC_INPUTS];
-float remoteInput[NUM_RC_INPUTS];
-
-void turnRCISR(void){
-  RCISR(TURN_RC);
-}
-void speedRCISR(void){
-  RCISR(SPEED_RC);
-}
-
-void RCISR(byte whichRCInput){
-  if(digitalRead(RC_PIN[whichRCInput]) == HIGH){
-    lastRisingMicros[whichRCInput] = micros();
-  }else if((micros() - lastRisingMicros[whichRCInput]) < rcTimeoutMicros){
-    remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500) / 500.0;
-    remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -1, 1);
-  }else{ // signal is too old, set to 0
-    remoteInput[whichRCInput] = 0;
-  }
-}
-
-void setupRCControl(){
-  pinMode(RC_PIN[SPEED_RC], INPUT_PULLUP);
-  pinMode(RC_PIN[TURN_RC], INPUT_PULLUP);
-  #ifdef IS_PICO
-  attachInterrupt(RC_PIN[TURN_RC], turnRCISR, CHANGE);
-  attachInterrupt(RC_PIN[SPEED_RC], speedRCISR, CHANGE);
-  #else
-  attachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]), turnRCISR, CHANGE);
-  attachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]), speedRCISR, CHANGE);
-  #endif
-}
-void detachRCControl(){
-  #ifdef IS_PICO
-  detachInterrupt(RC_PIN[TURN_RC]);
-  detachInterrupt(RC_PIN[SPEED_RC]);
-  #else
-  detachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]));
-  detachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]));
-  #endif
-}
-
-void runRCInput(float &speed, float &turn){
-  // if(remoteMode==1){
-  bool validSignal = true;
-  for(byte i=0;i<NUM_RC_INPUTS;i++){
-    if(micros()-lastRisingMicros[i]>rcTimeoutMicros){
-      validSignal = false;
-    }
-  }
-  if(validSignal){
-    speed=remoteInput[SPEED_RC];
-    turn=remoteInput[TURN_RC];
-  }else{ // receiving invalid signal
-  }
-}
-#endif
-
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
 boolean movementAllowed;
