@@ -53,11 +53,6 @@ const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
 const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
-#ifdef RC_CONTROL
-const char use_rc_control[] PROGMEM = "USE_RC";
-const char speed_rc_pin[] PROGMEM = "RC_SPEED_PIN";
-const char turn_rc_pin[] PROGMEM = "RC_TURN_PIN";
-#endif
 #ifdef HAS_WIFI
 const char car_wifi_name[] PROGMEM = "CAR_WIFI_NAME";
 const char car_wifi_password[] PROGMEM = "CAR_WIFI_PASSWORD";
@@ -114,11 +109,6 @@ const char* const SETTING[] PROGMEM = {
   num_drive_buttons,
   steering_off_switch,
   steering_off_switch_pin
-  #ifdef RC_CONTROL
-  , use_rc_control,
-  speed_rc_pin, 
-  turn_rc_pin
-  #endif
   #ifdef HAS_WIFI
   , car_wifi_name,
   car_wifi_password, 
@@ -176,11 +166,6 @@ enum {
   S_NUM_DRIVE_BUTTONS,
   S_STEERING_OFF_SWITCH,
   S_STEERING_OFF_SWITCH_PIN,
-  #ifdef RC_CONTROL
-  S_USE_RC_CONTROL,
-  S_SPEED_RC_PIN,
-  S_TURN_RC_PIN,
-  #endif
   #ifdef HAS_WIFI
   S_CAR_WIFI_NAME,
   S_CAR_WIFI_PASSWORD,

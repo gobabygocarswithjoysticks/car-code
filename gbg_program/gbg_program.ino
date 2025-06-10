@@ -163,16 +163,6 @@ byte STEERING_OFF_SWITCH_PIN = 4;
 
 #endif
 
-#ifdef RC_CONTROL
-enum {
-  TURN_RC = 0,
-  SPEED_RC,
-  NUM_RC_INPUTS
-};
-boolean USE_RC_CONTROL = true;
-byte RC_PIN[NUM_RC_INPUTS] = {8, 11};
-#endif
-
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 //// needed for button control settings
 struct ButtonDriveConfig {
@@ -387,26 +377,15 @@ ISR(WDT_vect) // Watchdog timer interrupt.
   #if defined(HAS_WIFI)
     const int version_number = 13;  // esp32, picoW or pico2W
     const byte settings_memory_key = 13;
-  #else // not pcb or wifi-capable
-    #ifdef RC_CONTROL
-      const int version_number = 16;  // nano or uno with RC control
-      const byte settings_memory_key = 16;
-    #else // standard nano or uno or pico without wifi
+  #else   // not pcb or wifi-capable
+          // standard nano or uno or pico without wifi
       // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
       const int version_number = 11;  // nano or uno
       //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
       //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
       //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
       const byte settings_memory_key = 11;
-    #endif
   #endif
-#endif
-
-#ifdef RC_CONTROL
-#define rcTimeoutMicros 40000 // 40ms timeout for RC control
-#ifdef IS_PICO
-#else
-#include <PinChangeInterrupt.h>
 #endif
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
@@ -542,10 +521,6 @@ void setup() {
 
   setupPins();
 
-#ifdef RC_CONTROL
-  setupRCControl();
-#endif
-
 #if defined(HAS_WIFI)
   setupWifi();
 #endif
@@ -629,12 +604,6 @@ void loop()
 #if defined(HAS_WIFI)
   if (joyOK) {
     runWifiInput(speedInput, turnInput); // references, so the function can edit the values
-  }
-#endif
-
-#if defined(RC_CONTROL)
-  if(joyOK){
-    runRCInput(speedInput, turnInput); // references, so the function can edit the values
   }
 #endif
 

@@ -314,29 +314,6 @@ void settingsSerial() {
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
       }
-#if defined(RC_CONTROL)
-      else if (strcmp_P(k, SETTING[S_USE_RC_CONTROL]) == 0) {
-        USE_RC_CONTROL = atoi(v);
-        if (USE_RC_CONTROL) {
-          detachRCControl();
-          sprintf(resultBuf, "true");
-          setupRCControl();
-        } else {
-          detachRCControl();
-          sprintf(resultBuf, "false");
-        }
-      } else if (strcmp_P(k, SETTING[S_TURN_RC_PIN]) == 0) {
-        detachRCControl();
-        RC_PIN[TURN_RC] = atoi(v);
-        setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[TURN_RC]);
-      } else if (strcmp_P(k, SETTING[S_SPEED_RC_PIN]) == 0) {
-        detachRCControl();
-        RC_PIN[SPEED_RC] = atoi(v);
-        setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[SPEED_RC]);
-      }
-#endif
 #if defined(HAS_WIFI)
       else if (strcmp_P(k, SETTING[S_CAR_WIFI_NAME]) == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
@@ -470,11 +447,6 @@ void saveSettings()
   EEPROMwrite(addressW, driveButtons);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
-#if defined(RC_CONTROL)
-  EEPROMwrite(addressW, USE_RC_CONTROL);
-  EEPROMwrite(addressW, RC_PIN[TURN_RC]);
-  EEPROMwrite(addressW, RC_PIN[SPEED_RC]);
-#endif
 #if defined(HAS_WIFI)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
@@ -545,11 +517,6 @@ void recallSettings()
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
 
-#if defined(RC_CONTROL)
-  EEPROMread(addressR, USE_RC_CONTROL);
-  EEPROMread(addressR, RC_PIN[TURN_RC]);
-  EEPROMread(addressR, RC_PIN[SPEED_RC]);
-#endif
 #if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
