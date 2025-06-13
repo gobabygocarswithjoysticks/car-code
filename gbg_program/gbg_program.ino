@@ -406,7 +406,6 @@ ISR(WDT_vect) // Watchdog timer interrupt.
       //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
       //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
       const byte settings_memory_key = 18;
-    #endif
   #endif
 #endif
 
