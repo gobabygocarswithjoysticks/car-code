@@ -163,15 +163,6 @@ byte STEERING_OFF_SWITCH_PIN = 4;
 
 #endif
 
-#ifdef RC_CONTROL
-enum {
-  TURN_RC = 0,
-  SPEED_RC,
-  NUM_RC_INPUTS
-};
-boolean USE_RC_CONTROL = true;
-byte RC_PIN[NUM_RC_INPUTS] = {8, 11};
-#endif
 
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 //// needed for button control settings
@@ -224,6 +215,26 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 #endif
 
 boolean STEERING_OFF_SWITCH = false;
+
+enum {
+  TURN_RC = 0,
+  SPEED_RC,
+  CTRL_RC,
+  STOP_RC,
+  NUM_RC_INPUTS
+};
+boolean USE_RC_CONTROL = false;
+byte RC_PIN[NUM_RC_INPUTS] = {7, 8, 9, 10};
+
+boolean USE_STOP_SWITCH = false;
+byte STOP_PIN = 5;
+boolean STOP_PIN_HIGH = false;
+boolean NO_STOP_UNTIL_START = false;
+
+boolean USE_ON_OFF_BUTTONS = false;
+byte ON_BUTTON = 11; // pin for the on button
+byte OFF_BUTTON = 12; // pin for the off button
+boolean ON_OFF_BUTTONS_ACTIVE_HIGH = false;
 
 #if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
@@ -385,29 +396,24 @@ ISR(WDT_vect) // Watchdog timer interrupt.
   #endif
 #else
   #if defined(HAS_WIFI)
-    const int version_number = 13;  // esp32, picoW or pico2W
-    const byte settings_memory_key = 13;
+    const int version_number = 20;  // esp32, picoW or pico2W
+    const byte settings_memory_key = 20;
   #else // not pcb or wifi-capable
-    #ifdef RC_CONTROL
-      const int version_number = 16;  // nano or uno with RC control
-      const byte settings_memory_key = 16;
-    #else // standard nano or uno or pico without wifi
+      //standard nano or uno or pico without wifi, but with capability for RC control
       // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-      const int version_number = 11;  // nano or uno
+      const int version_number = 18;  // nano or uno
       //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
       //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
       //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-      const byte settings_memory_key = 11;
+      const byte settings_memory_key = 18;
     #endif
   #endif
 #endif
 
-#ifdef RC_CONTROL
 #define rcTimeoutMicros 40000 // 40ms timeout for RC control
 #ifdef IS_PICO
 #else
 #include <PinChangeInterrupt.h>
-#endif
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 float remoteInput[NUM_RC_INPUTS];
@@ -431,31 +437,43 @@ void RCISR(byte whichRCInput){
 }
 
 void setupRCControl(){
-  pinMode(RC_PIN[SPEED_RC], INPUT_PULLUP);
-  pinMode(RC_PIN[TURN_RC], INPUT_PULLUP);
+  for(byte i=0;i<NUM_RC_INPUTS;i++){
+    pinMode(RC_PIN[i], INPUT_PULLUP);
+  }
+  
   #ifdef IS_PICO
   attachInterrupt(RC_PIN[TURN_RC], turnRCISR, CHANGE);
   attachInterrupt(RC_PIN[SPEED_RC], speedRCISR, CHANGE);
+  attachInterrupt(RC_PIN[CTRL_RC], ctrlRCISR, CHANGE);
+  attachInterrupt(RC_PIN[STOP_RC], stopRCISR, CHANGE);
   #else
   attachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]), turnRCISR, CHANGE);
   attachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]), speedRCISR, CHANGE);
+  attachPCINT(digitalPinToPCINT(RC_PIN[CTRL_RC]), ctrlRCISR, CHANGE);
+  attachPCINT(digitalPinToPCINT(RC_PIN[STOP_RC]), stopRCISR, CHANGE);
   #endif
 }
 void detachRCControl(){
   #ifdef IS_PICO
   detachInterrupt(RC_PIN[TURN_RC]);
   detachInterrupt(RC_PIN[SPEED_RC]);
+  detachInterrupt(RC_PIN[CTRL_RC]);
+  detachInterrupt(RC_PIN[STOP_RC]);
   #else
   detachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]));
   detachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]));
+  detachPCINT(digitalPinToPCINT(RC_PIN[CTRL_RC]));
+  detachPCINT(digitalPinToPCINT(RC_PIN[STOP_RC]));
   #endif
 }
 
 void runRCInput(float &speed, float &turn){
-  // if(remoteMode==1){
+  if(USE_RC_CONTROL==false){
+    return;
+  }
   bool validSignal = true;
   for(byte i=0;i<NUM_RC_INPUTS;i++){
-    if(micros()-lastRisingMicros[i]>rcTimeoutMicros){
+    if(micros()-lastRisingMicros[i]>rcTimeoutMicros){ //TODO:consider overflow
       validSignal = false;
     }
   }
@@ -463,6 +481,9 @@ void runRCInput(float &speed, float &turn){
     speed=remoteInput[SPEED_RC];
     turn=remoteInput[TURN_RC];
   }else{ // receiving invalid signal
+    speed=0;
+    turn=0;
+    //TODO: only if rc control has been activated
   }
 }
 #endif
@@ -542,9 +563,7 @@ void setup() {
 
   setupPins();
 
-#ifdef RC_CONTROL
   setupRCControl();
-#endif
 
 #if defined(HAS_WIFI)
   setupWifi();
@@ -632,11 +651,11 @@ void loop()
   }
 #endif
 
-#if defined(RC_CONTROL)
+// #if defined(RC_CONTROL) //TODO: HOW TO MAKE THIS WORK WITH WIFI?
   if(joyOK){
     runRCInput(speedInput, turnInput); // references, so the function can edit the values
   }
-#endif
+// #endif
 
   ////////////////////////////// PUT INPUT PROCESSORS HERE ///////////////////////
   /**
