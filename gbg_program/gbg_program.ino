@@ -424,6 +424,12 @@ void turnRCISR(void){
 void speedRCISR(void){
   RCISR(SPEED_RC);
 }
+void ctrlRCISR(void){
+  RCISR(CTRL_RC);
+}
+void stopRCISR(void){
+  RCISR(STOP_RC);
+}
 
 void RCISR(byte whichRCInput){
   if(digitalRead(RC_PIN[whichRCInput]) == HIGH){

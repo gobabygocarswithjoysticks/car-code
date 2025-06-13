@@ -126,8 +126,8 @@ const char* const SETTING[] PROGMEM = {
     button_mode_pin,
     num_drive_buttons,
     steering_off_switch,
-    steering_off_switch_pin
-        use_rc_control,
+    steering_off_switch_pin,
+    use_rc_control,
     speed_rc_pin,
     turn_rc_pin
 #ifdef HAS_WIFI
