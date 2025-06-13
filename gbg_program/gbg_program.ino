@@ -411,9 +411,10 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #define rcTimeoutMicros 40000 // 40ms timeout for RC control
-#ifdef IS_PICO
+#if defined(IS_PICO) || defined(ESP32)
 #else
 #include <PinChangeInterrupt.h>
+#endif
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 float remoteInput[NUM_RC_INPUTS];
@@ -486,7 +487,6 @@ void runRCInput(float &speed, float &turn){
     //TODO: only if rc control has been activated
   }
 }
-#endif
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
