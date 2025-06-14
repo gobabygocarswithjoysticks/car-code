@@ -473,18 +473,18 @@ void setupRCControl() {
   }
 #else // uno or nano, needs PinChangeInterrupt library
   for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   attachPCINT(digitalPinToPCINT(RC_PIN[i])); // attach the ISR to all RC pins
+   attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
   }
 #endif
 }
 void detachRCControl() {
 #if defined(IS_PICO) || defined(ESP32)
   for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   detachInterrupt((RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+   detachInterrupt((RC_PIN[i])); // attach the ISR to all RC pins
   }
 #else // nano or uno, needs PinChangeInterrupt library
   for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   detachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+   detachPCINT(digitalPinToPCINT(RC_PIN[i])); // attach the ISR to all RC pins
   }
 #endif
 }
