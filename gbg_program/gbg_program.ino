@@ -250,6 +250,8 @@ boolean USE_WIFI = false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
+const int16_t rcControlSwitchDeadband = 50;
+
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
 
@@ -417,7 +419,7 @@ const byte settings_memory_key = 18;
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 unsigned long anyRCRisingMillis;
-float remoteInput[NUM_RC_INPUTS];
+int16_t remoteInput[NUM_RC_INPUTS];
 struct RCFlags { // https://en.cppreference.com/w/cpp/language/bit_field.html
   uint8_t everActivated: 1; // true if the RC signal has ever been received
   uint8_t RCOverride: 1;   // true if the RC control is overriding the joystick control
@@ -441,14 +443,20 @@ void ctrlRCISR(void) {
 void stopRCISR(void) {
   RCISR(STOP_RC);
 }
+void (*RCISRs[])() = {
+  turnRCISR,
+  speedRCISR,
+  ctrlRCISR,
+  stopRCISR
+};
 
 void RCISR(byte whichRCInput) {
   if (digitalRead(RC_PIN[whichRCInput]) == HIGH) {
     lastRisingMicros[whichRCInput] = micros();
     anyRCRisingMillis = millis();
   } else if ((micros() - lastRisingMicros[whichRCInput]) < rcTimeoutMicros) {
-    remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500) / 500.0;
-    remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -1, 1);
+    remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500);
+    remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -500, 500);
   } else { // signal is too old, set to 0
     remoteInput[whichRCInput] = 0;
   }
@@ -460,28 +468,24 @@ void setupRCControl() {
   }
 
 #ifdef IS_PICO
-  attachInterrupt(RC_PIN[TURN_RC], turnRCISR, CHANGE);
-  attachInterrupt(RC_PIN[SPEED_RC], speedRCISR, CHANGE);
-  attachInterrupt(RC_PIN[CTRL_RC], ctrlRCISR, CHANGE);
-  attachInterrupt(RC_PIN[STOP_RC], stopRCISR, CHANGE);
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
 #else
-  attachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]), turnRCISR, CHANGE);
-  attachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]), speedRCISR, CHANGE);
-  attachPCINT(digitalPinToPCINT(RC_PIN[CTRL_RC]), ctrlRCISR, CHANGE);
-  attachPCINT(digitalPinToPCINT(RC_PIN[STOP_RC]), stopRCISR, CHANGE);
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
 #endif
 }
 void detachRCControl() {
 #ifdef IS_PICO
-  detachInterrupt(RC_PIN[TURN_RC]);
-  detachInterrupt(RC_PIN[SPEED_RC]);
-  detachInterrupt(RC_PIN[CTRL_RC]);
-  detachInterrupt(RC_PIN[STOP_RC]);
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   detachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
 #else
-  detachPCINT(digitalPinToPCINT(RC_PIN[TURN_RC]));
-  detachPCINT(digitalPinToPCINT(RC_PIN[SPEED_RC]));
-  detachPCINT(digitalPinToPCINT(RC_PIN[CTRL_RC]));
-  detachPCINT(digitalPinToPCINT(RC_PIN[STOP_RC]));
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   detachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
 #endif
 }
 
@@ -498,19 +502,19 @@ void runRCInput(float &speed, float &turn) {
 
   if (validSignal) {
     rcFlags.everActivated = true;
-    if (remoteInput[CTRL_RC] > 0.1) {
+    if (remoteInput[CTRL_RC] > rcControlSwitchDeadband) {
       rcFlags.RCOverride = true;
-    } else if (remoteInput[CTRL_RC] < -0.1) {
+    } else if (remoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
       rcFlags.RCOverride = false;
     }
-    if (remoteInput[STOP_RC] > 0.1) {
+    if (remoteInput[STOP_RC] > rcControlSwitchDeadband) {
       rcFlags.RCStop = true;
-    } else if (remoteInput[STOP_RC] < -0.1) {
+    } else if (remoteInput[STOP_RC] < -rcControlSwitchDeadband) {
       rcFlags.RCStop = false;
     }
     if (rcFlags.RCOverride) {
-      speed = remoteInput[SPEED_RC];
-      turn = remoteInput[TURN_RC];
+      speed = remoteInput[SPEED_RC] / 500.0;
+      turn = remoteInput[TURN_RC] / 500.0;
     }
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
 
