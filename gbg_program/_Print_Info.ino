@@ -19,8 +19,8 @@ boolean printVariables(int interval) {
     prnt(F("leftMotorWriteVal"), leftMotorWriteVal);
     prnt(F("rightMotorWriteVal"), rightMotorWriteVal);
     prnt(F("speedKnobVal"), speedKnobVal);
-    prnt(F("movementAllowed"), movementAllowed ? "true" : "false");
-    prnt(F("joyOK"), joyOK ? "true" : "false");
+    prntbool(F("movementAllowed"), movementAllowed);
+    prntbool(F("joyOK"), joyOK);
     int buttonBits = 0;
     if (ENABLE_BUTTON_CTRL) {
       int button;
@@ -90,34 +90,34 @@ void printSettings() {
   prnt(FV(SETTING[S_FASTEST_BACKWARD]), FASTEST_BACKWARD);
   prnt(FV(SETTING[S_TURN_SPEED]), TURN_SPEED);
   prnt(FV(SETTING[S_SCALE_TURNING_WHEN_MOVING]), SCALE_TURNING_WHEN_MOVING);
-  prnt(FV(SETTING[S_REVERSE_TURN_IN_REVERSE]), REVERSE_TURN_IN_REVERSE ? "true" : "false");
+  prntbool(FV(SETTING[S_REVERSE_TURN_IN_REVERSE]), REVERSE_TURN_IN_REVERSE);
   prnt(FV(SETTING[S_LEFT_MOTOR_CENTER]), LEFT_MOTOR_CENTER);
   prnt(FV(SETTING[S_LEFT_MOTOR_SLOW]), LEFT_MOTOR_SLOW);
   prnt(FV(SETTING[S_LEFT_MOTOR_FAST]), LEFT_MOTOR_FAST);
   prnt(FV(SETTING[S_RIGHT_MOTOR_CENTER]), RIGHT_MOTOR_CENTER);
   prnt(FV(SETTING[S_RIGHT_MOTOR_SLOW]), RIGHT_MOTOR_SLOW);
   prnt(FV(SETTING[S_RIGHT_MOTOR_FAST]), RIGHT_MOTOR_FAST);
-  prnt(FV(SETTING[S_USE_SPEED_KNOB]), USE_SPEED_KNOB ? "true" : "false");
+  prntbool(FV(SETTING[S_USE_SPEED_KNOB]), USE_SPEED_KNOB);
   prnt(FV(SETTING[S_SPEED_KNOB_SLOW_VAL]), SPEED_KNOB_SLOW_VAL);
   prnt(FV(SETTING[S_SPEED_KNOB_FAST_VAL]), SPEED_KNOB_FAST_VAL);
-  prnt(FV(SETTING[S_SCALE_ACCEL_WITH_SPEED]), SCALE_ACCEL_WITH_SPEED ? "true" : "false");
+  prntbool(FV(SETTING[S_SCALE_ACCEL_WITH_SPEED]), SCALE_ACCEL_WITH_SPEED);
   prnt(FV(SETTING[S_SPEED_KNOB_PIN]), SPEED_KNOB_PIN);
   prnt(FV(SETTING[S_JOY_X_PIN]), JOY_X_PIN);
   prnt(FV(SETTING[S_JOY_Y_PIN]), JOY_Y_PIN);
 
 #ifdef IS_PCB
-  prnt(FV(SETTING[S_SWAP_MOTORS]), SWAP_MOTORS ? "true" : "false");
+  prntbool(FV(SETTING[S_SWAP_MOTORS]), SWAP_MOTORS);
 #else
   prnt(FV(SETTING[S_LEFT_MOTOR_CONTROLLER_PIN]), LEFT_MOTOR_CONTROLLER_PIN);
   prnt(FV(SETTING[S_RIGHT_MOTOR_CONTROLLER_PIN]), RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-  prnt(FV(SETTING[S_ENABLE_STARTUP_PULSE]), ENABLE_STARTUP_PULSE ? "true" : "false");
+  prntbool(FV(SETTING[S_ENABLE_STARTUP_PULSE]), ENABLE_STARTUP_PULSE);
   prnt(FV(SETTING[S_LEFT_MOTOR_PULSE]), LEFT_MOTOR_PULSE);
   prnt(FV(SETTING[S_RIGHT_MOTOR_PULSE]), RIGHT_MOTOR_PULSE);
   prnt(FV(SETTING[S_START_MOTOR_PULSE_TIME]), START_MOTOR_PULSE_TIME);
   prnt(FV(SETTING[S_JOY_CALIB_COUNT]), JOY_CALIB_COUNT);
-  prnt(FV(SETTING[S_ENABLE_BUTTON_CTRL]), ENABLE_BUTTON_CTRL ? "true" : "false");
-  prnt(FV(SETTING[S_USE_BUTTON_MODE_PIN]), USE_BUTTON_MODE_PIN ? "true" : "false");
+  prntbool(FV(SETTING[S_ENABLE_BUTTON_CTRL]), ENABLE_BUTTON_CTRL);
+  prntbool(FV(SETTING[S_USE_BUTTON_MODE_PIN]), USE_BUTTON_MODE_PIN);
   prnt(FV(SETTING[S_BUTTON_MODE_PIN]), BUTTON_MODE_PIN);
   prnt(FV(SETTING[S_NUM_DRIVE_BUTTONS]), NUM_DRIVE_BUTTONS);
 
@@ -132,29 +132,55 @@ void printSettings() {
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
     printAndAppendToChecksum(F("],"));
   }
-  prnt(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH ? "true" : "false");
+  prntbool(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH);
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
+
+  prntbool(FV(SETTING[S_USE_RC_CONTROL]), USE_RC_CONTROL);
+  prnt(FV(SETTING[S_SPEED_RC_PIN]), RC_PIN[TURN_RC]);
+  prnt(FV(SETTING[S_TURN_RC_PIN]), RC_PIN[SPEED_RC]);
+  prnt(FV(SETTING[S_CTRL_RC_PIN]), RC_PIN[CTRL_RC]);
+  prnt(FV(SETTING[S_STOP_RC_PIN]), RC_PIN[STOP_RC]);
+  prntbool(FV(SETTING[S_NO_RC_STOP_UNTIL_START]), NO_RC_STOP_UNTIL_START);
+  prntbool(FV(SETTING[S_USE_STOP_SWITCH]), USE_STOP_SWITCH);
+  prnt(FV(SETTING[S_ON_OFF_SWITCH_PIN]), STOP_PIN);
+  prntbool(FV(SETTING[S_ON_OFF_ACTIVE_HIGH]), STOP_PIN_HIGH);
+  prntbool(FV(SETTING[S_NO_STOP_UNTIL_START]), NO_STOP_UNTIL_START);
+  prntbool(FV(SETTING[S_USE_ON_OFF_BUTTONS]), USE_ON_OFF_BUTTONS);
+  prnt(FV(SETTING[S_ON_BUTTON]), ON_BUTTON);
+  prnt(FV(SETTING[S_OFF_BUTTON]), OFF_BUTTON);
+  prntbool(FV(SETTING[S_ON_OFF_BUTTONS_ACTIVE_HIGH]), ON_OFF_BUTTONS_ACTIVE_HIGH);
 
 #if defined(HAS_WIFI)
   prnt(FV(SETTING[S_CAR_WIFI_NAME]), CAR_WIFI_NAME);
   prnt(FV(SETTING[S_CAR_WIFI_PASSWORD]), CAR_WIFI_PASSWORD);
-  prnt(FV(SETTING[S_USE_WIFI]), USE_WIFI ? "true" : "false");
+  prntbool(FV(SETTING[S_USE_WIFI]), USE_WIFI);
 #endif
 
-  printAndAppendToChecksum(F("\"CHECKSUM\":")); 
+  printAndAppendToChecksum(F("\"CHECKSUM\":"));
   Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
   Serial.println("}");
 
 }
 
-template <typename T>
-void prnt(const __FlashStringHelper *fsh, T value) {
+void prnt(const __FlashStringHelper *fsh, int value) {
   serialChecksum += 5;
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
   Serial.print("\":");
   serialChecksum += Serial.print(value);
   Serial.print(", ");
+}
+
+void prntbool(const __FlashStringHelper *fsh, boolean value) {
+  serialChecksum += 5;
+  Serial.print("\"");
+  serialChecksum += Serial.print(fsh);
+  Serial.print("\":");
+  if (value) {
+    serialChecksum += Serial.print("true,");
+  } else {
+    serialChecksum += Serial.print("false,");
+  }
 }
 
 void printAndAppendToChecksum(const __FlashStringHelper *fsh) {

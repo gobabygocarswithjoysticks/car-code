@@ -48,11 +48,30 @@ const char start_motor_pulse_time[] PROGMEM = "START_MOTOR_PULSE_TIME";
 const char joy_calib_count[] PROGMEM = "JOY_CALIB_COUNT";
 const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
 const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
+const char button_mode_toggle[] PROGMEM = "BUTTON_MODE_TOGGLE";
 const char button_mode_pin[] PROGMEM = "BUTTON_MODE_PIN";
 const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
 const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
+
+const char use_stop_switch[] PROGMEM = "USE_STOP_SWITCH";
+const char on_off_switch_pin[] PROGMEM = "STOP_PIN";
+const char on_off_active_high[] PROGMEM = "STOP_PIN_HIGH";
+const char no_stop_until_start[] = "NO_STOP_UNTIL_START";
+
+const char use_on_off_buttons[] PROGMEM = "USE_ON_OFF_BUTTONS";
+const char on_button[] PROGMEM = "ON_BUTTON";
+const char off_button[] PROGMEM = "OFF_BUTTON";
+const char on_off_buttons_active_high[] PROGMEM = "ON_OFF_BUTTONS_ACTIVE_HIGH";
+
+const char use_rc_control[] PROGMEM = "USE_RC";
+const char speed_rc_pin[] PROGMEM = "RC_SPEED_PIN";
+const char turn_rc_pin[] PROGMEM = "RC_TURN_PIN";
+const char stop_rc_pin[] PROGMEM = "RC_STOP_PIN";
+const char ctrl_rc_pin[] PROGMEM = "RC_CTRL_PIN";
+const char no_rc_stop_until_start[] PROGMEM = "NO_RC_STOP_UNTIL_START";
+
 #ifdef HAS_WIFI
 const char car_wifi_name[] PROGMEM = "CAR_WIFI_NAME";
 const char car_wifi_password[] PROGMEM = "CAR_WIFI_PASSWORD";
@@ -92,12 +111,12 @@ const char* const SETTING[] PROGMEM = {
   speed_knob_pin,
   joy_x_pin,
   joy_y_pin,
-  #ifdef IS_PCB
+#ifdef IS_PCB
   swap_motors,
-  #else
+#else
   left_motor_controller_pin,
   right_motor_controller_pin,
-  #endif
+#endif
   enable_startup_pulse,
   left_motor_pulse,
   right_motor_pulse,
@@ -105,15 +124,30 @@ const char* const SETTING[] PROGMEM = {
   joy_calib_count,
   enable_button_ctrl,
   use_button_mode_pin,
+  button_mode_toggle,
   button_mode_pin,
   num_drive_buttons,
   steering_off_switch,
-  steering_off_switch_pin
-  #ifdef HAS_WIFI
-  , car_wifi_name,
-  car_wifi_password, 
-  use_wifi
-  #endif
+  steering_off_switch_pin,
+  use_stop_switch,
+  on_off_switch_pin,
+  on_off_active_high,
+  no_stop_until_start,
+  use_on_off_buttons,
+  on_button,
+  off_button,
+  on_off_buttons_active_high,
+  use_rc_control,
+  speed_rc_pin,
+  turn_rc_pin,
+  stop_rc_pin,
+  ctrl_rc_pin,
+  no_rc_stop_until_start,
+#ifdef HAS_WIFI
+  car_wifi_name,
+  car_wifi_password,
+  use_wifi,
+#endif
 };
 
 enum {
@@ -149,12 +183,12 @@ enum {
   S_SPEED_KNOB_PIN,
   S_JOY_X_PIN,
   S_JOY_Y_PIN,
-  #ifdef IS_PCB
+#ifdef IS_PCB
   S_SWAP_MOTORS,
-  #else
+#else
   S_LEFT_MOTOR_CONTROLLER_PIN,
   S_RIGHT_MOTOR_CONTROLLER_PIN,
-  #endif
+#endif
   S_ENABLE_STARTUP_PULSE,
   S_LEFT_MOTOR_PULSE,
   S_RIGHT_MOTOR_PULSE,
@@ -162,15 +196,30 @@ enum {
   S_JOY_CALIB_COUNT,
   S_ENABLE_BUTTON_CTRL,
   S_USE_BUTTON_MODE_PIN,
+  S_BUTTON_MODE_TOGGLE,
   S_BUTTON_MODE_PIN,
   S_NUM_DRIVE_BUTTONS,
   S_STEERING_OFF_SWITCH,
   S_STEERING_OFF_SWITCH_PIN,
-  #ifdef HAS_WIFI
+  S_USE_STOP_SWITCH,
+  S_ON_OFF_SWITCH_PIN,
+  S_ON_OFF_ACTIVE_HIGH,
+  S_NO_STOP_UNTIL_START,
+  S_USE_ON_OFF_BUTTONS,
+  S_ON_BUTTON,
+  S_OFF_BUTTON,
+  S_ON_OFF_BUTTONS_ACTIVE_HIGH,
+  S_USE_RC_CONTROL,
+  S_SPEED_RC_PIN,
+  S_TURN_RC_PIN,
+  S_STOP_RC_PIN,
+  S_CTRL_RC_PIN,
+  S_NO_RC_STOP_UNTIL_START,
+#ifdef HAS_WIFI
   S_CAR_WIFI_NAME,
   S_CAR_WIFI_PASSWORD,
   S_USE_WIFI,
-  #endif
+#endif
   S_NUM
 };
 

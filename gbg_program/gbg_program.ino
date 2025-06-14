@@ -1,20 +1,20 @@
- /*
-    This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
-    https://github.com/gobabygocarswithjoysticks/car-code
-    Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions
-    Website for uploading and configuring this code: https://gobabygocarswithjoysticks.github.io/programmer/
+/*
+   This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
+   https://github.com/gobabygocarswithjoysticks/car-code
+   Questions or comments? Please email gobabygocarswithjoysticks@gmail.com or post here: https://github.com/gobabygocarswithjoysticks/car-code/discussions
+   Website for uploading and configuring this code: https://gobabygocarswithjoysticks.github.io/programmer/
 
-    THIS PROGRAM IS COMPILED BY A GITHUB ACTION. IT WON'T COMPILE PROPERLY IN THE ARDUINO IDE BECAUSE PRE-PROCESSING AND #DEFINES WILL BE MISSING.
+   THIS PROGRAM IS COMPILED BY A GITHUB ACTION. IT WON'T COMPILE PROPERLY IN THE ARDUINO IDE BECAUSE PRE-PROCESSING AND #DEFINES WILL BE MISSING.
 
-    This program has three types of functions that can be combined together to customize how the car drives.
-        Input readers       -   get control inputs from the child
-                InputReader_JoystickAxis      -   reads an axis of a joystick and scales the input (use two for a two axis joystick)
-                InputReader_Buttons     -  reads a set of buttons and edits two values
+   This program has three types of functions that can be combined together to customize how the car drives.
+       Input readers       -   get control inputs from the child
+               InputReader_JoystickAxis      -   reads an axis of a joystick and scales the input (use two for a two axis joystick)
+               InputReader_Buttons     -  reads a set of buttons and edits two values
 
-        Input processors  -    limit speed, acceleration, and add other drive features
+       Input processors  -    limit speed, acceleration, and add other drive features
 
-        Drive controllers   -  control motors of the car to make it go
-                DriveController_TwoSideDrive     -   controls a car with two independent wheel motors
+       Drive controllers   -  control motors of the car to make it go
+               DriveController_TwoSideDrive     -   controls a car with two independent wheel motors
 */
 #include <Arduino.h>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +163,7 @@ byte STEERING_OFF_SWITCH_PIN = 4;
 
 #endif
 
+
 ///////////////////////////////////////////// BUTTON CONTROL /////////////////////////////////
 //// needed for button control settings
 struct ButtonDriveConfig {
@@ -175,6 +176,7 @@ const byte maxNumDriveButtons = 6;
 #if defined(ESP32)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
+boolean BUTTON_MODE_TOGGLE = false;
 byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -188,6 +190,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 #elif defined(IS_PCB)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
+boolean BUTTON_MODE_TOGGLE = false;
 byte NUM_DRIVE_BUTTONS = 4;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -200,6 +203,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 };
 #else
 boolean ENABLE_BUTTON_CTRL = false;
+boolean BUTTON_MODE_TOGGLE = false;
 boolean USE_BUTTON_MODE_PIN = false;
 byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
@@ -215,6 +219,28 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 
 boolean STEERING_OFF_SWITCH = false;
 
+enum {
+  TURN_RC = 0,
+  SPEED_RC,
+  CTRL_RC,
+  STOP_RC,
+  NUM_RC_INPUTS
+};
+boolean USE_RC_CONTROL = false;
+byte RC_PIN[NUM_RC_INPUTS] = {7, 8, 9, 10};
+
+boolean NO_RC_STOP_UNTIL_START = false;
+
+boolean USE_STOP_SWITCH = false;
+byte STOP_PIN = 5;
+boolean STOP_PIN_HIGH = false;
+boolean NO_STOP_UNTIL_START = false;
+
+boolean USE_ON_OFF_BUTTONS = false;
+byte ON_BUTTON = 11; // pin for the on button
+byte OFF_BUTTON = 12; // pin for the off button
+boolean ON_OFF_BUTTONS_ACTIVE_HIGH = false;
+
 #if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
 int32_t CAR_WIFI_PASSWORD = 12345678;
@@ -225,6 +251,8 @@ boolean USE_WIFI = false;
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
+
+const int16_t rcControlSwitchDeadband = 50;
 
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
@@ -319,15 +347,15 @@ class Servo {
       analogWrite(pin2, 0);
     }
     void writeMicroseconds(int microseconds) {
-      if (isAttached){
-        microseconds=constrain(microseconds,1000,2000);
-        if(microseconds>1500){
+      if (isAttached) {
+        microseconds = constrain(microseconds, 1000, 2000);
+        if (microseconds > 1500) {
           analogWrite(pin2, 0);
-          analogWrite(pin1, constrain((microseconds-1500)*255/500,0,255));
-        }else if(microseconds<1500){
+          analogWrite(pin1, constrain((microseconds - 1500) * 255 / 500, 0, 255));
+        } else if (microseconds < 1500) {
           analogWrite(pin1, 0);
-          analogWrite(pin2, constrain((1500-microseconds)*255/500,0,255));
-        }else{
+          analogWrite(pin2, constrain((1500 - microseconds) * 255 / 500, 0, 255));
+        } else {
           analogWrite(pin1, 0);
           analogWrite(pin2, 0);
         }
@@ -366,27 +394,142 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #ifdef IS_PCB
-  #if defined(HAS_WIFI)
-    const int version_number = 15;  // pcb with picoW or pico2W
-    const byte settings_memory_key = 15;
-  #else
-    const int version_number = 14;  // pcb with pico or pico2
-    const byte settings_memory_key = 14;
-  #endif
+#if defined(HAS_WIFI)
+const int version_number = 15;  // pcb with picoW or pico2W
+const byte settings_memory_key = 15;
 #else
-  #if defined(HAS_WIFI)
-    const int version_number = 13;  // esp32, picoW or pico2W
-    const byte settings_memory_key = 13;
-  #else   // not pcb or wifi-capable
-          // standard nano or uno or pico without wifi
-      // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-      const int version_number = 11;  // nano or uno
-      //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-      //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
-      //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
-      const byte settings_memory_key = 11;
-  #endif
+const int version_number = 14;  // pcb with pico or pico2
+const byte settings_memory_key = 14;
 #endif
+#else
+#if defined(HAS_WIFI)
+const int version_number = 20;  // esp32, picoW or pico2W
+const byte settings_memory_key = 20;
+#else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
+// the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
+const int version_number = 18;  // nano or uno
+//if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
+const byte settings_memory_key = 18;
+#endif
+#endif
+
+#define rcTimeoutMicros 40000 // 40ms timeout for RC control
+#if defined(IS_PICO) || defined(ESP32)
+#else
+#include <PinChangeInterrupt.h>
+#endif
+
+unsigned long lastRisingMicros[NUM_RC_INPUTS];
+unsigned long anyRCRisingMillis;
+int16_t remoteInput[NUM_RC_INPUTS];
+struct RCFlags { // https://en.cppreference.com/w/cpp/language/bit_field.html
+  uint8_t everActivated: 1; // true if the RC signal has ever been received
+  uint8_t RCOverride: 1;   // true if the RC control is overriding the joystick control
+  uint8_t RCStop: 1;     // true if the RC control is stopping the car
+  uint8_t RC_make_motors_e_stop: 1; // true if the RC control is making the motors emergency stop
+  uint8_t Start_Stop_Buttons_e_stop: 1; // true if the start/stop buttons are making the motors emergency stop
+  uint8_t Start_Switch_Ever_Activated: 1; // true if the start switch has ever been activated to start the car
+  uint8_t buttonModeActive: 1; // used for toggling button mode
+  uint8_t lastButtonModePinState: 1; // used for toggling button mode
+} rcFlags; // a bunch of booleans for remote control, stored efficiently
+
+void turnRCISR(void) {
+  RCISR(TURN_RC);
+}
+void speedRCISR(void) {
+  RCISR(SPEED_RC);
+}
+void ctrlRCISR(void) {
+  RCISR(CTRL_RC);
+}
+void stopRCISR(void) {
+  RCISR(STOP_RC);
+}
+void (*RCISRs[])() = {
+  turnRCISR,
+  speedRCISR,
+  ctrlRCISR,
+  stopRCISR
+};
+
+void RCISR(byte whichRCInput) {
+  if (digitalRead(RC_PIN[whichRCInput]) == HIGH) {
+    lastRisingMicros[whichRCInput] = micros();
+    anyRCRisingMillis = millis();
+  } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
+    remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500);
+    remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -500, 500);
+  } else { // signal is too old, set to 0
+    remoteInput[whichRCInput] = 0;
+  }
+}
+
+void setupRCControl() {
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    pinMode(RC_PIN[i], INPUT_PULLUP);
+  }
+
+#if defined(IS_PICO) || defined(ESP32)
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   attachInterrupt((RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
+#else // uno or nano, needs PinChangeInterrupt library
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  }
+#endif
+}
+void detachRCControl() {
+#if defined(IS_PICO) || defined(ESP32)
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   detachInterrupt((RC_PIN[i])); // attach the ISR to all RC pins
+  }
+#else // nano or uno, needs PinChangeInterrupt library
+  for(byte i=0; i<NUM_RC_INPUTS; i++) {
+   detachPCINT(digitalPinToPCINT(RC_PIN[i])); // attach the ISR to all RC pins
+  }
+#endif
+}
+
+void runRCInput(float &speed, float &turn) {
+  if (USE_RC_CONTROL == false) {
+    return;
+  }
+  bool validSignal = true;
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    if (millis() - anyRCRisingMillis > (rcTimeoutMicros / 1000)) { // millis takes weeks to overflow so don't worry about it
+      validSignal = false;
+    }
+  }
+
+  if (validSignal) {
+    rcFlags.everActivated = true;
+    if (remoteInput[CTRL_RC] > rcControlSwitchDeadband) {
+      rcFlags.RCOverride = true;
+    } else if (remoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
+      rcFlags.RCOverride = false;
+    }
+    if (remoteInput[STOP_RC] > rcControlSwitchDeadband) {
+      rcFlags.RCStop = true;
+    } else if (remoteInput[STOP_RC] < -rcControlSwitchDeadband) {
+      rcFlags.RCStop = false;
+    }
+    if (rcFlags.RCOverride) {
+      speed = remoteInput[SPEED_RC] / 500.0;
+      turn = remoteInput[TURN_RC] / 500.0;
+    }
+    rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
+
+  } else { // receiving invalid signal
+    if (NO_RC_STOP_UNTIL_START == false || rcFlags.everActivated == true) {
+      // if the no_stop_until_start setting is false, always turn off the car if the signal stops
+      // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
+      rcFlags.RC_make_motors_e_stop = true;
+    } else {
+      rcFlags.RC_make_motors_e_stop = false;
+    }
+  }
+}
 
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
@@ -463,6 +606,8 @@ void setup() {
 
   setupPins();
 
+  setupRCControl();
+
 #if defined(HAS_WIFI)
   setupWifi();
 #endif
@@ -488,10 +633,10 @@ void setupPins() {
 
 #ifdef IS_PCB
   // PCB
-  if(SWAP_MOTORS){
+  if (SWAP_MOTORS) {
     leftMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
-    rightMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);  
-  }else{ // normal
+    rightMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
+  } else { // normal
     leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
     rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
   }
@@ -539,8 +684,24 @@ void loop()
   turnInput = InputReader_JoystickAxis(joyXVal, CONTROL_LEFT, CONTROL_CENTER_X, CONTROL_RIGHT, X_DEADZONE);
   speedInput = InputReader_JoystickAxis(joyYVal, CONTROL_DOWN, CONTROL_CENTER_Y, CONTROL_UP, Y_DEADZONE);
 
+
   if (ENABLE_BUTTON_CTRL) {
-    InputReader_Buttons(!USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW), true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
+    boolean buttonModeActive;
+    if (BUTTON_MODE_TOGGLE) {
+      boolean buttonModePinState = digitalRead(BUTTON_MODE_PIN);
+      if(buttonModePinState == LOW && rcFlags.lastButtonModePinState == HIGH) {
+        rcFlags.buttonModeActive = !rcFlags.buttonModeActive; // toggle button mode
+      }
+      buttonModeActive = rcFlags.buttonModeActive;
+      rcFlags.lastButtonModePinState=buttonModePinState;
+    } else {
+      buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW);
+    }
+    InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
+  }
+
+  if (joyOK) {
+    runRCInput(speedInput, turnInput); // variables are passed as references, so the function can edit the values
   }
 
 #if defined(HAS_WIFI)
@@ -548,6 +709,7 @@ void loop()
     runWifiInput(speedInput, turnInput); // references, so the function can edit the values
   }
 #endif
+
 
   ////////////////////////////// PUT INPUT PROCESSORS HERE ///////////////////////
   /**
@@ -563,13 +725,13 @@ void loop()
 
   */
 #if defined(HAS_WIFI)
-  if (activatedByRemote||!USE_WIFI) {
+  if (activatedByRemote || !USE_WIFI) {
 #endif
     turnProcessed = turnInput;
     speedProcessed = speedInput;
 #if defined(HAS_WIFI) //using wifi and not activated by remote
   } else {
-    turnProcessed = 0;
+    turnProcessed = 0; // soft stop, not e stop - website connection is less reliable than RC control
     speedProcessed = 0;
   }
 #endif
@@ -606,17 +768,52 @@ void loop()
     turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
   }
 
-  if(abs(turnToDrive)>=0.001||abs(speedToDrive)>=0.001){
-    if(joyOK){
+  if(USE_ON_OFF_BUTTONS) {
+    if (digitalRead(ON_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
+      rcFlags.Start_Stop_Buttons_e_stop = false;
+    }
+    if (digitalRead(OFF_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
+      rcFlags.Start_Stop_Buttons_e_stop = true;
+    }
+  }
+
+  if (USE_STOP_SWITCH) {
+    if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) {
+      if(NO_STOP_UNTIL_START==false || rcFlags.Start_Switch_Ever_Activated) {
+        speedToDrive = 0;
+        turnToDrive = 0;
+      }
+    }else{ // switch is saying "go"
+      rcFlags.Start_Switch_Ever_Activated = true; // switch has activated the car
+    }
+  }
+
+  if (rcFlags.RC_make_motors_e_stop) {
+    speedToDrive = 0;
+    turnToDrive = 0;
+  }
+
+  if (rcFlags.Start_Stop_Buttons_e_stop) {
+    speedToDrive = 0;
+    turnToDrive = 0;
+  }
+
+  // TODO: ADD on/off buttons
+  // TODO: ADD ON/OFF SWITCH
+
+
+
+  if (abs(turnToDrive) >= 0.001 || abs(speedToDrive) >= 0.001) {
+    if (joyOK) {
       LED_ON;
-    }else{
-      if((millis()%150)<75){
+    } else {
+      if ((millis() % 150) < 75) {
         LED_ON;
-      }else{
+      } else {
         LED_OFF;
       }
     }
-  }else{
+  } else {
     LED_OFF;
   }
 
@@ -644,7 +841,7 @@ void loop()
       joystickCenterCounter = 0;
     }
   }
-  
+
   if (startupPulse && joyOK && delayedStartDone) {
     startupPulse = false;
     if (movementAllowed) {  // don't pulse if the website says don't move

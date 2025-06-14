@@ -11,7 +11,7 @@ WebServer webServer(80);
 char statusBuffer[40];
 
 void setupWifi() {
-  if(!USE_WIFI) {
+  if (!USE_WIFI) {
     return;
   }
   WiFi.mode(WIFI_AP);
@@ -71,7 +71,7 @@ void setupWifi() {
 }
 
 void runWifiInput(float& speedInput, float& turnInput) {
-  if(!USE_WIFI) {
+  if (!USE_WIFI) {
     return;
   }
   switch (remoteMode) {
@@ -96,7 +96,7 @@ void runWifiInput(float& speedInput, float& turnInput) {
 
 
 void runWifi() {
-  if(!USE_WIFI) {
+  if (!USE_WIFI) {
     return;
   }
   webServer.handleClient();
