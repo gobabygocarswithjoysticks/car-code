@@ -782,6 +782,7 @@ void loop()
       if(NO_STOP_UNTIL_START==false || rcFlags.Start_Switch_Ever_Activated) {
         speedToDrive = 0;
         turnToDrive = 0;
+      }
     }else{ // switch is saying "go"
       rcFlags.Start_Switch_Ever_Activated = true; // switch has activated the car
     }
