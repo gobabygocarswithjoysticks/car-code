@@ -189,6 +189,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 #elif defined(IS_PCB)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
+boolean BUTTON_MODE_TOGGLE = false;
 byte NUM_DRIVE_BUTTONS = 4;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)

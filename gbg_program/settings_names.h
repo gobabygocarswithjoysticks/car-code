@@ -55,22 +55,22 @@ const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
 const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
 
-const char use_stop_switch[] PROGMEM = "USESSW"; //TODO: TRANSLATE IN JAVASCRPT
-const char on_off_switch_pin[] PROGMEM = "STOPP"; //TODO: TRANSLATE IN JAVASCRPT
-const char on_off_active_high[] PROGMEM = "SPH"; //TODO: TRANSLATE IN JAVASCRPT
-const char no_stop_until_start[] = "NSUS"; //TODO: TRANSLATE IN JAVASCRPT
+const char use_stop_switch[] PROGMEM = "USE_STOP_SWITCH";
+const char on_off_switch_pin[] PROGMEM = "STOP_PIN";
+const char on_off_active_high[] PROGMEM = "STOP_PIN_HIGH";
+const char no_stop_until_start[] = "NO_STOP_UNTIL_START";
 
-const char use_on_off_buttons[] PROGMEM = "USE_OO_B"; //TODO: TRANSLATE IN JAVASCRPT
-const char on_button[] PROGMEM = "ONBP"; //TODO: TRANSLATE IN JAVASCRPT
-const char off_button[] PROGMEM = "OFFBP"; //TODO: TRANSLATE IN JAVASCRPT
-const char on_off_buttons_active_high[] PROGMEM = "OOBSAEH"; //TODO: TRANSLATE IN JAVASCRPT
+const char use_on_off_buttons[] PROGMEM = "USE_ON_OFF_BUTTONS";
+const char on_button[] PROGMEM = "ON_BUTTON";
+const char off_button[] PROGMEM = "OFF_BUTTON";
+const char on_off_buttons_active_high[] PROGMEM = "ON_OFF_BUTTONS_ACTIVE_HIGH";
 
 const char use_rc_control[] PROGMEM = "USE_RC";
-const char speed_rc_pin[] PROGMEM = "RCSP"; //TODO: TRANSLATE IN JAVASCRPT
-const char turn_rc_pin[] PROGMEM = "RCTP"; //TODO: TRANSLATE IN JAVASCRPT
-const char stop_rc_pin[] PROGMEM = "RCSP"; //TODO: TRANSLATE IN JAVASCRPT
-const char ctrl_rc_pin[] PROGMEM = "RCCP"; //TODO: TRANSLATE IN JAVASCRPT
-const char no_rc_stop_until_start[] PROGMEM = "NORCSUS"; //TODO: TRANSLATE IN JAVASCRPT
+const char speed_rc_pin[] PROGMEM = "RC_SPEED_PIN";
+const char turn_rc_pin[] PROGMEM = "RC_TURN_PIN";
+const char stop_rc_pin[] PROGMEM = "RC_STOP_PIN";
+const char ctrl_rc_pin[] PROGMEM = "RC_CTRL_PIN";
+const char no_rc_stop_until_start[] PROGMEM = "NO_RC_STOP_UNTIL_START";
 
 #ifdef HAS_WIFI
 const char car_wifi_name[] PROGMEM = "CAR_WIFI_NAME";
