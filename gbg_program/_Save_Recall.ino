@@ -647,12 +647,10 @@ void recallSettings()
     while (true) { // flash SOS forever
       Serial.println(F("{\"error\": \"eeprom failure\"}"));
 
-
-
       for (int j = 0; j < 3; j++) { // S O S
         int t = (j == 1) ? 600 : 200;
         for (int i = 0; i < 3; i++) {
-          LED_ON(); delay(t); LED_OFF(); delay(200); 
+          LED_ON; delay(t); LED_OFF; delay(200); 
 #if defined(IS_PICO)
           rp2040.wdt_reset();
 #endif
