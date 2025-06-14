@@ -646,60 +646,19 @@ void recallSettings()
 #endif
     while (true) { // flash SOS forever
       Serial.println(F("{\"error\": \"eeprom failure\"}"));
+
+
+
+      for (int j = 0; j < 3; j++) { // S O S
+        int t = (j == 1) ? 600 : 200;
+        for (int i = 0; i < 3; i++) {
+          LED_ON(); delay(t); LED_OFF(); delay(200); 
 #if defined(IS_PICO)
-      rp2040.wdt_reset();
+          rp2040.wdt_reset();
 #endif
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-      delay(400);
-#if defined(IS_PICO)
-      rp2040.wdt_reset();
-#endif
-      LED_ON;
-      delay(500);
-      LED_OFF;
-      delay(400);
-      LED_ON;
-      delay(500);
-#if defined(IS_PICO)
-      rp2040.wdt_reset();
-#endif
-      LED_OFF;
-      delay(400);
-      LED_ON;
-      delay(500);
-      LED_OFF;
-      delay(400);
-#if defined(IS_PICO)
-      rp2040.wdt_reset();
-#endif
-      delay(400);
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-      LED_ON;
-      delay(200);
-      LED_OFF;
-      delay(200);
-#if defined(IS_PICO)
-      rp2040.wdt_reset();
-#endif
-      delay(1000);
+        }
+        delay(j < 2 ? 400 : 1400);
+      }
     }
   }
 }
