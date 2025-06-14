@@ -70,6 +70,7 @@ const char speed_rc_pin[] PROGMEM = "RC_SPEED_PIN";
 const char turn_rc_pin[] PROGMEM = "RC_TURN_PIN";
 const char stop_rc_pin[] PROGMEM = "RC_STOP_PIN";
 const char ctrl_rc_pin[] PROGMEM = "RC_CTRL_PIN";
+const char no_rc_stop_until_start[] PROGMEM = "NO_RC_STOP_UNTIL_START";
 
 #ifdef HAS_WIFI
 const char car_wifi_name[] PROGMEM = "CAR_WIFI_NAME";
@@ -127,14 +128,24 @@ const char* const SETTING[] PROGMEM = {
     num_drive_buttons,
     steering_off_switch,
     steering_off_switch_pin,
+    use_stop_switch,
+    on_off_switch_pin,
+    on_off_active_high,
+    no_stop_until_start,
+    use_on_off_buttons,
+    on_button,
+    off_button,
+    on_off_buttons_active_high,
     use_rc_control,
     speed_rc_pin,
-    turn_rc_pin
+    turn_rc_pin,
+    stop_rc_pin,
+    ctrl_rc_pin,
+    no_rc_stop_until_start,
 #ifdef HAS_WIFI
-    ,
     car_wifi_name,
     car_wifi_password,
-    use_wifi
+    use_wifi,
 #endif
 };
 
@@ -188,9 +199,20 @@ enum {
     S_NUM_DRIVE_BUTTONS,
     S_STEERING_OFF_SWITCH,
     S_STEERING_OFF_SWITCH_PIN,
+    S_USE_STOP_SWITCH,
+    S_ON_OFF_SWITCH_PIN,
+    S_ON_OFF_ACTIVE_HIGH,
+    S_NO_STOP_UNTIL_START,
+    S_USE_ON_OFF_BUTTONS,
+    S_ON_BUTTON,
+    S_OFF_BUTTON,
+    S_ON_OFF_BUTTONS_ACTIVE_HIGH,
     S_USE_RC_CONTROL,
     S_SPEED_RC_PIN,
     S_TURN_RC_PIN,
+    S_STOP_RC_PIN,
+    S_CTRL_RC_PIN,
+    S_NO_RC_STOP_UNTIL_START,
 #ifdef HAS_WIFI
     S_CAR_WIFI_NAME,
     S_CAR_WIFI_PASSWORD,

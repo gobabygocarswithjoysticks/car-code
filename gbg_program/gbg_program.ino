@@ -226,6 +226,8 @@ enum {
 boolean USE_RC_CONTROL = false;
 byte RC_PIN[NUM_RC_INPUTS] = {7, 8, 9, 10};
 
+boolean NO_RC_STOP_UNTIL_START=false;
+
 boolean USE_STOP_SWITCH = false;
 byte STOP_PIN = 5;
 boolean STOP_PIN_HIGH = false;
@@ -398,13 +400,10 @@ ISR(WDT_vect) // Watchdog timer interrupt.
   #if defined(HAS_WIFI)
     const int version_number = 20;  // esp32, picoW or pico2W
     const byte settings_memory_key = 20;
-  #else // not pcb or wifi-capable
-      //standard nano or uno or pico without wifi, but with capability for RC control
+  #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
       // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
       const int version_number = 18;  // nano or uno
       //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-      //new unprogrammed EEPROM defaults to 255, so this way the car will use the hardcoded values on first boot instead of unreasonable ones (all variables made from bytes of 255).
-      //change this key if you want changes to the hardcoded settings to be used. (don't use a value of 255)
       const byte settings_memory_key = 18;
   #endif
 #endif
@@ -417,6 +416,14 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 float remoteInput[NUM_RC_INPUTS];
+struct RCFlags{
+  uint8_t everActivated:1; // true if the RC signal has ever been received
+  uint8_t RCOverride:1;    // true if the RC control is overriding the joystick control
+  uint8_t RCStop:1;      // true if the RC control is stopping the car
+  uint8_t RC_make_motors_e_stop:1; // true if the RC control is making the motors emergency stop
+  uint8_t Start_Stop_Buttons_e_stop:1; // true if the start/stop buttons are making the motors emergency stop
+  uint8_t Start_Switch_Ever_Activated:1; // true if the start switch has ever been activated to start the car
+};
 
 void turnRCISR(void){
   RCISR(TURN_RC);
@@ -483,13 +490,33 @@ void runRCInput(float &speed, float &turn){
       validSignal = false;
     }
   }
+
   if(validSignal){
-    speed=remoteInput[SPEED_RC];
-    turn=remoteInput[TURN_RC];
+    RCFlags.everActivated = true;
+    if(remoteInput[CTRL_RC] > 0.1){
+      RCFlags.RCOverride = true;
+    }else if(remoteInput[CTRL_RC] < -0.1){
+      RCFlags.RCOverride = false;
+    }
+    if(remoteInput[STOP_RC] > 0.1){
+      RCFlags.RCStop = true;
+    }else if(remoteInput[STOP_RC] < -0.1){
+      RCFlags.RCStop = false;
+    }
+    if(RCFlags.RCOverride){
+      speed=remoteInput[SPEED_RC];
+      turn=remoteInput[TURN_RC];
+    }
+    RCFlags.RC_make_motors_e_stop=RCFlags.RCStop;
+
   }else{ // receiving invalid signal
-    speed=0;
-    turn=0;
-    //TODO: only if rc control has been activated
+    if(NO_RC_STOP_UNTIL_START==false || RCFlags.everActivated==true){
+      // if the no_stop_until_start setting is false, always turn off the car if the signal stops
+      // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
+      RCFlags.RC_make_motors_e_stop = true;    
+    }else{
+      RCFlags.RC_make_motors_e_stop = false;
+    }
   }
 }
 
@@ -650,17 +677,17 @@ void loop()
     InputReader_Buttons(!USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW), true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
   }
 
+
+  if(joyOK){
+    runRCInput(speedInput, turnInput); // variables are passed as references, so the function can edit the values
+  }
+
 #if defined(HAS_WIFI)
   if (joyOK) {
     runWifiInput(speedInput, turnInput); // references, so the function can edit the values
   }
 #endif
 
-// #if defined(RC_CONTROL) //TODO: HOW TO MAKE THIS WORK WITH WIFI?
-  if(joyOK){
-    runRCInput(speedInput, turnInput); // references, so the function can edit the values
-  }
-// #endif
 
   ////////////////////////////// PUT INPUT PROCESSORS HERE ///////////////////////
   /**
@@ -682,7 +709,7 @@ void loop()
     speedProcessed = speedInput;
 #if defined(HAS_WIFI) //using wifi and not activated by remote
   } else {
-    turnProcessed = 0;
+    turnProcessed = 0; // soft stop, not e stop - website connection is less reliable than RC control
     speedProcessed = 0;
   }
 #endif
@@ -718,6 +745,16 @@ void loop()
     speedToDrive = constrain(speedToDrive, -speedKnobScaler, speedKnobScaler);
     turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
   }
+
+  if(RCFlags.RC_make_motors_e_stop){
+    speedToDrive = 0;
+    turnToDrive = 0;
+  }
+
+  // TODO: ADD on/off buttons
+  // TODO: ADD ON/OFF SWITCH
+
+
 
   if(abs(turnToDrive)>=0.001||abs(speedToDrive)>=0.001){
     if(joyOK){

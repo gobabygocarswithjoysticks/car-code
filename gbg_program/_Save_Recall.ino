@@ -323,6 +323,9 @@ void settingsSerial() {
         RC_PIN[STOP_RC] = atoi(v);
         setupRCControl();
         sprintf(resultBuf, "%d", RC_PIN[STOP_RC]);
+      } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START])==0){
+        NO_RC_STOP_UNTIL_START = atoi(v);
+        printTrueOrFalse(NO_RC_STOP_UNTIL_START);
       } else if(strcmp_P(k, SETTING[S_USE_STOP_SWITCH])==0) {
         USE_STOP_SWITCH=atoi(v);
         if(USE_STOP_SWITCH){
@@ -500,6 +503,7 @@ void saveSettings()
   EEPROMwrite(addressW, RC_PIN[SPEED_RC]);
   EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
   EEPROMwrite(addressW, RC_PIN[STOP_RC]);
+  EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
 
   EEPROMwrite(addressW, USE_STOP_SWITCH);
   EEPROMwrite(addressW, STOP_PIN);
@@ -586,6 +590,7 @@ void recallSettings()
   EEPROMread(addressR, RC_PIN[SPEED_RC]);
   EEPROMread(addressR, RC_PIN[CTRL_RC]);
   EEPROMread(addressR, RC_PIN[STOP_RC]);
+  EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
 
   EEPROMread(addressR, USE_STOP_SWITCH);
   EEPROMread(addressR, STOP_PIN);
