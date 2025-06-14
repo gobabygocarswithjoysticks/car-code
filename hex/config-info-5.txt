@@ -1,1 +1,0 @@
-standard-esp32, gbg_program, ESP, ESP32
