@@ -53,16 +53,16 @@ void settingsSerial() {
       char *v = strtok(0, ":,");
       boolean changedSomething = true;  // used to see if a valid command was found
       memset(resultBuf, '\0', 15);
-      if(strcmp_P(k, SETTING[S_CONTROL_RIGHT])==0) {
+      if (strcmp_P(k, SETTING[S_CONTROL_RIGHT]) == 0) {
         CONTROL_RIGHT = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_RIGHT);
-      } else if(strcmp_P(k, SETTING[S_CONTROL_CENTER_X])==0) {
+      } else if (strcmp_P(k, SETTING[S_CONTROL_CENTER_X]) == 0) {
         CONTROL_CENTER_X = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_CENTER_X);
-      } else if(strcmp_P(k, SETTING[S_CONTROL_LEFT])==0) {
+      } else if (strcmp_P(k, SETTING[S_CONTROL_LEFT]) == 0) {
         CONTROL_LEFT = atoi(v);
         sprintf(resultBuf, "%d", CONTROL_LEFT);
-      } else if(strcmp_P(k, SETTING[S_X_DEADZONE])==0) {
+      } else if (strcmp_P(k, SETTING[S_X_DEADZONE]) == 0) {
         X_DEADZONE = abs(atoi(v));
         sprintf(resultBuf, "%d", X_DEADZONE);
       } else if (strcmp_P(k, SETTING[S_CONTROL_UP]) == 0) {
@@ -109,7 +109,7 @@ void settingsSerial() {
         dtostrf(SCALE_TURNING_WHEN_MOVING, 0, 4, resultBuf);
       } else if (strcmp_P(k, SETTING[S_REVERSE_TURN_IN_REVERSE]) == 0) {
         REVERSE_TURN_IN_REVERSE = atoi(v);
-        printTrueOrFalse(REVERSE_TURN_IN_REVERSE)
+        printTrueOrFalse(REVERSE_TURN_IN_REVERSE);
       } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CENTER]) == 0) {
         LEFT_MOTOR_CENTER = atoi(v);
         sprintf(resultBuf, "%d", LEFT_MOTOR_CENTER);
@@ -194,7 +194,7 @@ void settingsSerial() {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-     
+
       } else if (strcmp_P(k, SETTING[S_ENABLE_STARTUP_PULSE]) == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);
         printTrueOrFalse(ENABLE_STARTUP_PULSE);
@@ -232,10 +232,13 @@ void settingsSerial() {
           }
         }
         printTrueOrFalse(USE_BUTTON_MODE_PIN);
+      } else if (strcmp_P(k, SETTING[S_BUTTON_MODE_TOGGLE]) == 0) {
+        BUTTON_MODE_TOGGLE = atoi(v);
+        printTrueOrFalse(BUTTON_MODE_TOGGLE);
       } else if (strcmp_P(k, SETTING[S_BUTTON_MODE_PIN]) == 0) {
-          BUTTON_MODE_PIN = atoi(v);
-          pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
-          sprintf(resultBuf, "%d", BUTTON_MODE_PIN);  
+        BUTTON_MODE_PIN = atoi(v);
+        pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
+        sprintf(resultBuf, "%d", BUTTON_MODE_PIN);
       } else if (strcmp_P(k, SETTING[S_NUM_DRIVE_BUTTONS]) == 0) {
         NUM_DRIVE_BUTTONS = constrain(atoi(v), 0, 6);
         if (ENABLE_BUTTON_CTRL) {
@@ -323,31 +326,31 @@ void settingsSerial() {
         RC_PIN[STOP_RC] = atoi(v);
         setupRCControl();
         sprintf(resultBuf, "%d", RC_PIN[STOP_RC]);
-      } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START])==0){
+      } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START]) == 0) {
         NO_RC_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_RC_STOP_UNTIL_START);
-      } else if(strcmp_P(k, SETTING[S_USE_STOP_SWITCH])==0) {
-        USE_STOP_SWITCH=atoi(v);
-        if(USE_STOP_SWITCH){
-          pinMode(STOP_PIN,INPUT_PULLUP);
+      } else if (strcmp_P(k, SETTING[S_USE_STOP_SWITCH]) == 0) {
+        USE_STOP_SWITCH = atoi(v);
+        if (USE_STOP_SWITCH) {
+          pinMode(STOP_PIN, INPUT_PULLUP);
         }
         printTrueOrFalse(USE_STOP_SWITCH);
-      } else if(strcmp_P(k, SETTING[S_STOP_PIN])==0) {
-        STOP_PIN=atoi(v);
-        if(USE_STOP_SWITCH){
-          pinMode(STOP_PIN,INPUT_PULLUP);
+      } else if (strcmp_P(k, SETTING[S_ON_OFF_SWITCH_PIN]) == 0) {
+        STOP_PIN = atoi(v);
+        if (USE_STOP_SWITCH) {
+          pinMode(STOP_PIN, INPUT_PULLUP);
         }
         sprintf(resultBuf, "%d", STOP_PIN);
-      } else if(strcmp_P(k, SETTING[S_STOP_PIN_HIGH])==0) {
-        STOP_PIN_HIGH=atoi(v);
+      } else if (strcmp_P(k, SETTING[S_ON_OFF_ACTIVE_HIGH]) == 0) {
+        STOP_PIN_HIGH = atoi(v);
         printTrueOrFalse(STOP_PIN_HIGH);
-      } else if(strcmp_P(k, SETTING[S_NO_STOP_UNTIL_START])==0) {
-        NO_STOP_UNTIL_START=atoi(v);
+      } else if (strcmp_P(k, SETTING[S_NO_STOP_UNTIL_START]) == 0) {
+        NO_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_STOP_UNTIL_START);
-      
+
       } else if (strcmp_P(k, SETTING[S_USE_ON_OFF_BUTTONS]) == 0) {
         USE_ON_OFF_BUTTONS = atoi(v);
-        if(USE_ON_OFF_BUTTONS){
+        if (USE_ON_OFF_BUTTONS) {
           pinMode(ON_BUTTON, INPUT_PULLUP);
           pinMode(OFF_BUTTON, INPUT_PULLUP);
         }
@@ -758,8 +761,8 @@ void EEPROMread(unsigned int& address, T & value)
   }
 }
 
-void printTrueOrFalse(bool val){
-  if(val)
+void printTrueOrFalse(bool val) {
+  if (val)
     sprintf(resultBuf, "true");
   else
     sprintf(resultBuf, "false");
@@ -782,4 +785,3 @@ uint32_t crc_update(uint32_t crc, byte data)
   crc = pgm_read_dword_near(crc_table + (tbl_idx & 0x0f)) ^ (crc >> 4);
   return crc;
 }
-

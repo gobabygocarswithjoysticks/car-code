@@ -146,7 +146,7 @@ void printSettings() {
   prntbool(FV(SETTING[S_ON_OFF_ACTIVE_HIGH]), STOP_PIN_HIGH);
   prntbool(FV(SETTING[S_NO_STOP_UNTIL_START]), NO_STOP_UNTIL_START);
   prntbool(FV(SETTING[S_USE_ON_OFF_BUTTONS]), USE_ON_OFF_BUTTONS);
-  prnt(FV(SETTING[S_ON_BUTTON]), ON_BUTTON);  
+  prnt(FV(SETTING[S_ON_BUTTON]), ON_BUTTON);
   prnt(FV(SETTING[S_OFF_BUTTON]), OFF_BUTTON);
   prntbool(FV(SETTING[S_ON_OFF_BUTTONS_ACTIVE_HIGH]), ON_OFF_BUTTONS_ACTIVE_HIGH);
 
@@ -156,7 +156,7 @@ void printSettings() {
   prntbool(FV(SETTING[S_USE_WIFI]), USE_WIFI);
 #endif
 
-  printAndAppendToChecksum(F("\"CHECKSUM\":")); 
+  printAndAppendToChecksum(F("\"CHECKSUM\":"));
   Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
   Serial.println("}");
 
