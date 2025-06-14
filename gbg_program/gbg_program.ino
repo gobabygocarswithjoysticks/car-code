@@ -176,6 +176,7 @@ const byte maxNumDriveButtons = 6;
 #if defined(ESP32)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
+boolean BUTTON_MODE_TOGGLE = false;
 byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -699,7 +700,6 @@ void loop()
     InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
   }
 
-
   if (joyOK) {
     runRCInput(speedInput, turnInput); // variables are passed as references, so the function can edit the values
   }
@@ -768,7 +768,31 @@ void loop()
     turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
   }
 
+  if(USE_ON_OFF_BUTTONS) {
+    if (digitalRead(ON_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
+      rcFlags.Start_Stop_Buttons_e_stop = false;
+    }
+    if (digitalRead(OFF_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
+      rcFlags.Start_Stop_Buttons_e_stop = true;
+    }
+  }
+
+  if (USE_STOP_SWITCH) {
+    if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) {
+      if(NO_STOP_UNTIL_START==false || rcFlags.Start_Switch_Ever_Activated) {
+        speedToDrive = 0;
+        turnToDrive = 0;
+    }else{ // switch is saying "go"
+      rcFlags.Start_Switch_Ever_Activated = true; // switch has activated the car
+    }
+  }
+
   if (rcFlags.RC_make_motors_e_stop) {
+    speedToDrive = 0;
+    turnToDrive = 0;
+  }
+
+  if (rcFlags.Start_Stop_Buttons_e_stop) {
     speedToDrive = 0;
     turnToDrive = 0;
   }
