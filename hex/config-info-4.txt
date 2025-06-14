@@ -1,0 +1,1 @@
+standard-rpiPico-W, gbg_program, RPIPICOW, rpi pico W
