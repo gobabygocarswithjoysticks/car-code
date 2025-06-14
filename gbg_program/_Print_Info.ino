@@ -162,8 +162,7 @@ void printSettings() {
 
 }
 
-template <typename T>
-void prnt(const __FlashStringHelper *fsh, T value) {
+void prnt(const __FlashStringHelper *fsh, int value) {
   serialChecksum += 5;
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
