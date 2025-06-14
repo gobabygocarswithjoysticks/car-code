@@ -64,7 +64,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            additional-commands: arduino-cli lib install Servo
+            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
             order: 1
 
           - configName: "standard-nanoNew"
@@ -74,7 +74,7 @@ jobs:
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            additional-commands: arduino-cli lib install Servo
+            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
             order: 2
 
           - configName: "standard-rpiPico"

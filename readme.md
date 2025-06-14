@@ -10,6 +10,9 @@ The new standard code is in this directory: https://github.com/gobabygocarswithj
 
 Instructions for modifying go baby go cars to use this code can be found here: https://gobabygocarswithjoysticks.github.io/index/ 
 
+### Remote Control
+![notes on remote control methods](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/remote_control.md)
+
 ### Acknowledgements
 * Arduino
 * https://github.com/earlephilhower/arduino-pico
