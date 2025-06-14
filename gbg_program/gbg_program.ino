@@ -454,7 +454,7 @@ void RCISR(byte whichRCInput) {
   if (digitalRead(RC_PIN[whichRCInput]) == HIGH) {
     lastRisingMicros[whichRCInput] = micros();
     anyRCRisingMillis = millis();
-  } else if ((micros() - lastRisingMicros[whichRCInput]) < rcTimeoutMicros) {
+  } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
     remoteInput[whichRCInput] = ((micros() - lastRisingMicros[whichRCInput]) - 1500);
     remoteInput[whichRCInput] = constrain(remoteInput[whichRCInput], -500, 500);
   } else { // signal is too old, set to 0
