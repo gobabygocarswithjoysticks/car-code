@@ -2,9 +2,10 @@ At the request of many families and physical therapists, we added features to th
 
 * on/off switch
 * on/off buttons
+* joystick/button toggling
 * RC receiver input
 
-Please talk to your physical therapist about the best way to use these features, and take a look at these resources: (remote control user manual coming soon)
+Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: (remote control user manual coming soon)
 
 ## Instructions for adding a keyfob on/off toggle
 Advantages: simple, cheap
