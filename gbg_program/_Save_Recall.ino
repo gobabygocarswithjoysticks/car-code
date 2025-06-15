@@ -55,7 +55,7 @@ const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_Y_DEADZONE
 };
 
-const int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
+int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &CONTROL_RIGHT,
   &CONTROL_CENTER_X,
   &CONTROL_LEFT,
