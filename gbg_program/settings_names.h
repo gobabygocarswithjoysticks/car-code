@@ -67,7 +67,7 @@ const char on_off_buttons_active_high[] PROGMEM = "OOBAH";//"ON_OFF_BUTTONS_ACTI
 
 const char use_rc_control[] PROGMEM = "USE_RC";
 const char speed_rc_pin[] PROGMEM = "RSP";//"RC_SPEED_PIN";
-const char turn_rc_pin[] PROGMEM = "RTP"://"RC_TURN_PIN";
+const char turn_rc_pin[] PROGMEM = "RTP";//"RC_TURN_PIN";
 const char stop_rc_pin[] PROGMEM = "RPP";//"RC_STOP_PIN";
 const char ctrl_rc_pin[] PROGMEM = "RCP";//"RC_CTRL_PIN";
 const char no_rc_stop_until_start[] PROGMEM = "NRSUS";//"NO_RC_STOP_UNTIL_START";
