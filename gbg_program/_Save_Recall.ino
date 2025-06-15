@@ -43,7 +43,7 @@ void settingsMemory()
 
 #include "settings_names.h"
 
-#define NUM_SETTINGS_ID_INT 14
+#define NUM_SETTINGS_ID_INT 19
 const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_CONTROL_RIGHT,
   S_CONTROL_CENTER_X,
@@ -58,7 +58,12 @@ const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_LEFT_MOTOR_FAST,
   S_RIGHT_MOTOR_CENTER,
   S_RIGHT_MOTOR_SLOW,
-  S_RIGHT_MOTOR_FAST
+  S_RIGHT_MOTOR_FAST,
+  S_LEFT_MOTOR_PULSE,
+  S_RIGHT_MOTOR_PULSE,
+  S_JOY_CALIB_COUNT,
+  S_SPEED_KNOB_SLOW_VAL,
+  S_SPEED_KNOB_FAST_VAL,
 };
 
 int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
@@ -75,7 +80,12 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &LEFT_MOTOR_FAST,
   &RIGHT_MOTOR_CENTER,
   &RIGHT_MOTOR_SLOW,
-  &RIGHT_MOTOR_FAST
+  &RIGHT_MOTOR_FAST,
+  &LEFT_MOTOR_PULSE,
+  &RIGHT_MOTOR_PULSE,
+  &JOY_CALIB_COUNT,
+  &SPEED_KNOB_SLOW_VAL,
+  &SPEED_KNOB_FAST_VAL,
 };
 
 void settingsSerial() {
@@ -136,12 +146,6 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_USE_SPEED_KNOB]) == 0) {
         USE_SPEED_KNOB = atoi(v);
         printTrueOrFalse(USE_SPEED_KNOB);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_SLOW_VAL]) == 0) {
-        SPEED_KNOB_SLOW_VAL = atoi(v);
-        sprintf(resultBuf, "%d", SPEED_KNOB_SLOW_VAL);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_FAST_VAL]) == 0) {
-        SPEED_KNOB_FAST_VAL = atoi(v);
-        sprintf(resultBuf, "%d", SPEED_KNOB_FAST_VAL);
       } else if (strcmp_P(k, SETTING[S_SCALE_ACCEL_WITH_SPEED]) == 0) {
         SCALE_ACCEL_WITH_SPEED = atoi(v);
         printTrueOrFalse(SCALE_ACCEL_WITH_SPEED);
@@ -203,18 +207,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_ENABLE_STARTUP_PULSE]) == 0) {
         ENABLE_STARTUP_PULSE = atoi(v);
         printTrueOrFalse(ENABLE_STARTUP_PULSE);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_PULSE]) == 0) {
-        LEFT_MOTOR_PULSE = atoi(v);
-        sprintf(resultBuf, "%d", LEFT_MOTOR_PULSE);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_PULSE]) == 0) {
-        RIGHT_MOTOR_PULSE = atoi(v);
-        sprintf(resultBuf, "%d", RIGHT_MOTOR_PULSE);
       } else if (strcmp_P(k, SETTING[S_START_MOTOR_PULSE_TIME]) == 0) {
         START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
         sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
-      } else if (strcmp_P(k, SETTING[S_JOY_CALIB_COUNT]) == 0) {
-        JOY_CALIB_COUNT = atoi(v);
-        sprintf(resultBuf, "%d", JOY_CALIB_COUNT);
       } else if (strcmp_P(k, SETTING[S_ENABLE_BUTTON_CTRL]) == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
