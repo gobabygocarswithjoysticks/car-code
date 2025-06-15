@@ -172,7 +172,7 @@ void prnt(const __FlashStringHelper *fsh, int value) {
 }
 
 void prntbool(const __FlashStringHelper *fsh, boolean value) {
-  serialChecksum += 3; // for the three total characters, the " and the ":
+  serialChecksum += 3; // for the three total characters, " and ":
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
   Serial.print("\":");
