@@ -521,13 +521,9 @@ void runRCInput(float &speed, float &turn) {
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
 
   } else { // receiving invalid signal
-    if (NO_RC_STOP_UNTIL_START == false || rcFlags.everActivated == true) {
-      // if the no_stop_until_start setting is false, always turn off the car if the signal stops
-      // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
-      rcFlags.RC_make_motors_e_stop = true;
-    } else {
-      rcFlags.RC_make_motors_e_stop = false;
-    }
+    // if the no_stop_until_start setting is false, always turn off the car if the signal stops
+    // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
+    rcFlags.RC_make_motors_e_stop = (NO_RC_STOP_UNTIL_START == false || rcFlags.everActivated == true);
   }
 }
 
