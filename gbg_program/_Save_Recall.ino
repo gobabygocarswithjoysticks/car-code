@@ -535,28 +535,23 @@ void recallSettings()
   unsigned int addressR = 1;
   eepromCRC = 0;
   errorCorrectionPerformed = false;
-  
-  EEPROMread(addressR, settingsStructA);
-  // EEPROMread(addressR, CONTROL_RIGHT);
-  // EEPROMread(addressR, CONTROL_CENTER_X);
-  // EEPROMread(addressR, CONTROL_LEFT);
-  // EEPROMread(addressR, X_DEADZONE);
-  // EEPROMread(addressR, CONTROL_UP);
-  // EEPROMread(addressR, CONTROL_CENTER_Y);
-  // EEPROMread(addressR, CONTROL_DOWN);
-  // EEPROMread(addressR, Y_DEADZONE);
-
-  EEPROMread(addressR, settingsStructB);
-  // EEPROMread(addressR, ACCELERATION_FORWARD);
-  // EEPROMread(addressR, DECELERATION_FORWARD);
-  // EEPROMread(addressR, ACCELERATION_BACKWARD);
-  // EEPROMread(addressR, DECELERATION_BACKWARD);
-  // EEPROMread(addressR, ACCELERATION_TURNING);
-  // EEPROMread(addressR, DECELERATION_TURNING);
-  // EEPROMread(addressR, FASTEST_FORWARD);
-  // EEPROMread(addressR, FASTEST_BACKWARD);
-  // EEPROMread(addressR, TURN_SPEED);
- 
+  EEPROMread(addressR, CONTROL_RIGHT);
+  EEPROMread(addressR, CONTROL_CENTER_X);
+  EEPROMread(addressR, CONTROL_LEFT);
+  EEPROMread(addressR, X_DEADZONE);
+  EEPROMread(addressR, CONTROL_UP);
+  EEPROMread(addressR, CONTROL_CENTER_Y);
+  EEPROMread(addressR, CONTROL_DOWN);
+  EEPROMread(addressR, Y_DEADZONE);
+  EEPROMread(addressR, ACCELERATION_FORWARD);
+  EEPROMread(addressR, DECELERATION_FORWARD);
+  EEPROMread(addressR, ACCELERATION_BACKWARD);
+  EEPROMread(addressR, DECELERATION_BACKWARD);
+  EEPROMread(addressR, ACCELERATION_TURNING);
+  EEPROMread(addressR, DECELERATION_TURNING);
+  EEPROMread(addressR, FASTEST_FORWARD);
+  EEPROMread(addressR, FASTEST_BACKWARD);
+  EEPROMread(addressR, TURN_SPEED);
   EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING);
   EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
   EEPROMread(addressR, REVERSE_TURN_IN_REVERSE);
@@ -569,6 +564,7 @@ void recallSettings()
   EEPROMread(addressR, USE_SPEED_KNOB);
   EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
   EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
+
   EEPROMread(addressR, JOY_X_PIN);
   EEPROMread(addressR, JOY_Y_PIN);
 #ifdef IS_PCB
