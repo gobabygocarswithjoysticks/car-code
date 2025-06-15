@@ -22,28 +22,65 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///// joystick input reader constants /////
-int16_t CONTROL_RIGHT = 60;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
-int16_t CONTROL_CENTER_X = 542;  // use to calibrate joystick (value from the X axis of the joystick when it is centered)
-int16_t CONTROL_LEFT = 987;      // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
-int16_t X_DEADZONE = 50;         // radius around center where joystick is considered centered
-
-int16_t CONTROL_UP = 936;        // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
-int16_t CONTROL_CENTER_Y = 455;  // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
-int16_t CONTROL_DOWN = 44;       // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
-int16_t Y_DEADZONE = 50;         // radius around center where joystick is considered centered
+struct SettingsStructA {
+  int16_t CONTROL_RIGHT;
+  int16_t CONTROL_CENTER_X;
+  int16_t CONTROL_LEFT;
+  int16_t X_DEADZONE;
+  int16_t CONTROL_UP;
+  int16_t CONTROL_CENTER_Y;
+  int16_t CONTROL_DOWN;
+  int16_t Y_DEADZONE;
+} settingsStructA = {
+  60,  // CONTROL_RIGHT // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
+  542, // CONTROL_CENTER_X // use to calibrate joystick (value from the X axis of the joystick when it is centered)
+  987, // CONTROL_LEFT // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
+  50,  // X_DEADZONE // radius around center where joystick is considered centered
+  936, // CONTROL_UP // use to calibrate joystick (value from the Y axis of the joystick when all the way to the bottom)
+  455, // CONTROL_CENTER_Y // use to calibrate joystick (value from the Y axis of the joystick when it is centered)
+  44,  // CONTROL_DOWN // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
+  50   // Y_DEADZONE // radius around center where joystick is considered centered
+};
+#define CONTROL_RIGHT settingsStructA.CONTROL_RIGHT
+#define CONTROL_CENTER_X settingsStructA.CONTROL_CENTER_X
+#define CONTROL_LEFT settingsStructA.CONTROL_LEFT
+#define X_DEADZONE settingsStructA.X_DEADZONE
+#define CONTROL_UP settingsStructA.CONTROL_UP
+#define CONTROL_CENTER_Y settingsStructA.CONTROL_CENTER_Y
+#define CONTROL_DOWN settingsStructA.CONTROL_DOWN
+#define Y_DEADZONE settingsStructA.Y_DEADZONE
 
 ///// input processor constants /////
-float ACCELERATION_FORWARD = 0.25;   //change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
-float DECELERATION_FORWARD = 3;      //change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
-float ACCELERATION_BACKWARD = 0.25;  //change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
-float DECELERATION_BACKWARD = 3;     //change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
-
-float ACCELERATION_TURNING = 1;  //acceleration of turning speed
-float DECELERATION_TURNING = 3;  //deceleration of turning speed
-
-float FASTEST_FORWARD = 0.2;    //change # to limit the forward speed [0.0-1.0]
-float FASTEST_BACKWARD = 0.2;   //change # to limit the backward speed [0.0-1.0]
-float TURN_SPEED = 0.15;        //change # to limit the turning speed (greater than 0)
+struct settingsStructB {
+  float ACCELERATION_FORWARD;
+  float DECELERATION_FORWARD;
+  float ACCELERATION_BACKWARD;
+  float DECELERATION_BACKWARD;
+  float ACCELERATION_TURNING;
+  float DECELERATION_TURNING;
+  float FASTEST_FORWARD;
+  float FASTEST_BACKWARD;
+  float TURN_SPEED;
+} settingsStructB = {
+  0.25,   // ACCELERATION_FORWARD // change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
+  3,      // DECELERATION_FORWARD // change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
+  0.25,   // ACCELERATION_BACKWARD // change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
+  3,      // DECELERATION_BACKWARD // change # to change the amount of deceleration when going backward (1/#=seconds to reach max speed)
+  1,      // ACCELERATION_TURNING // acceleration of turning speed
+  3,      // DECELERATION_TURNING // deceleration of turning speed
+  0.2,    // FASTEST_FORWARD // change # to limit the forward speed [0.0-1.0]
+  0.2,    // FASTEST_BACKWARD // change # to limit the backward speed [0.0-1.0]
+  0.15    // TURN_SPEED // change # to limit the turning speed (greater than 0)
+};
+#define ACCELERATION_FORWARD settingsStructB.ACCELERATION_FORWARD
+#define DECELERATION_FORWARD settingsStructB.DECELERATION_FORWARD
+#define ACCELERATION_BACKWARD settingsStructB.ACCELERATION_BACKWARD
+#define DECELERATION_BACKWARD settingsStructB.DECELERATION_BACKWARD
+#define ACCELERATION_TURNING settingsStructB.ACCELERATION_TURNING
+#define DECELERATION_TURNING settingsStructB.DECELERATION_TURNING
+#define FASTEST_FORWARD settingsStructB.FASTEST_FORWARD
+#define FASTEST_BACKWARD settingsStructB.FASTEST_BACKWARD
+#define TURN_SPEED settingsStructB.TURN_SPEED
 
 float SCALE_TURNING_WHEN_MOVING = 1.0;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
 
