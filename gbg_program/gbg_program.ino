@@ -31,7 +31,8 @@ struct SettingsStructA {
   int16_t CONTROL_CENTER_Y;
   int16_t CONTROL_DOWN;
   int16_t Y_DEADZONE;
-} settingsStructA = {
+};
+SettingsStructA settingsStructA = {
   60,  // CONTROL_RIGHT // use to calibrate joystick (value from the X axis of the joystick when all the way to the left)
   542, // CONTROL_CENTER_X // use to calibrate joystick (value from the X axis of the joystick when it is centered)
   987, // CONTROL_LEFT // use to calibrate joystick (value from the X axis of the joystick when all the way to the right)
@@ -61,7 +62,8 @@ struct SettingsStructB {
   float FASTEST_FORWARD;
   float FASTEST_BACKWARD;
   float TURN_SPEED;
-} settingsStructB = {
+};
+SettingsStructB settingsStructB = {
   0.25,   // ACCELERATION_FORWARD // change # to change the amount of acceleration when going forward (1/#=seconds to reach max speed)
   3,      // DECELERATION_FORWARD // change # to change the amount of deceleration when going forward (1/#=seconds to reach max speed)
   0.25,   // ACCELERATION_BACKWARD // change # to change the amount of acceleration when going backward (1/#=seconds to reach max speed)
