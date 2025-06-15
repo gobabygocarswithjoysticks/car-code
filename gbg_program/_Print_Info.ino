@@ -163,6 +163,15 @@ void printSettings() {
 
 }
 
+void prnt(const __FlashStringHelper *fsh, float value) {
+  serialChecksum += 5;
+  Serial.print("\"");
+  serialChecksum += Serial.print(fsh);
+  Serial.print("\":");
+  serialChecksum += Serial.print(value, 4);
+  Serial.print(", ");
+}
+
 void prnt(const __FlashStringHelper *fsh, int value) {
   serialChecksum += 5;
   Serial.print("\"");
