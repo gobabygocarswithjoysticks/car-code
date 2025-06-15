@@ -43,7 +43,7 @@ void settingsMemory()
 
 #include "settings_names.h"
 
-#define NUM_SETTINGS_ID_INT 8
+#define NUM_SETTINGS_ID_INT 14
 const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_CONTROL_RIGHT,
   S_CONTROL_CENTER_X,
@@ -52,7 +52,13 @@ const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_CONTROL_UP,
   S_CONTROL_CENTER_Y,
   S_CONTROL_DOWN,
-  S_Y_DEADZONE
+  S_Y_DEADZONE,
+  S_LEFT_MOTOR_CENTER,
+  S_LEFT_MOTOR_SLOW,
+  S_LEFT_MOTOR_FAST,
+  S_RIGHT_MOTOR_CENTER,
+  S_RIGHT_MOTOR_SLOW,
+  S_RIGHT_MOTOR_FAST
 };
 
 int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
@@ -63,7 +69,13 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &CONTROL_UP,
   &CONTROL_CENTER_Y,
   &CONTROL_DOWN,
-  &Y_DEADZONE
+  &Y_DEADZONE,
+  &LEFT_MOTOR_CENTER,
+  &LEFT_MOTOR_SLOW,
+  &LEFT_MOTOR_FAST,
+  &RIGHT_MOTOR_CENTER,
+  &RIGHT_MOTOR_SLOW,
+  &RIGHT_MOTOR_FAST
 };
 
 void settingsSerial() {
@@ -121,24 +133,6 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_REVERSE_TURN_IN_REVERSE]) == 0) {
         REVERSE_TURN_IN_REVERSE = atoi(v);
         printTrueOrFalse(REVERSE_TURN_IN_REVERSE);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_CENTER]) == 0) {
-        LEFT_MOTOR_CENTER = atoi(v);
-        sprintf(resultBuf, "%d", LEFT_MOTOR_CENTER);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_SLOW]) == 0) {
-        LEFT_MOTOR_SLOW = atoi(v);
-        sprintf(resultBuf, "%d", LEFT_MOTOR_SLOW);
-      } else if (strcmp_P(k, SETTING[S_LEFT_MOTOR_FAST]) == 0) {
-        LEFT_MOTOR_FAST = atoi(v);
-        sprintf(resultBuf, "%d", LEFT_MOTOR_FAST);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_CENTER]) == 0) {
-        RIGHT_MOTOR_CENTER = atoi(v);
-        sprintf(resultBuf, "%d", RIGHT_MOTOR_CENTER);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_SLOW]) == 0) {
-        RIGHT_MOTOR_SLOW = atoi(v);
-        sprintf(resultBuf, "%d", RIGHT_MOTOR_SLOW);
-      } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_FAST]) == 0) {
-        RIGHT_MOTOR_FAST = atoi(v);
-        sprintf(resultBuf, "%d", RIGHT_MOTOR_FAST);
       } else if (strcmp_P(k, SETTING[S_USE_SPEED_KNOB]) == 0) {
         USE_SPEED_KNOB = atoi(v);
         printTrueOrFalse(USE_SPEED_KNOB);
