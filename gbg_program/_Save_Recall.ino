@@ -344,7 +344,7 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_ON_OFF_ACTIVE_HIGH]) == 0) {
         STOP_PIN_HIGH = atoi(v);
         printTrueOrFalse(STOP_PIN_HIGH);
-      } else if (strcmp_P(k, SETTING[S_NO_STOP_UNTIL_START]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_ARM_STOP_AFTER_START]) == 0) {
         NO_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_STOP_UNTIL_START);
 

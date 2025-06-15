@@ -58,7 +58,7 @@ const char steering_off_switch_pin[] PROGMEM = "STEERING_OFF_SWITCH_PIN";
 const char use_stop_switch[] PROGMEM = "USE_STOP_SWITCH";
 const char on_off_switch_pin[] PROGMEM = "STOP_PIN";
 const char on_off_active_high[] PROGMEM = "STOP_PIN_HIGH";
-const char no_stop_until_start[] = "NO_STOP_UNTIL_START";
+const char no_stop_until_start[] PROGMEM = "NO_STOP_UNTIL_START";
 
 const char use_on_off_buttons[] PROGMEM = "USE_ON_OFF_BUTTONS";
 const char on_button[] PROGMEM = "ON_BUTTON";
@@ -204,7 +204,7 @@ enum {
   S_USE_STOP_SWITCH,
   S_ON_OFF_SWITCH_PIN,
   S_ON_OFF_ACTIVE_HIGH,
-  S_NO_STOP_UNTIL_START,
+  S_ARM_STOP_AFTER_START,
   S_USE_ON_OFF_BUTTONS,
   S_ON_BUTTON,
   S_OFF_BUTTON,
