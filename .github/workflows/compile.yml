@@ -337,7 +337,7 @@ jobs:
 
          echo "${{ matrix.configName }}, ${{ matrix.code-name }}, ${{ matrix.board-upload }}, ${{ matrix.niceBoardName }}" > ./hex/config-info-${{ matrix.order}}.txt
 
-         # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or progranName.ino.bin (for esp32) since others aren't needed
+         # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or programName.ino.bin (for esp32) since others aren't needed
 
          if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf

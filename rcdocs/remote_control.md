@@ -12,15 +12,20 @@ Advantages: simple, cheap
 
 Disadvantages: car won't turn off if the transmitter is out of range
 
+
 ## Instructions for adding a keyfob switch
-Advantages: simple, cheap, car will turn off if the transmitter is out of range
+Advantages: cheap, car will turn off if the transmitter is out of range
+
+Disadvantages: modifying the keyfob makes it a bit more complicated
 
 ## Instructions for adding a keyfob that can drive the car
 Advantages: simple, cheap
 
 Disadvantages: car won't turn off if the transmitter is out of range, challenging to drive precisely
 
+
 ## Instructions for adding an RC receiver
 Advantages: can drive the car precisely, car will turn off if the transmitter is out of range
 
-Disadvantages: more expensive
+Disadvantages: more expensive, more complicated
+

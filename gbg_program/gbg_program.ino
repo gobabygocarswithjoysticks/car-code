@@ -403,8 +403,8 @@ const byte settings_memory_key = 14;
 #endif
 #else
 #if defined(HAS_WIFI)
-const int version_number = 20;  // esp32, picoW or pico2W
-const byte settings_memory_key = 20;
+const int version_number = 19;  // esp32, picoW or pico2W
+const byte settings_memory_key = 19;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
 const int version_number = 18;  // nano or uno
