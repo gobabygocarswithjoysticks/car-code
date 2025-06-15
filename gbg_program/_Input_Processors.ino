@@ -4,12 +4,12 @@ float InputProcessor_ReadKnob(byte _SPEED_KNOB_PIN, int slowVal, int fastVal, in
   return constrain(floatMap(raw, slowVal, fastVal, 0, 1), 0, 1);
 }
 
-void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float _FASTEST_FORWARD, float FASTEST_BACKWARD, float TURN_SPEED) {
-  FASTEST_BACKWARD = abs(FASTEST_BACKWARD);
+void InputProcessor_ScaleInput(float speedKnobScaler, float &turnInput, float &speedInput, float _FASTEST_FORWARD, float _FASTEST_BACKWARD, float TURN_SPEED) {
+  _FASTEST_BACKWARD = abs(_FASTEST_BACKWARD);
   _FASTEST_FORWARD = abs(_FASTEST_FORWARD);
   TURN_SPEED = abs(TURN_SPEED);
-  speedInput = twoMap(speedInput, -1, 0, 1, /**/ -FASTEST_BACKWARD * speedKnobScaler, 0, 0, _FASTEST_FORWARD * speedKnobScaler, 0);
-  speedInput = constrain(speedInput, -FASTEST_BACKWARD * speedKnobScaler, _FASTEST_FORWARD * speedKnobScaler);
+  speedInput = twoMap(speedInput, -1, 0, 1, /**/ -_FASTEST_BACKWARD * speedKnobScaler, 0, 0, _FASTEST_FORWARD * speedKnobScaler, 0);
+  speedInput = constrain(speedInput, -_FASTEST_BACKWARD * speedKnobScaler, _FASTEST_FORWARD * speedKnobScaler);
 
   turnInput = constrain(turnInput * TURN_SPEED * speedKnobScaler, -TURN_SPEED * speedKnobScaler, TURN_SPEED * speedKnobScaler);
 }
