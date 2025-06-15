@@ -42,14 +42,14 @@ SettingsStructA settingsStructA = {
   44,  // CONTROL_DOWN // use to calibrate joystick (value from the Y axis of the joystick when all the way to the top)
   50   // Y_DEADZONE // radius around center where joystick is considered centered
 };
-#define CONTROL_RIGHT settingsStructA.CONTROL_RIGHT
-#define CONTROL_CENTER_X settingsStructA.CONTROL_CENTER_X
-#define CONTROL_LEFT settingsStructA.CONTROL_LEFT
-#define X_DEADZONE settingsStructA.X_DEADZONE
-#define CONTROL_UP settingsStructA.CONTROL_UP
-#define CONTROL_CENTER_Y settingsStructA.CONTROL_CENTER_Y
-#define CONTROL_DOWN settingsStructA.CONTROL_DOWN
-#define Y_DEADZONE settingsStructA.Y_DEADZONE
+#define CONTROL_RIGHT (settingsStructA.CONTROL_RIGHT)
+#define CONTROL_CENTER_X (settingsStructA.CONTROL_CENTER_X)
+#define CONTROL_LEFT (settingsStructA.CONTROL_LEFT)
+#define X_DEADZONE (settingsStructA.X_DEADZONE)
+#define CONTROL_UP (settingsStructA.CONTROL_UP)
+#define CONTROL_CENTER_Y (settingsStructA.CONTROL_CENTER_Y)
+#define CONTROL_DOWN (settingsStructA.CONTROL_DOWN)
+#define Y_DEADZONE (settingsStructA.Y_DEADZONE)
 
 ///// input processor constants /////
 struct SettingsStructB {
@@ -74,15 +74,15 @@ SettingsStructB settingsStructB = {
   0.2,    // FASTEST_BACKWARD // change # to limit the backward speed [0.0-1.0]
   0.15    // TURN_SPEED // change # to limit the turning speed (greater than 0)
 };
-#define ACCELERATION_FORWARD settingsStructB.ACCELERATION_FORWARD
-#define DECELERATION_FORWARD settingsStructB.DECELERATION_FORWARD
-#define ACCELERATION_BACKWARD settingsStructB.ACCELERATION_BACKWARD
-#define DECELERATION_BACKWARD settingsStructB.DECELERATION_BACKWARD
-#define ACCELERATION_TURNING settingsStructB.ACCELERATION_TURNING
-#define DECELERATION_TURNING settingsStructB.DECELERATION_TURNING
-#define FASTEST_FORWARD settingsStructB.FASTEST_FORWARD
-#define FASTEST_BACKWARD settingsStructB.FASTEST_BACKWARD
-#define TURN_SPEED settingsStructB.TURN_SPEED
+#define ACCELERATION_FORWARD (settingsStructB.ACCELERATION_FORWARD)
+#define DECELERATION_FORWARD (settingsStructB.DECELERATION_FORWARD)
+#define ACCELERATION_BACKWARD (settingsStructB.ACCELERATION_BACKWARD)
+#define DECELERATION_BACKWARD (settingsStructB.DECELERATION_BACKWARD)
+#define ACCELERATION_TURNING (settingsStructB.ACCELERATION_TURNING)
+#define DECELERATION_TURNING (settingsStructB.DECELERATION_TURNING)
+#define FASTEST_FORWARD (settingsStructB.FASTEST_FORWARD)
+#define FASTEST_BACKWARD (settingsStructB.FASTEST_BACKWARD)
+#define TURN_SPEED (settingsStructB.TURN_SPEED)
 
 float SCALE_TURNING_WHEN_MOVING = 1.0;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
 
