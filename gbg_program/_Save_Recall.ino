@@ -43,6 +43,29 @@ void settingsMemory()
 
 #include "settings_names.h"
 
+#define NUM_SETTINGS_ID_INT 8
+const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
+  S_CONTROL_RIGHT,
+  S_CONTROL_CENTER_X,
+  S_CONTROL_LEFT,
+  S_X_DEADZONE,
+  S_CONTROL_UP,
+  S_CONTROL_CENTER_Y,
+  S_CONTROL_DOWN,
+  S_Y_DEADZONE
+};
+
+const int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
+  &CONTROL_RIGHT,
+  &CONTROL_CENTER_X,
+  &CONTROL_LEFT,
+  &X_DEADZONE,
+  &CONTROL_UP,
+  &CONTROL_CENTER_Y,
+  &CONTROL_DOWN,
+  &Y_DEADZONE
+};
+
 void settingsSerial() {
   int8_t in = Serial.read();
   if (in != -1) {
@@ -53,31 +76,19 @@ void settingsSerial() {
       char *v = strtok(0, ":,");
       boolean changedSomething = true;  // used to see if a valid command was found
       memset(resultBuf, '\0', 15);
-      if (strcmp_P(k, SETTING[S_CONTROL_RIGHT]) == 0) {
-        CONTROL_RIGHT = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_RIGHT);
-      } else if (strcmp_P(k, SETTING[S_CONTROL_CENTER_X]) == 0) {
-        CONTROL_CENTER_X = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_CENTER_X);
-      } else if (strcmp_P(k, SETTING[S_CONTROL_LEFT]) == 0) {
-        CONTROL_LEFT = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_LEFT);
-      } else if (strcmp_P(k, SETTING[S_X_DEADZONE]) == 0) {
-        X_DEADZONE = abs(atoi(v));
-        sprintf(resultBuf, "%d", X_DEADZONE);
-      } else if (strcmp_P(k, SETTING[S_CONTROL_UP]) == 0) {
-        CONTROL_UP = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_UP);
-      } else if (strcmp_P(k, SETTING[S_CONTROL_CENTER_Y]) == 0) {
-        CONTROL_CENTER_Y = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_CENTER_Y);
-      } else if (strcmp_P(k, SETTING[S_CONTROL_DOWN]) == 0) {
-        CONTROL_DOWN = atoi(v);
-        sprintf(resultBuf, "%d", CONTROL_DOWN);
-      } else if (strcmp_P(k, SETTING[S_Y_DEADZONE]) == 0) {
-        Y_DEADZONE = abs(atoi(v));
-        sprintf(resultBuf, "%d", Y_DEADZONE);
-      } else if (strcmp_P(k, SETTING[S_ACCELERATION_FORWARD]) == 0) {
+
+      boolean found = false;
+      for (byte i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
+        if (strcmp_P(k, SETTING[settingsID_int[i]]) == 0) {
+          *settingsPtr_int[i] = atoi(v);
+          sprintf(resultBuf, "%d", *settingsPtr_int[i]);
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+      }else if (strcmp_P(k, SETTING[S_ACCELERATION_FORWARD]) == 0) {
         ACCELERATION_FORWARD = abs(atof(v));
         dtostrf(ACCELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp_P(k, SETTING[S_DECELERATION_FORWARD]) == 0) {

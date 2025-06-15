@@ -150,7 +150,7 @@ const char* const SETTING[] PROGMEM = {
 #endif
 };
 
-enum {
+enum SettingID{
   S_CONTROL_RIGHT = 0,
   S_CONTROL_CENTER_X,
   S_CONTROL_LEFT,
