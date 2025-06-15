@@ -48,7 +48,7 @@ const char start_motor_pulse_time[] PROGMEM = "START_MOTOR_PULSE_TIME";
 const char joy_calib_count[] PROGMEM = "JOY_CALIB_COUNT";
 const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
 const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
-const char button_mode_toggle[] PROGMEM = "BUTTON_MODE_TOGGLE";
+const char button_mode_toggle[] PROGMEM = "BMT";//"BUTTON_MODE_TOGGLE";
 const char button_mode_pin[] PROGMEM = "BUTTON_MODE_PIN";
 const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 
