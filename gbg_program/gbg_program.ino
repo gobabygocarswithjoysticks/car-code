@@ -51,7 +51,7 @@ struct SettingsStructA {
 #define Y_DEADZONE settingsStructA.Y_DEADZONE
 
 ///// input processor constants /////
-struct settingsStructB {
+struct SettingsStructB {
   float ACCELERATION_FORWARD;
   float DECELERATION_FORWARD;
   float ACCELERATION_BACKWARD;
