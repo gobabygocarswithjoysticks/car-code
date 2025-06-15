@@ -10,15 +10,15 @@ boolean printVariables(int interval) {
     prnt(F("current values, millis:"), millis());
     prnt(F("joyXVal"), joyXVal);
     prnt(F("joyYVal"), joyYVal);
-    prnt(F("turnInput"), turnInput);
-    prnt(F("speedInput"), speedInput);
-    prnt(F("turnProcessed"), turnProcessed);
-    prnt(F("speedProcessed"), speedProcessed);
-    prnt(F("turnToDrive"), turnToDrive);
-    prnt(F("speedToDrive"), speedToDrive);
+    prntf(F("turnInput"), turnInput);
+    prntf(F("speedInput"), speedInput);
+    prntf(F("turnProcessed"), turnProcessed);
+    prntf(F("speedProcessed"), speedProcessed);
+    prntf(F("turnToDrive"), turnToDrive);
+    prntf(F("speedToDrive"), speedToDrive);
     prnt(F("leftMotorWriteVal"), leftMotorWriteVal);
     prnt(F("rightMotorWriteVal"), rightMotorWriteVal);
-    prnt(F("speedKnobVal"), speedKnobVal);
+    prntf(F("speedKnobVal"), speedKnobVal);
     prntbool(F("movementAllowed"), movementAllowed);
     prntbool(F("joyOK"), joyOK);
     int buttonBits = 0;
@@ -172,7 +172,7 @@ void prnt(const __FlashStringHelper *fsh, float value) {
   Serial.print(", ");
 }
 
-void prnt(const __FlashStringHelper *fsh, int value) {
+void prntf(const __FlashStringHelper *fsh, int value) {
   serialChecksum += 5;
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
