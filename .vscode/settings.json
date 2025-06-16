@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "BMAH",
+        "BSAH",
         "CALIB",
         "D'Amico",
         "DFAKE",
@@ -11,8 +12,16 @@
         "pico",
         "prnt",
         "prntbool",
+        "prntf",
+        "RCISR",
+        "RCISRs",
         "RPIPICO",
         "rpipicow",
-        "samd"
+        "samd",
+        "stwm",
+        "vect",
+        "WDCE",
+        "WDIE",
+        "WDTCSR"
     ]
 }

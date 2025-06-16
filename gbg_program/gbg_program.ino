@@ -254,7 +254,7 @@ boolean USE_WIFI = false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
-const int16_t rcControlSwitchDeadband = 50;
+const int16_t rcControlSwitchDeadband = 100;
 
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
