@@ -88,6 +88,8 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &SPEED_KNOB_FAST_VAL,
 };
 
+char phrase[20];
+
 void settingsSerial() {
   int8_t in = Serial.read();
   if (in != -1) {
@@ -100,13 +102,13 @@ void settingsSerial() {
       memset(resultBuf, '\0', 15);
 
       boolean found = false;
-      for (int i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
+      for (byte i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
+        strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_int[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
         Serial.println(settingsID_int[i]); //TODO: delete
-        Serial.println(F(SETTING[settingsID_int[i]])); //TODO: delete
-        if (strcmp_P(k, SETTING[settingsID_int[i]]) == 0) {
-          int valz = atoi(v);
-          *settingsPtr_int[i] = valz;
-          sprintf(resultBuf, "%d", valz);
+        Serial.println(phrase); //TODO: delete
+        if (strcmp_P(k, phrase) == 0) {
+          *settingsPtr_int[i] = atoi(v);;
+          sprintf(resultBuf, "%d", *settingsPtr_int[i]);
           found = true;
           break;
         }
