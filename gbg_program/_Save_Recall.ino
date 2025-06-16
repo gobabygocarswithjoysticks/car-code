@@ -100,10 +100,12 @@ void settingsSerial() {
       memset(resultBuf, '\0', 15);
 
       boolean found = false;
-      for (byte i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
+      for (int i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
+        Serial.println(SETTING[settingsID_int[i]]); //TODO: delete
         if (strcmp_P(k, SETTING[settingsID_int[i]]) == 0) {
-          *settingsPtr_int[i] = atoi(v);
-          sprintf(resultBuf, "%d", *settingsPtr_int[i]);
+          int valz = atoi(v);
+          *settingsPtr_int[i] = valz;
+          sprintf(resultBuf, "%d", valz);
           found = true;
           break;
         }
