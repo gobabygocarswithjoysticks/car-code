@@ -104,9 +104,7 @@ void settingsSerial() {
       boolean found = false;
       for (byte i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
         strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_int[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
-        Serial.println(settingsID_int[i]); //TODO: delete
-        Serial.println(phrase); //TODO: delete
-        if (strcmp_P(k, phrase) == 0) {
+        if (strcmp(k, phrase) == 0) {
           *settingsPtr_int[i] = atoi(v);;
           sprintf(resultBuf, "%d", *settingsPtr_int[i]);
           found = true;
