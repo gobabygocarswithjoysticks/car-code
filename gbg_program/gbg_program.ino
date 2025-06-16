@@ -421,6 +421,8 @@ const byte settings_memory_key = 18;
 #include <PinChangeInterrupt.h>
 #endif
 
+boolean buttonModeActive = false;
+
 unsigned long lastRisingMicros[NUM_RC_INPUTS];
 unsigned long anyRCRisingMillis;
 int16_t remoteInput[NUM_RC_INPUTS];
@@ -684,7 +686,6 @@ void loop()
 
 
   if (ENABLE_BUTTON_CTRL) {
-    boolean buttonModeActive;
     if (BUTTON_MODE_TOGGLE) {
       boolean buttonModePinState = digitalRead(BUTTON_MODE_PIN);
       if(buttonModePinState == LOW && rcFlags.lastButtonModePinState == HIGH) {
@@ -696,6 +697,8 @@ void loop()
       buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW);
     }
     InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
+  }else{
+    buttonModeActive = false;
   }
 
   if (joyOK) {

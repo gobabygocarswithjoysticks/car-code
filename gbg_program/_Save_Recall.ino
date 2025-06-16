@@ -531,12 +531,7 @@ void saveSettings()
   EEPROMwrite(addressW, USE_WIFI);
 #endif
   EEPROMwrite(addressW, eepromCRC);
-  Serial.println(addressW); //TODO: DELETE
-  Serial.println(addressW);
-  Serial.println(addressW);
-  Serial.println(addressW);
-  Serial.println(addressW);
-  Serial.println(addressW);
+  // addressW was 170
   
 #if defined(FAKE_EEPROM)
   EEPROM.commit();
@@ -629,9 +624,7 @@ void recallSettings()
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
-  Serial.println(addressR); //TODO: DELETE
-  Serial.println(addressR);
-  Serial.println(addressR);
+  // addressR was 170
 
 #if defined(FAKE_EEPROM)
   if (errorCorrectionPerformed) {

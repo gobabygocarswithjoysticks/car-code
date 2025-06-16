@@ -25,15 +25,16 @@ boolean printVariables(int interval) {
     if (ENABLE_BUTTON_CTRL) {
       int button;
       for (button = 0; button < maxNumDriveButtons; button++) {
-        if (digitalRead(driveButtons[button].pin) == LOW)
+        if (digitalRead(driveButtons[button].pin) == BUTTONS_ACTIVE_HIGH)
           bitSet(buttonBits, button);
       }
 
       // extra MSB set to 1 if buttons active, to indicate the size of maxNumDriveButtons
       if (ENABLE_BUTTON_CTRL) {
         if (USE_BUTTON_MODE_PIN) {
-          if (digitalRead(BUTTON_MODE_PIN) == LOW)
+          if (buttonModeActive){
             bitSet(buttonBits, button);
+          }
         } else { // mode pin use = false; buttons on
           bitSet(buttonBits, button);
         }
