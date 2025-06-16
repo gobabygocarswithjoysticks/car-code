@@ -605,9 +605,6 @@ void setup() {
   printSettings();  // do it again to increase the chance of a valid message going through
 
   setupPins();
-
-  setupRCControl();
-
 #if defined(HAS_WIFI)
   setupWifi();
 #endif
@@ -630,6 +627,21 @@ void setupPins() {
   if (STEERING_OFF_SWITCH) {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
+
+  if( USE_RC_CONTROL) {
+    setupRCControl();
+  }
+
+  if (USE_STOP_SWITCH) {
+    pinMode(STOP_PIN, INPUT_PULLUP);
+  }
+
+  if (USE_ON_OFF_BUTTONS) {
+    pinMode(ON_BUTTON, INPUT_PULLUP);
+    pinMode(OFF_BUTTON, INPUT_PULLUP);
+  }
+
+  
 
 #ifdef IS_PCB
   // PCB
