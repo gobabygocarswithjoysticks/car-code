@@ -32,7 +32,7 @@ boolean printVariables(int interval) {
       // extra MSB set to 1 if buttons active, to indicate the size of maxNumDriveButtons
       if (ENABLE_BUTTON_CTRL) {
         if (USE_BUTTON_MODE_PIN) {
-          if (buttonModeActive){
+          if (buttonModeActive) {
             bitSet(buttonBits, button);
           }
         } else { // mode pin use = false; buttons on
@@ -153,9 +153,9 @@ void printSettings() {
   prntbool(FV(SETTING[S_ON_OFF_BUTTONS_ACTIVE_HIGH]), ON_OFF_BUTTONS_ACTIVE_HIGH);
 
 #if defined(HAS_WIFI)
+  prntbool(FV(SETTING[S_USE_WIFI]), USE_WIFI);
   prnt(FV(SETTING[S_CAR_WIFI_NAME]), CAR_WIFI_NAME);
   prnt(FV(SETTING[S_CAR_WIFI_PASSWORD]), CAR_WIFI_PASSWORD);
-  prntbool(FV(SETTING[S_USE_WIFI]), USE_WIFI);
 #endif
 
   printAndAppendToChecksum(F("\"CHECKSUM\":"));

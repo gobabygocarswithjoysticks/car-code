@@ -229,18 +229,32 @@ enum {
   NUM_RC_INPUTS
 };
 boolean USE_RC_CONTROL = false;
+#if defined(ESP32)
+byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 20};
+#else
 byte RC_PIN[NUM_RC_INPUTS] = {7, 8, 9, 10};
+#endif
 
 boolean NO_RC_STOP_UNTIL_START = false;
 
 boolean USE_STOP_SWITCH = false;
+#if defined(ESP32)
+byte STOP_PIN = 22;
+#else
 byte STOP_PIN = 5;
+#endif
+
 boolean STOP_PIN_HIGH = false;
 boolean NO_STOP_UNTIL_START = false;
 
 boolean USE_ON_OFF_BUTTONS = false;
+#if defined(ESP32)
+byte ON_BUTTON = 16;
+byte OFF_BUTTON = 17;
+#else
 byte ON_BUTTON = 11; // pin for the on button
 byte OFF_BUTTON = 12; // pin for the off button
+#endif
 boolean ON_OFF_BUTTONS_ACTIVE_HIGH = false;
 
 #if defined(HAS_WIFI)
@@ -474,23 +488,23 @@ void setupRCControl() {
   }
 
 #if defined(IS_PICO) || defined(ESP32)
-  for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   attachInterrupt((RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    attachInterrupt((RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
   }
 #else // uno or nano, needs PinChangeInterrupt library
-  for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    attachPCINT(digitalPinToPCINT(RC_PIN[i]), RCISRs[i], CHANGE); // attach the ISR to all RC pins
   }
 #endif
 }
 void detachRCControl() {
 #if defined(IS_PICO) || defined(ESP32)
-  for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   detachInterrupt((RC_PIN[i])); // attach the ISR to all RC pins
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    detachInterrupt((RC_PIN[i])); // attach the ISR to all RC pins
   }
 #else // nano or uno, needs PinChangeInterrupt library
-  for(byte i=0; i<NUM_RC_INPUTS; i++) {
-   detachPCINT(digitalPinToPCINT(RC_PIN[i])); // attach the ISR to all RC pins
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    detachPCINT(digitalPinToPCINT(RC_PIN[i])); // attach the ISR to all RC pins
   }
 #endif
 }
@@ -628,7 +642,7 @@ void setupPins() {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
 
-  if( USE_RC_CONTROL) {
+  if ( USE_RC_CONTROL) {
     setupRCControl();
   }
 
@@ -700,7 +714,7 @@ void loop()
   if (ENABLE_BUTTON_CTRL) {
     if (BUTTON_MODE_TOGGLE) {
       boolean buttonModePinState = digitalRead(BUTTON_MODE_PIN);
-      if(buttonModePinState == BUTTONS_ACTIVE_HIGH && rcFlags.lastButtonModePinState == !BUTTONS_ACTIVE_HIGH) {
+      if (buttonModePinState == BUTTONS_ACTIVE_HIGH && rcFlags.lastButtonModePinState == !BUTTONS_ACTIVE_HIGH) {
         buttonModeActive = !buttonModeActive; // toggle button mode
       }
       rcFlags.lastButtonModePinState = buttonModePinState;
@@ -708,7 +722,7 @@ void loop()
       buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == BUTTONS_ACTIVE_HIGH);
     }
     InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
-  }else{
+  } else {
     buttonModeActive = false;
   }
 
@@ -780,7 +794,7 @@ void loop()
     turnToDrive = constrain(turnToDrive, -speedKnobScaler, speedKnobScaler);
   }
 
-  if(USE_ON_OFF_BUTTONS) {
+  if (USE_ON_OFF_BUTTONS) {
     if (digitalRead(ON_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
       rcFlags.Start_Stop_Buttons_e_stop = false;
     }
@@ -791,11 +805,11 @@ void loop()
 
   if (USE_STOP_SWITCH) {
     if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) {
-      if(NO_STOP_UNTIL_START==false || rcFlags.Start_Switch_Ever_Activated) {
+      if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) {
         speedToDrive = 0;
         turnToDrive = 0;
       }
-    }else{ // switch is saying "go"
+    } else { // switch is saying "go"
       rcFlags.Start_Switch_Ever_Activated = true; // switch has activated the car
     }
   }

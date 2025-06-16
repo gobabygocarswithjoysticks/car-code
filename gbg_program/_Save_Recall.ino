@@ -113,7 +113,7 @@ void settingsSerial() {
       }
 
       if (found) {
-      }else if (strcmp_P(k, SETTING[S_ACCELERATION_FORWARD]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_ACCELERATION_FORWARD]) == 0) {
         ACCELERATION_FORWARD = abs(atof(v));
         dtostrf(ACCELERATION_FORWARD, 0, 4, resultBuf);
       } else if (strcmp_P(k, SETTING[S_DECELERATION_FORWARD]) == 0) {
@@ -510,17 +510,17 @@ void saveSettings()
 
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
-  
+
   EEPROMwrite(addressW, USE_STOP_SWITCH);
   EEPROMwrite(addressW, STOP_PIN);
   EEPROMwrite(addressW, STOP_PIN_HIGH);
   EEPROMwrite(addressW, NO_STOP_UNTIL_START);
-  
+
   EEPROMwrite(addressW, USE_ON_OFF_BUTTONS);
   EEPROMwrite(addressW, ON_BUTTON);
   EEPROMwrite(addressW, OFF_BUTTON);
   EEPROMwrite(addressW, ON_OFF_BUTTONS_ACTIVE_HIGH);
-  
+
   EEPROMwrite(addressW, USE_RC_CONTROL);
   EEPROMwrite(addressW, RC_PIN[SPEED_RC]);
   EEPROMwrite(addressW, RC_PIN[TURN_RC]);
@@ -535,7 +535,7 @@ void saveSettings()
 #endif
   EEPROMwrite(addressW, eepromCRC);
   // addressW was 170
-  
+
 #if defined(FAKE_EEPROM)
   EEPROM.commit();
 #endif
@@ -600,17 +600,17 @@ void recallSettings()
 
   EEPROMread(addressR, STEERING_OFF_SWITCH);
   EEPROMwrite(addressR, STEERING_OFF_SWITCH_PIN);
-  
+
   EEPROMread(addressR, USE_STOP_SWITCH);
   EEPROMread(addressR, STOP_PIN);
   EEPROMread(addressR, STOP_PIN_HIGH);
   EEPROMread(addressR, NO_STOP_UNTIL_START);
-  
+
   EEPROMread(addressR, USE_ON_OFF_BUTTONS);
   EEPROMread(addressR, ON_BUTTON);
   EEPROMread(addressR, OFF_BUTTON);
   EEPROMread(addressR, ON_OFF_BUTTONS_ACTIVE_HIGH);
-  
+
   EEPROMread(addressR, USE_RC_CONTROL);
   EEPROMread(addressR, RC_PIN[SPEED_RC]);
   EEPROMread(addressR, RC_PIN[TURN_RC]);
@@ -664,7 +664,7 @@ void recallSettings()
       for (byte j = 0; j < 3; j++) { // S O S
         int16_t t = (j == 1) ? 600 : 200;
         for (byte i = 0; i < 3; i++) {
-          LED_ON; delay(t); LED_OFF; delay(200); 
+          LED_ON; delay(t); LED_OFF; delay(200);
 #if defined(IS_PICO)
           rp2040.wdt_reset();
 #endif
