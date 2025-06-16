@@ -217,6 +217,8 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
 };
 #endif
 
+boolean BUTTONS_ACTIVE_HIGH = false; // true = buttons are active high, false = buttons are active low
+
 boolean STEERING_OFF_SWITCH = false;
 
 enum {
@@ -693,7 +695,7 @@ void loop()
     } else {
       buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW);
     }
-    InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, LOW);
+    InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
   }
 
   if (joyOK) {

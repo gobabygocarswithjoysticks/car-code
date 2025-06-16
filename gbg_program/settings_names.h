@@ -50,6 +50,7 @@ const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
 const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
 const char button_mode_toggle[] PROGMEM = "BMT";//"BUTTON_MODE_TOGGLE";
 const char button_mode_pin[] PROGMEM = "BUTTON_MODE_PIN";
+const char button_active_high[] PROGMEM = "BSAH";//"BUTTONS_ACTIVE_HIGH";
 const char num_drive_buttons[] PROGMEM = "NUM_DRIVE_BUTTONS";
 
 const char steering_off_switch[] PROGMEM = "STEERING_OFF_SWITCH";
@@ -126,6 +127,7 @@ const char* const SETTING[] PROGMEM = {
   use_button_mode_pin,
   button_mode_toggle,
   button_mode_pin,
+  button_active_high,
   num_drive_buttons,
   steering_off_switch,
   steering_off_switch_pin,
@@ -198,6 +200,7 @@ enum SettingID{
   S_USE_BUTTON_MODE_PIN,
   S_BUTTON_MODE_TOGGLE,
   S_BUTTON_MODE_PIN,
+  S_BUTTONS_ACTIVE_HIGH,
   S_NUM_DRIVE_BUTTONS,
   S_STEERING_OFF_SWITCH,
   S_STEERING_OFF_SWITCH_PIN,

@@ -239,6 +239,9 @@ void settingsSerial() {
         BUTTON_MODE_PIN = atoi(v);
         pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
         sprintf(resultBuf, "%d", BUTTON_MODE_PIN);
+      } else if (strcmp_P(k, SETTING[S_BUTTONS_ACTIVE_HIGH]) == 0) {
+        BUTTONS_ACTIVE_HIGH = atoi(v);
+        printTrueOrFalse(BUTTONS_ACTIVE_HIGH);
       } else if (strcmp_P(k, SETTING[S_NUM_DRIVE_BUTTONS]) == 0) {
         NUM_DRIVE_BUTTONS = constrain(atoi(v), 0, 6);
         if (ENABLE_BUTTON_CTRL) {
@@ -467,7 +470,6 @@ void saveSettings()
   EEPROMwrite(addressW, FASTEST_BACKWARD);
   EEPROMwrite(addressW, TURN_SPEED);
   EEPROMwrite(addressW, SCALE_TURNING_WHEN_MOVING);
-  EEPROMwrite(addressW, SCALE_ACCEL_WITH_SPEED);
   EEPROMwrite(addressW, REVERSE_TURN_IN_REVERSE);
   EEPROMwrite(addressW, LEFT_MOTOR_CENTER);
   EEPROMwrite(addressW, LEFT_MOTOR_SLOW);
@@ -478,7 +480,8 @@ void saveSettings()
   EEPROMwrite(addressW, USE_SPEED_KNOB);
   EEPROMwrite(addressW, SPEED_KNOB_SLOW_VAL);
   EEPROMwrite(addressW, SPEED_KNOB_FAST_VAL);
-
+  EEPROMwrite(addressW, SCALE_ACCEL_WITH_SPEED);
+  EEPROMwrite(addressW, SPEED_KNOB_PIN);
   EEPROMwrite(addressW, JOY_X_PIN);
   EEPROMwrite(addressW, JOY_Y_PIN);
 #ifdef IS_PCB
@@ -487,36 +490,40 @@ void saveSettings()
   EEPROMwrite(addressW, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMwrite(addressW, RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-  EEPROMwrite(addressW, SPEED_KNOB_PIN);
 
+  EEPROMwrite(addressW, ENABLE_STARTUP_PULSE);
   EEPROMwrite(addressW, LEFT_MOTOR_PULSE);
   EEPROMwrite(addressW, RIGHT_MOTOR_PULSE);
   EEPROMwrite(addressW, START_MOTOR_PULSE_TIME);
-  EEPROMwrite(addressW, ENABLE_STARTUP_PULSE);
   EEPROMwrite(addressW, JOY_CALIB_COUNT);
-  EEPROMwrite(addressW, BUTTON_MODE_PIN);
   EEPROMwrite(addressW, ENABLE_BUTTON_CTRL);
   EEPROMwrite(addressW, USE_BUTTON_MODE_PIN);
+  EEPROMwrite(addressW, BUTTON_MODE_TOGGLE);
+  EEPROMwrite(addressW, BUTTON_MODE_PIN);
+  EEPROMwrite(addressW, BUTTONS_ACTIVE_HIGH);
   EEPROMwrite(addressW, NUM_DRIVE_BUTTONS);
+
   EEPROMwrite(addressW, driveButtons);
+
   EEPROMwrite(addressW, STEERING_OFF_SWITCH);
   EEPROMwrite(addressW, STEERING_OFF_SWITCH_PIN);
-  EEPROMwrite(addressW, USE_RC_CONTROL);
-  EEPROMwrite(addressW, RC_PIN[TURN_RC]);
-  EEPROMwrite(addressW, RC_PIN[SPEED_RC]);
-  EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
-  EEPROMwrite(addressW, RC_PIN[STOP_RC]);
-  EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
-
+  
   EEPROMwrite(addressW, USE_STOP_SWITCH);
   EEPROMwrite(addressW, STOP_PIN);
   EEPROMwrite(addressW, STOP_PIN_HIGH);
   EEPROMwrite(addressW, NO_STOP_UNTIL_START);
-
+  
   EEPROMwrite(addressW, USE_ON_OFF_BUTTONS);
   EEPROMwrite(addressW, ON_BUTTON);
   EEPROMwrite(addressW, OFF_BUTTON);
   EEPROMwrite(addressW, ON_OFF_BUTTONS_ACTIVE_HIGH);
+  
+  EEPROMwrite(addressW, USE_RC_CONTROL);
+  EEPROMwrite(addressW, RC_PIN[SPEED_RC]);
+  EEPROMwrite(addressW, RC_PIN[TURN_RC]);
+  EEPROMwrite(addressW, RC_PIN[STOP_RC]);
+  EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
+  EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
 
 #if defined(HAS_WIFI)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
@@ -524,8 +531,13 @@ void saveSettings()
   EEPROMwrite(addressW, USE_WIFI);
 #endif
   EEPROMwrite(addressW, eepromCRC);
-  // addressW equaled 177 on pico W on this line
-
+  Serial.println(addressW); //TODO: DELETE
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+  Serial.println(addressW);
+  
 #if defined(FAKE_EEPROM)
   EEPROM.commit();
 #endif
@@ -553,7 +565,6 @@ void recallSettings()
   EEPROMread(addressR, FASTEST_BACKWARD);
   EEPROMread(addressR, TURN_SPEED);
   EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING);
-  EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
   EEPROMread(addressR, REVERSE_TURN_IN_REVERSE);
   EEPROMread(addressR, LEFT_MOTOR_CENTER);
   EEPROMread(addressR, LEFT_MOTOR_SLOW);
@@ -564,7 +575,8 @@ void recallSettings()
   EEPROMread(addressR, USE_SPEED_KNOB);
   EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
   EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
-
+  EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
+  EEPROMread(addressR, SPEED_KNOB_PIN);
   EEPROMread(addressR, JOY_X_PIN);
   EEPROMread(addressR, JOY_Y_PIN);
 #ifdef IS_PCB
@@ -573,37 +585,40 @@ void recallSettings()
   EEPROMread(addressR, LEFT_MOTOR_CONTROLLER_PIN);
   EEPROMread(addressR, RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
-  EEPROMread(addressR, SPEED_KNOB_PIN);
 
+  EEPROMread(addressR, ENABLE_STARTUP_PULSE);
   EEPROMread(addressR, LEFT_MOTOR_PULSE);
   EEPROMread(addressR, RIGHT_MOTOR_PULSE);
   EEPROMread(addressR, START_MOTOR_PULSE_TIME);
-  EEPROMread(addressR, ENABLE_STARTUP_PULSE);
   EEPROMread(addressR, JOY_CALIB_COUNT);
-  EEPROMread(addressR, BUTTON_MODE_PIN);
   EEPROMread(addressR, ENABLE_BUTTON_CTRL);
   EEPROMread(addressR, USE_BUTTON_MODE_PIN);
+  EEPROMread(addressR, BUTTON_MODE_TOGGLE);
+  EEPROMread(addressR, BUTTON_MODE_PIN);
+  EEPROMread(addressR, BUTTONS_ACTIVE_HIGH);
   EEPROMread(addressR, NUM_DRIVE_BUTTONS);
+
   EEPROMread(addressR, driveButtons);
+
   EEPROMread(addressR, STEERING_OFF_SWITCH);
-  EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
-
-  EEPROMread(addressR, USE_RC_CONTROL);
-  EEPROMread(addressR, RC_PIN[TURN_RC]);
-  EEPROMread(addressR, RC_PIN[SPEED_RC]);
-  EEPROMread(addressR, RC_PIN[CTRL_RC]);
-  EEPROMread(addressR, RC_PIN[STOP_RC]);
-  EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
-
+  EEPROMwrite(addressR, STEERING_OFF_SWITCH_PIN);
+  
   EEPROMread(addressR, USE_STOP_SWITCH);
   EEPROMread(addressR, STOP_PIN);
   EEPROMread(addressR, STOP_PIN_HIGH);
   EEPROMread(addressR, NO_STOP_UNTIL_START);
-
+  
   EEPROMread(addressR, USE_ON_OFF_BUTTONS);
   EEPROMread(addressR, ON_BUTTON);
   EEPROMread(addressR, OFF_BUTTON);
   EEPROMread(addressR, ON_OFF_BUTTONS_ACTIVE_HIGH);
+  
+  EEPROMread(addressR, USE_RC_CONTROL);
+  EEPROMread(addressR, RC_PIN[SPEED_RC]);
+  EEPROMread(addressR, RC_PIN[TURN_RC]);
+  EEPROMread(addressR, RC_PIN[STOP_RC]);
+  EEPROMread(addressR, RC_PIN[CTRL_RC]);
+  EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
 
 #if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);
@@ -614,6 +629,9 @@ void recallSettings()
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
+  Serial.println(addressR); //TODO: DELETE
+  Serial.println(addressR);
+  Serial.println(addressR);
 
 #if defined(FAKE_EEPROM)
   if (errorCorrectionPerformed) {
