@@ -641,7 +641,7 @@ void setupPins() {
     pinMode(OFF_BUTTON, INPUT_PULLUP);
   }
 
-  
+
 
 #ifdef IS_PCB
   // PCB
@@ -809,11 +809,6 @@ void loop()
     speedToDrive = 0;
     turnToDrive = 0;
   }
-
-  // TODO: ADD on/off buttons
-  // TODO: ADD ON/OFF SWITCH
-
-
 
   if (abs(turnToDrive) >= 0.001 || abs(speedToDrive) >= 0.001) {
     if (joyOK) {
