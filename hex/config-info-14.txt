@@ -1,0 +1,1 @@
+clear_eeprom-rpiPico, clear_eeprom, RPIPICO, rpi pico
