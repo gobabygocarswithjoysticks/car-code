@@ -101,7 +101,8 @@ void settingsSerial() {
 
       boolean found = false;
       for (int i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
-        Serial.println(SETTING[settingsID_int[i]]); //TODO: delete
+        Serial.println(settingsID_int[i]); //TODO: delete
+        Serial.println(F(SETTING[settingsID_int[i]])); //TODO: delete
         if (strcmp_P(k, SETTING[settingsID_int[i]]) == 0) {
           int valz = atoi(v);
           *settingsPtr_int[i] = valz;
