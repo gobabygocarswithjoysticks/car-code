@@ -688,13 +688,12 @@ void loop()
   if (ENABLE_BUTTON_CTRL) {
     if (BUTTON_MODE_TOGGLE) {
       boolean buttonModePinState = digitalRead(BUTTON_MODE_PIN);
-      if(buttonModePinState == LOW && rcFlags.lastButtonModePinState == HIGH) {
-        rcFlags.buttonModeActive = !rcFlags.buttonModeActive; // toggle button mode
+      if(buttonModePinState == BUTTONS_ACTIVE_HIGH && rcFlags.lastButtonModePinState == !BUTTONS_ACTIVE_HIGH) {
+        buttonModeActive = !buttonModeActive; // toggle button mode
       }
-      buttonModeActive = rcFlags.buttonModeActive;
-      rcFlags.lastButtonModePinState=buttonModePinState;
+      rcFlags.lastButtonModePinState = buttonModePinState;
     } else {
-      buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == LOW);
+      buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == BUTTONS_ACTIVE_HIGH);
     }
     InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
   }else{
