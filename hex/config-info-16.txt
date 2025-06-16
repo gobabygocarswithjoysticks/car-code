@@ -1,1 +1,0 @@
-clear_eeprom-esp32, clear_eeprom, ESP, ESP32
