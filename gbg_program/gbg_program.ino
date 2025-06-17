@@ -536,8 +536,16 @@ void runRCInput(float &speed, float &turn) {
       rcFlags.RCStop = false;
     }
     if (rcFlags.RCOverride) {
-      speed = remoteInput[SPEED_RC] / 500.0;
-      turn = remoteInput[TURN_RC] / 500.0;
+      speed = remoteInput[SPEED_RC];
+      turn = remoteInput[TURN_RC];
+      if(abs(speed) < 50) {
+        speed = 0;
+      }
+      if(abs(turn) < 50) {
+        turn = 0;
+      }
+      speed = speed / 500.0;
+      turn = turn / 500.0;
     }
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
 
