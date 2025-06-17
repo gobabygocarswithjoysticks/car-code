@@ -18,6 +18,14 @@ simple, cheap
 car won't turn off if the transmitter is out of range
 
 ### Instructions:
+Get a keyfob remote and receiver module with at least 2 (probably 4) buttons. (search for 2262/2272 4CH key remote control).
+
+Connect the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
+
+Connect the D0 and D3 pins of the receiver module to 2 pins of the Arduino.
+
+### How to Use:
+Press button A on the keyfob to turn the car off, and button D to turn it back on.
 
 ## Instructions for adding a keyfob switch
 Description: Modify a keyfob remote with a switch that stops the car or allows it to drive.
@@ -40,7 +48,9 @@ car won't turn off if the transmitter is out of range, challenging to drive prec
 ### Instructions:
 Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
 
-Connect the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. Connect the D0, D1, D2, and D3 pins of the receiver module to 4 pins of the Arduino.
+Connect the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
+
+Connect the D0, D1, D2, and D3 pins of the receiver module to 4 pins of the Arduino.
 
 check "enable button ctrl"
 
