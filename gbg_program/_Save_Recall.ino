@@ -312,16 +312,16 @@ void settingsSerial() {
           detachRCControl();
           sprintf(resultBuf, "false");
         }
-      } else if (strcmp_P(k, SETTING[S_TURN_RC_PIN]) == 0) {
-        detachRCControl();
-        RC_PIN[TURN_RC] = atoi(v);
-        setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[TURN_RC]);
       } else if (strcmp_P(k, SETTING[S_SPEED_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[SPEED_RC] = atoi(v);
         setupRCControl();
         sprintf(resultBuf, "%d", RC_PIN[SPEED_RC]);
+      } else if (strcmp_P(k, SETTING[S_TURN_RC_PIN]) == 0) {
+        detachRCControl();
+        RC_PIN[TURN_RC] = atoi(v);
+        setupRCControl();
+        sprintf(resultBuf, "%d", RC_PIN[TURN_RC]);
       } else if (strcmp_P(k, SETTING[S_CTRL_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[CTRL_RC] = atoi(v);
