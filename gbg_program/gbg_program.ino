@@ -437,9 +437,9 @@ const byte settings_memory_key = 18;
 
 boolean buttonModeActive = false;
 
-unsigned long lastRisingMicros[NUM_RC_INPUTS];
-unsigned long anyRCRisingMillis;
-int16_t remoteInput[NUM_RC_INPUTS];
+volatile unsigned long lastRisingMicros[NUM_RC_INPUTS];
+volatile unsigned long anyRCRisingMillis;
+volatile int16_t remoteInput[NUM_RC_INPUTS];
 struct RCFlags { // https://en.cppreference.com/w/cpp/language/bit_field.html
   uint8_t everActivated: 1; // true if the RC signal has ever been received
   uint8_t RCOverride: 1;   // true if the RC control is overriding the joystick control
