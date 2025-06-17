@@ -429,7 +429,7 @@ const byte settings_memory_key = 18;
 #endif
 #endif
 
-#define rcTimeoutMicros 45000 // 45ms timeout for RC control
+#define rcTimeoutMicros 120000 // timeout for RC control
 #if defined(IS_PICO) || defined(ESP32)
 #else
 #include <PinChangeInterrupt.h>
@@ -479,8 +479,6 @@ void RCISR(byte whichRCInput) {
     if(pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
       remoteInput[whichRCInput] = constrain((int16_t)pulseTime - 1500, -500, 500); // convert to range -500 to 500
     }
-  } else { // signal is too old, set to 0
-    remoteInput[whichRCInput] = 0;
   }
 }
 
