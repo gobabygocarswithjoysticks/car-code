@@ -39,10 +39,6 @@ boolean printVariables(int interval) {
           bitSet(buttonBits, button);
         }
       } //else  buttons off
-
-      // if (ENABLE_BUTTON_CTRL && !(USE_BUTTON_MODE_PIN && digitalRead(BUTTON_MODE_PIN) == HIGH)) { // buttons on
-      //   bitSet(buttonBits, button); // extra MSB set to 1, to indicate the size of maxNumDriveButtons
-      // }
     }
     prnt(F("buttons"), buttonBits);
     serialChecksum += Serial.print(F("\"b_m_p\":"));
