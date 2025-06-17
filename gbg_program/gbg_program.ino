@@ -517,9 +517,9 @@ void runRCInput(float &speed, float &turn) {
     rcFlags.RC_make_motors_e_stop = false;
     return;
   }
-  bool validSignal = (millis() - anyRCRisingMillis < (rcTimeoutMicros / 1000));
+  bool validSignal = (millis() - anyRCRisingMillis) <= (rcTimeoutMicros / 1000); // // millis takes weeks to overflow so don't worry about it
   for (byte i = 0; i < NUM_RC_INPUTS; i++) {
-    if (millis() - lastRisingMicros[i] < rcTimeoutMicros) { // millis takes weeks to overflow so don't worry about it
+    if (millis() - lastRisingMicros[i] > rcTimeoutMicros) {
       validSignal = false;
     }
   }
