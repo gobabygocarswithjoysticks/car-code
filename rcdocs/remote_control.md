@@ -92,6 +92,25 @@ Program the transmitter to send the following signals on 4 channels:
 * "control" switch with off under 1300 and on above 1700
 * "stop" switch with off under 1300 and on above 1700
 
+check "use rc"
+
+set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
+
+set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
+
+set "rc control pin" to the pin connected to the receiver channel for the "control" switch
+
+set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
+
+If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
+
+### How to use:
+When the "control" switch is on, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the joystick or buttons on the car can be used to drive the car.
+
+When the "stop" switch is on, the car will stop driving.
+
+If the transmitter is turned off or goes out of range, the car will stop driving.
+
 ---
 ## keyfob that can drive the car
 ### Description:
