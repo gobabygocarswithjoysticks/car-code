@@ -42,6 +42,7 @@ Get a keyfob remote and receiver module with four buttons. (search for 2262/2272
 
 Connect the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. Connect the D0, D1, D2, and D3 pins of the receiver module to 4 pins of the Arduino.
 
+check "
 
 
 ## Instructions for adding an RC receiver

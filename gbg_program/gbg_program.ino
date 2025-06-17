@@ -518,7 +518,7 @@ void runRCInput(float &speed, float &turn) {
   }
   bool validSignal = (millis() - anyRCRisingMillis < (rcTimeoutMicros / 1000));
   for (byte i = 0; i < NUM_RC_INPUTS; i++) {
-    if (millis() - lastRisingMicros[i] <(rcTimeoutMicros) { // millis takes weeks to overflow so don't worry about it
+    if (millis() - lastRisingMicros[i] < rcTimeoutMicros) { // millis takes weeks to overflow so don't worry about it
       validSignal = false;
     }
   }
