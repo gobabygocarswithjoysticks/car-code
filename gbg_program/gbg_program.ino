@@ -53,17 +53,17 @@ boolean REVERSE_TURN_IN_REVERSE = false;  //flip turn axis when backing up so th
 
 // calibrate signals to motor controllers
 int16_t LEFT_MOTOR_CENTER = 1500;
-int16_t LEFT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
+int16_t LEFT_MOTOR_SLOW = 10;   // CENTER +- what? makes the motor start to turn
 int16_t LEFT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 int16_t RIGHT_MOTOR_CENTER = 1500;
-int16_t RIGHT_MOTOR_SLOW = 50;   // CENTER +- what? makes the motor start to turn
+int16_t RIGHT_MOTOR_SLOW = 10;   // CENTER +- what? makes the motor start to turn
 int16_t RIGHT_MOTOR_FAST = 500;  // CENTER +- what? makes the motor go at full speed (if you want to limit the max speed, use FASTEST_FORWARD AND FASTEST_BACKWARD)
 #ifdef IS_PCB
 int16_t LEFT_MOTOR_PULSE = 20; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 int16_t RIGHT_MOTOR_PULSE = 20;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 #else
-int16_t LEFT_MOTOR_PULSE = 90; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
-int16_t RIGHT_MOTOR_PULSE = 90;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int16_t LEFT_MOTOR_PULSE = 20; // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
+int16_t RIGHT_MOTOR_PULSE = 20;  // CENTER +- (sign of _SLOW) what? makes the car move a bit for the pulse on start
 #endif
 int16_t START_MOTOR_PULSE_TIME = 150; // milliseconds for pulse on start
 
