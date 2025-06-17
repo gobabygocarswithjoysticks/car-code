@@ -3,6 +3,9 @@ name: Compile
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'rcdocs/**'
   workflow_dispatch:
 
 concurrency:
