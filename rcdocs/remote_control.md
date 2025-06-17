@@ -104,6 +104,8 @@ set "rc stop pin" to the pin connected to the receiver channel for the "stop" sw
 
 If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
 
+If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
+
 ### How to use:
 When the "control" switch is on, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the joystick or buttons on the car can be used to drive the car.
 
