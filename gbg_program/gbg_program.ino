@@ -841,18 +841,18 @@ void loop()
     turnToDrive = 0;
   }
 
-  if (abs(turnToDrive) >= 0.001 || abs(speedToDrive) >= 0.001) {
-    if (joyOK) {
+  if(joyOK){
+    if (abs(turnToDrive) >= 0.001 || abs(speedToDrive) >= 0.001) {
       LED_ON;
     } else {
-      if ((millis() % 150) < 75) {
-        LED_ON;
-      } else {
-        LED_OFF;
-      }
+      LED_OFF;
     }
-  } else {
-    LED_OFF;
+  }else{ // joystick not calibrated yet
+    if ((millis() % 150) < 75) {
+      LED_ON;
+    } else {
+      LED_OFF;
+    }
   }
 
   ////////////////////////////// PUT THE DRIVE CONTROLLER HERE //////////////////////

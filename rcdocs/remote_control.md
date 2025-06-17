@@ -7,6 +7,8 @@ At the request of many families and physical therapists, we added features to th
 
 Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: (remote control user manual coming soon)
 
+# TODO: RC control is still in development and has not yet been fully tested.
+
 ---
 ## keyfob on/off toggle
 ### Description: 
@@ -62,7 +64,33 @@ set "stop pin" to the pin connected to the receiver module output pin
 
 uncheck "stop pin high"
 
-if you want the car to be able to drive without the remote, check "no stop until start". If "no stop until start" is checked, the car will be able to drive until the stop 
+If you want the car to be able to drive without the remote, check "no stop until start". If "no stop until start" is checked, the car will be able to drive until the switch on the remote is turned on then off again.
+
+If "no stop until start" is not checked, the car will not be able to drive until the switch on the remote is turned on. This means the remote is required for using the car.
+
+### How to use:
+Turn on the switch on the remote to allow the car to drive. Turn it off to stop the car. If the car goes out of range of the remote, it will stop driving.
+
+---
+## RC receiver
+### Advantages: 
+can drive the car precisely, car will turn off if the transmitter is out of range
+
+### Disadvantages: 
+more expensive, more complicated
+
+### Instructions:
+Get an RC transmitter with at least 4 channels, 1 joystick, and 2 switches. This is probably sold as a 6-channel transmitter. Also, get a receiver that is compatible with the transmitter.
+
+Connect the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively.
+
+Connect 4 signal pins from the receiver to 4 pins of the Arduino.
+
+Program the transmitter to send the following signals on 4 channels:
+* Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
+* Left/right joystick axis with center at 1500, left at 1000, right at 2000
+* "control" switch with off under 1300 and on above 1700
+* "stop" switch with off under 1300 and on above 1700
 
 ---
 ## keyfob that can drive the car
@@ -113,11 +141,3 @@ set "drive button 3" "turn" to -1
 
 ### How to use:
 Press button A on the keyfob to toggle between car control and remote control. When in remote control mode, press button B to turn right, button C to drive forward, and button D to turn left.
-
-## Instructions for adding an RC receiver
-### Advantages: 
-can drive the car precisely, car will turn off if the transmitter is out of range
-
-###Disadvantages: 
-more expensive, more complicated
-
