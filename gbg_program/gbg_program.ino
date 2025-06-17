@@ -429,7 +429,7 @@ const byte settings_memory_key = 18;
 #endif
 #endif
 
-#define rcTimeoutMicros 40000 // 40ms timeout for RC control
+#define rcTimeoutMicros 45000 // 45ms timeout for RC control
 #if defined(IS_PICO) || defined(ESP32)
 #else
 #include <PinChangeInterrupt.h>
