@@ -514,6 +514,7 @@ void detachRCControl() {
 void runRCInput(float &speed, float &turn) {
   if (USE_RC_CONTROL == false) {
     rcFlags.RCOverride = false;
+    rcFlags.RC_make_motors_e_stop = false;
     return;
   }
   bool validSignal = (millis() - anyRCRisingMillis < (rcTimeoutMicros / 1000));
@@ -815,6 +816,8 @@ void loop()
     if (digitalRead(OFF_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
       rcFlags.Start_Stop_Buttons_e_stop = true;
     }
+  }else{
+    rcFlags.Start_Stop_Buttons_e_stop = false; // no e-stop from buttons
   }
 
   if (USE_STOP_SWITCH) {
