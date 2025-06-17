@@ -11,11 +11,9 @@
 #### Instructions for modifying go baby go cars to use this code can be found here: https://gobabygocarswithjoysticks.github.io/index/ 
 
 ### Remote Control
-[notes on remote control methods](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/remote_control.md)
+[notes and instructions for remote control](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/remote_control.md)
 
 ### Acknowledgements
 * Arduino
 * https://github.com/earlephilhower/arduino-pico
 * The remote website uses [JoyStick](https://github.com/bobboteck/JoyStick) by Roberto D'Amico.
-
-
