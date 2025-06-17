@@ -429,7 +429,7 @@ const byte settings_memory_key = 18;
 #endif
 #endif
 
-#define rcTimeoutMicros 250000 // timeout for RC control
+#define rcTimeoutMicros 2500000 // timeout for RC control
 #if defined(IS_PICO) || defined(ESP32)
 #else
 #include <PinChangeInterrupt.h>
@@ -516,27 +516,38 @@ void runRCInput(float &speed, float &turn) {
     return;
   }
   bool validSignal = ((millis() - anyRCRisingMillis) <= (rcTimeoutMicros / 1000)); // millis takes weeks to overflow so don't worry about it
+  unsigned long copiedLastRisingMicros[NUM_RC_INPUTS];
+  int16_t copiedRemoteInput[NUM_RC_INPUTS];
+
+  noInterrupts(); // disable interrupts to copy the values safely
   for (byte i = 0; i < NUM_RC_INPUTS; i++) {
-    if ((micros() - lastRisingMicros[i]) > rcTimeoutMicros) {
+    copiedLastRisingMicros[i] = lastRisingMicros[i];
+    copiedRemoteInput[i] = remoteInput[i];
+  }
+  interrupts(); // re-enable interrupts
+
+
+  for (byte i = 0; i < NUM_RC_INPUTS; i++) {
+    if ((micros() - copiedLastRisingMicros[i]) > rcTimeoutMicros) {
       validSignal = false;
     }
   }
 
   if (validSignal) {
     rcFlags.everActivated = true;
-    if (remoteInput[CTRL_RC] > rcControlSwitchDeadband) {
+    if (copiedRemoteInput[CTRL_RC] > rcControlSwitchDeadband) {
       rcFlags.RCOverride = true;
-    } else if (remoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
+    } else if (copiedRemoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
       rcFlags.RCOverride = false;
     }
-    if (remoteInput[STOP_RC] > rcControlSwitchDeadband) {
+    if (copiedRemoteInput[STOP_RC] > rcControlSwitchDeadband) {
       rcFlags.RCStop = true;
-    } else if (remoteInput[STOP_RC] < -rcControlSwitchDeadband) {
+    } else if (copiedRemoteInput[STOP_RC] < -rcControlSwitchDeadband) {
       rcFlags.RCStop = false;
     }
     if (rcFlags.RCOverride) {
-      speed = remoteInput[SPEED_RC];
-      turn = remoteInput[TURN_RC];
+      speed = copiedRemoteInput[SPEED_RC];
+      turn = copiedRemoteInput[TURN_RC];
       if(abs(speed) < 50) {
         speed = 0;
       }
