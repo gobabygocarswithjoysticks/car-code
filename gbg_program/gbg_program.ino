@@ -183,7 +183,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {16, 1, 0}, //forwards
   {17, 0, -1}, //left
   {19, 0, 1}, //right
-  {20, 1, -1}, //LF
+  {26, 1, -1}, //LF
   {22, 1, 1}, //RF
   {25, -1, 0} //backwards
 };
@@ -230,7 +230,7 @@ enum {
 };
 boolean USE_RC_CONTROL = false;
 #if defined(ESP32)
-byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 20};
+byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 22};
 #else
 byte RC_PIN[NUM_RC_INPUTS] = {7, 8, 9, 10};
 #endif
