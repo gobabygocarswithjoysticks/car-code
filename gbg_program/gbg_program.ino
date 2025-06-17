@@ -475,9 +475,9 @@ void RCISR(byte whichRCInput) {
     lastRisingMicros[whichRCInput] = micros();
     anyRCRisingMillis = millis();
   } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
-    unsigned long pulseTime= micros() - lastRisingMicros[whichRCInput];
-    if(pulseTime>500&& pulseTime<2500) { // only accept pulses between 500 and 2500 microseconds
-      remoteInput[whichRCInput] = constrain(pulseTime - 1500, -500, 500); // convert to range -500 to 500
+    unsigned long pulseTime = micros() - lastRisingMicros[whichRCInput];
+    if(pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
+      remoteInput[whichRCInput] = constrain((int16_t)pulseTime - 1500, -500, 500); // convert to range -500 to 500
     }
   } else { // signal is too old, set to 0
     remoteInput[whichRCInput] = 0;
