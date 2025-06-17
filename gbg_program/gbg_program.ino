@@ -222,8 +222,8 @@ boolean BUTTONS_ACTIVE_HIGH = false; // true = buttons are active high, false = 
 boolean STEERING_OFF_SWITCH = false;
 
 enum {
-  TURN_RC = 0,
   SPEED_RC,
+  TURN_RC,
   CTRL_RC,
   STOP_RC,
   NUM_RC_INPUTS
