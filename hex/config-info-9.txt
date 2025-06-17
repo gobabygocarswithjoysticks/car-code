@@ -1,0 +1,1 @@
+PCB-rpiPico-W, PCB_gbg_program, RPIPICOW, rpi pico W
