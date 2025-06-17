@@ -511,6 +511,7 @@ void detachRCControl() {
 
 void runRCInput(float &speed, float &turn) {
   if (USE_RC_CONTROL == false) {
+    rcFlags.RCOverride = false;
     return;
   }
   bool validSignal = true;
@@ -542,6 +543,7 @@ void runRCInput(float &speed, float &turn) {
     // if the no_stop_until_start setting is false, always turn off the car if the signal stops
     // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
     rcFlags.RC_make_motors_e_stop = (NO_RC_STOP_UNTIL_START == false || rcFlags.everActivated == true);
+    rcFlags.RCOverride = false;
   }
 }
 
@@ -728,6 +730,8 @@ void loop()
 
   if (joyOK) {
     runRCInput(speedInput, turnInput); // variables are passed as references, so the function can edit the values
+  }else{
+    rcFlags.RCOverride = false;
   }
 
 #if defined(HAS_WIFI)
