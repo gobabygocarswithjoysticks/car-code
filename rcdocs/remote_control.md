@@ -5,7 +5,9 @@ At the request of many families and physical therapists, we added features to th
 * joystick/button toggling
 * RC receiver input
 
-Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: (remote control user manual coming soon)
+Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: 
+
+(remote control user manual coming soon)
 
 Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
