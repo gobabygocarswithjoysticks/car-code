@@ -17,10 +17,11 @@ Questions about the car software or these instructions? Please email us at gobab
 Press one button on a keyfob remote to stop the car, and another button to start it again.
 
 ### Advantages: 
-simple, cheap
+* simple
+* cheap
 
 ### Disadvantages: 
-car won't turn off if the transmitter is out of range
+* car won't turn off if the transmitter is out of range
 
 ### Instructions:
 Get a keyfob remote and receiver module with at least 2 (probably 4) buttons. (search for 2262/2272 4CH key remote control).
@@ -44,10 +45,11 @@ Press button A on the keyfob to turn the car off, and button D to turn it back o
 Modify a keyfob remote with a switch that stops the car or allows it to drive.
 
 ### Advantages: 
-cheap, car will turn off if the transmitter is out of range
+* cheap
+* car will turn off if the transmitter is out of range
 
 ### Disadvantages: 
-modifying the keyfob makes it a bit more complicated
+* modifying the keyfob makes it more complicated
 
 ### Instructions:
 Get a keyfob remote and receiver module with at least 1 button. (search for 2262/2272 4CH key remote control).
@@ -72,12 +74,59 @@ Using the programming website (connect to car then press "show all"):
 Turn on the switch on the remote to allow the car to drive. Turn it off to stop the car. If the car goes out of range of the remote, it will stop driving.
 
 ---
+## keyfob that can drive the car
+### Description:
+Use a keyfob remote to override and drive the car. One button will toggle between car control and remote control, and three buttons make the car drive forward, left, and right.
+### Advantages: 
+* simple
+* cheap
+
+## Disadvantages: 
+* car won't turn off if the transmitter is out of range
+* challenging to drive precisely
+* prevents the car from being driven by buttons on the car
+* car decelerates instead of stopping immediately
+
+### Instructions:
+Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
+
+Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
+
+Wire the D0, D1, D2, and D3 pins of the receiver module to 4 pins of the Arduino.
+
+Using the programming website (connect to car then press "show all"):
+* check "enable button ctrl"
+* check "use button mode pin"
+* set "button mode pin" to the pin connected to the receiver module D0 pin
+* check "button mode toggle"
+* check "buttons active high"
+* set "num drive buttons" to 3
+* drive button 1
+  * set "drive button 1" "pin" to the pin connected to the receiver module D1 pin
+  * set "drive button 1" "speed" to 0
+  * set "drive button 1" "turn" to 1
+* drive button 2
+  * set "drive button 2" "pin" to the pin connected to the receiver module D2 pin
+  * set "drive button 2" "speed" to 1
+  * set "drive button 2" "turn" to 0
+* drive button 3
+  * set "drive button 3" "pin" to the pin connected to the receiver module D3 pin
+  * set "drive button 3" "speed" to 0
+  * set "drive button 3" "turn" to -1
+
+### How to use:
+Press button A on the keyfob to toggle between car control and remote control. When in remote control mode, press button B to turn right, button C to drive forward, and button D to turn left.
+
+---
+
 ## RC receiver
 ### Advantages: 
-can drive the car precisely, car will turn off if the transmitter is out of range
+* drive the car precisely with the remote control
+* car will turn off if the transmitter is out of range
 
 ### Disadvantages: 
-more expensive, more complicated
+* more expensive
+* more complicated
 
 ### Instructions:
 Get a RC transmitter with at least 4 channels, 1 joystick, and 2 switches. This is probably sold as a 6-channel transmitter. Also, get a receiver that is compatible with the transmitter.
@@ -109,43 +158,3 @@ When the "control" switch is on, the joystick on the transmitter's joystick can 
 When the "stop" switch is on, the car will stop driving.
 
 If the transmitter is turned off or goes out of range, the car will stop driving.
-
----
-## keyfob that can drive the car
-### Description:
-Use a keyfob remote to override and drive the car. One button will toggle between car control and remote control, and three buttons make the car drive forward, left, and right.
-### Advantages: 
-simple, cheap
-
-## Disadvantages: 
-car won't turn off if the transmitter is out of range, challenging to drive precisely, prevents the car from being driven by buttons on the car, car decelerates instead of stopping immediately
-
-### Instructions:
-Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
-
-Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
-
-Wire the D0, D1, D2, and D3 pins of the receiver module to 4 pins of the Arduino.
-
-Using the programming website (connect to car then press "show all"):
-* check "enable button ctrl"
-* check "use button mode pin"
-* set "button mode pin" to the pin connected to the receiver module D0 pin
-* check "button mode toggle"
-* check "buttons active high"
-* set "num drive buttons" to 3
-* drive button 1
-  * set "drive button 1" "pin" to the pin connected to the receiver module D1 pin
-  * set "drive button 1" "speed" to 0
-  * set "drive button 1" "turn" to 1
-* drive button 2
-  * set "drive button 2" "pin" to the pin connected to the receiver module D2 pin
-  * set "drive button 2" "speed" to 1
-  * set "drive button 2" "turn" to 0
-* drive button 3
-  * set "drive button 3" "pin" to the pin connected to the receiver module D3 pin
-  * set "drive button 3" "speed" to 0
-  * set "drive button 3" "turn" to -1
-
-### How to use:
-Press button A on the keyfob to toggle between car control and remote control. When in remote control mode, press button B to turn right, button C to drive forward, and button D to turn left.
