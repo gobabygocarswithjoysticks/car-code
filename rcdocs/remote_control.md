@@ -11,6 +11,15 @@ Please talk to a physical therapist about the best way to use a remote control t
 
 Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
+## Notes on keyfob remote buttons:
+The pins on the receivers are consistently labeled D0, D1, D2, and D3. The buttons on the keyfob remotes are not consistently labeled, but D0 is usually the rightmost button and D3 is usually the leftmost button.
+
+```
+  2  0
+3  1
+```
+These instructions will use the numbers instead of the inconsistent letter labels on the keyfob remotes.
+
 ---
 ## keyfob on/off toggle
 ### Description: 
@@ -37,7 +46,7 @@ Using the programming website (connect to car then press "show all"):
 * check "on off buttons active high"
 
 ### How to Use:
-Press button A on the keyfob to turn the car off, and button D to turn it back on.
+Press button D0 on the keyfob to turn the car off, and button D3 to turn it back on.
 
 ---
 ## keyfob on/off switch
@@ -115,7 +124,7 @@ Using the programming website (connect to car then press "show all"):
   * set "drive button 3" "turn" to -1
 
 ### How to use:
-Press button A on the keyfob to toggle between car control and remote control. When in remote control mode, press button B to turn right, button C to drive forward, and button D to turn left.
+Press button D0 on the keyfob to toggle between car control and remote control. When in remote control mode, press button D1 to turn right, button D2 to drive forward, and button D3 to turn left.
 
 ---
 
