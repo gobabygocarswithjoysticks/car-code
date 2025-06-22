@@ -35,6 +35,8 @@ Press one button on a keyfob remote to stop the car, and another button to start
 ### Instructions:
 Get a keyfob remote and receiver module with at least 2 (probably 4) buttons. (search for 2262/2272 4CH key remote control).
 
+It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
 
 Wire the D0 and D3 pins of the receiver module to 2 pins of the Arduino.
@@ -67,6 +69,8 @@ Get a keyfob remote and receiver module with at least 1 button. (search for 2262
 
 Open the keyfob remote and wire a toggle switch parallel to one of the buttons. When the switch is on the remote should transmit continuously. Check that it is legal to transmit for minutes at a time on the frequency of the remote in your country. Optionally, replace the battery with a larger one to give a longer battery life.
 
+It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively.
 
 Wire an output pin of the receiver module to a pin of the Arduino.
@@ -98,6 +102,8 @@ Use a keyfob remote to override and drive the car. One button will toggle betwee
 
 ### Instructions:
 Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
+
+It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
 
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
 
