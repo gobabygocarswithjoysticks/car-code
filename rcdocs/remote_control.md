@@ -61,6 +61,7 @@ Modify a keyfob remote with a switch that stops the car or allows it to drive.
 
 ### Disadvantages: 
 * modifying the keyfob makes it more complicated
+* the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car would only be useful within the shorter 20 foot range.
 
 ### Instructions:
 Get a keyfob remote and receiver module with at least 1 button. (search for 2262/2272 4CH key remote control).
@@ -99,6 +100,7 @@ Use a keyfob remote to override and drive the car. One button will toggle betwee
 * challenging to drive precisely
 * prevents the car from being driven by buttons on the car
 * car decelerates instead of stopping immediately
+* the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car could only be driven within the shorter 20 foot range.
 
 ### Instructions:
 Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
