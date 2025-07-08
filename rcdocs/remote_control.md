@@ -20,6 +20,9 @@ The pins on the receivers are consistently labeled D0, D1, D2, and D3. The butto
 ```
 These instructions will use the numbers instead of the inconsistent letter labels on the keyfob remotes.
 
+## Notes on keyfob remote range:
+If the range is really short, try adjusting the screw on the receiver. I tried to tune it to the middle of the range in which it received a signal. You could also try adjusting the screw while someone else walks away with the remote. Remove the screwdriver from the screw before evaluating each adjustment to the screw, since the receiver is effected by the screwdriver touching the screw.
+
 ---
 ## keyfob on/off toggle
 ### Description: 
