@@ -11,6 +11,18 @@ Please talk to a physical therapist about the best way to use a remote control t
 
 Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
+## Notes on Wifi/website remote control
+
+This feature is available with ESP32, Pico 1W, and Pico 2W processors.
+
+Check the “use wifi” setting on the programmer website, then follow the instructions and QR codes on the programmer website.
+
+The Pico will create a wifi network and will serve a webpage that allows you to control the car from a phone, tablet, or computer.
+
+The wifi range is unreliable (sometimes measured as 10 feet sometimes as over 100 feet).
+
+No hardware is required for this method of remote control.
+
 ## Notes on keyfob remote buttons:
 The pins on the receivers are consistently labeled D0, D1, D2, and D3. The buttons on the keyfob remotes are not consistently labeled, but D0 is usually the rightmost button and D3 is usually the leftmost button.
 
