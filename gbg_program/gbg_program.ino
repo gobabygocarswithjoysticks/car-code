@@ -269,6 +269,7 @@ boolean USE_WIFI = false;
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
 const int16_t rcControlSwitchDeadband = 50;
+const int16_t rcControlDeadband = 50;
 
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
@@ -548,10 +549,10 @@ void runRCInput(float &speed, float &turn) {
     if (rcFlags.RCOverride) {
       speed = copiedRemoteInput[SPEED_RC];
       turn = copiedRemoteInput[TURN_RC];
-      if(abs(speed) < 50) {
+      if(abs(speed) < rcControlDeadband) {
         speed = 0;
       }
-      if(abs(turn) < 50) {
+      if(abs(turn) < rcControlDeadband) {
         turn = 0;
       }
       speed = speed / 500.0;
