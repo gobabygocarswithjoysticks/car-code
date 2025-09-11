@@ -268,7 +268,7 @@ boolean USE_WIFI = false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
-const int16_t rcControlSwitchDeadband = 100;
+const int16_t rcControlSwitchDeadband = 50;
 
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
@@ -429,7 +429,7 @@ const byte settings_memory_key = 18;
 #endif
 #endif
 
-#define rcTimeoutMicros 50000 // timeout for RC control
+#define rcTimeoutMicros 70000 // timeout for RC control
 #if defined(IS_PICO) || defined(ESP32)
 #else
 #include <PinChangeInterrupt.h>
