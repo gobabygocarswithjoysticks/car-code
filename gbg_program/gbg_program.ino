@@ -477,7 +477,7 @@ void RCISR(byte whichRCInput) {
     anyRCRisingMillis = millis();
   } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
     unsigned long pulseTime = micros() - lastRisingMicros[whichRCInput];
-    if(pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
+    if (pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
       remoteInput[whichRCInput] = constrain((int16_t)pulseTime - 1500, -500, 500); // convert to range -500 to 500
     }
   }
@@ -549,10 +549,10 @@ void runRCInput(float &speed, float &turn) {
     if (rcFlags.RCOverride) {
       speed = copiedRemoteInput[SPEED_RC];
       turn = copiedRemoteInput[TURN_RC];
-      if(abs(speed) < rcControlDeadband) {
+      if (abs(speed) < rcControlDeadband) {
         speed = 0;
       }
-      if(abs(turn) < rcControlDeadband) {
+      if (abs(turn) < rcControlDeadband) {
         turn = 0;
       }
       speed = speed / 500.0;
@@ -751,7 +751,7 @@ void loop()
 
   if (joyOK) {
     runRCInput(speedInput, turnInput); // variables are passed as references, so the function can edit the values
-  }else{
+  } else {
     rcFlags.RCOverride = false;
   }
 
@@ -826,7 +826,7 @@ void loop()
     if (digitalRead(OFF_BUTTON) == (ON_OFF_BUTTONS_ACTIVE_HIGH ? HIGH : LOW)) {
       rcFlags.Start_Stop_Buttons_e_stop = true;
     }
-  }else{
+  } else {
     rcFlags.Start_Stop_Buttons_e_stop = false; // no e-stop from buttons
   }
 
@@ -851,13 +851,13 @@ void loop()
     turnToDrive = 0;
   }
 
-  if(joyOK){
+  if (joyOK) {
     if (abs(turnToDrive) >= 0.001 || abs(speedToDrive) >= 0.001) {
       LED_ON;
     } else {
       LED_OFF;
     }
-  }else{ // joystick not calibrated yet
+  } else { // joystick not calibrated yet
     if ((millis() % 150) < 75) {
       LED_ON;
     } else {

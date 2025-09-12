@@ -42,8 +42,8 @@ boolean printVariables(int interval) {
     }
     prnt(F("buttons"), buttonBits);
     serialChecksum += Serial.print(F("\"b_m_p\":"));
-    if(rcFlags.RCOverride){
-          serialChecksum += Serial.print("\"R\"");
+    if (rcFlags.RCOverride) {
+      serialChecksum += Serial.print("\"R\"");
     } else {
       if (ENABLE_BUTTON_CTRL) {
         if (USE_BUTTON_MODE_PIN) {
