@@ -55,6 +55,10 @@ void setupWifi() {
     webServer.send(200,"application/json", wifiSettingsBuffer);
   });
 
+  webServer.on("/favicon.ico", []() {
+    webServer.send(200,"image/png",F("AAABAAEAEBACAAAAAACwAAAAFgAAACgAAAAQAAAAIAAAAAEAAQAAAAAAQAAAAAAAAAAAAAAAAgAAAAAAAAD///8AqA5JAP//AADLWwAAuEcAALtbAAC7WwAAzMcAAP//AAD//wAA//8AAP//AADEcQAAta0AAKRpAAC9rwAAxHEAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+  }
+
   webServer.on("/timeoutOn", []() {
     deactivateIfRemoteDisconnects = true;
     webServer.send(200);
