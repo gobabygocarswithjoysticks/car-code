@@ -43,15 +43,31 @@
 </script>
 <script>
 
+  function settingsChange(name, value) {
+    fetch("/setSetting?name=" + name + "&value=" + value);
+  }
+
   async function loadSettings() {
     var list = document.getElementById("car-settings");
     list.innerHTML = "";
     response = await fetch('/settings');
     settings = await response.json();
     for (const setting in settings) {
-      var entry = document.createElement("tr");
-      entry.innerHTML = "<td>" + setting + "</td><td>" + settings[setting] + "</td>";
-      list.appendChild(entry);
+      if (setting == "current settings, version:") {
+        continue;
+      }
+      var row = document.createElement("tr");
+      var name = document.createElement("td");
+      name.text = setting;
+      row.appendChild(name);
+      var valElem = document.createElement("td");
+      if (settings[setting] == "true" || settings[setting] == "false") {
+        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\'' + setting + '\', this.checked);"/>';
+      } else {
+        valElem.innerHTML = '<input type="text" inputmode="numeric" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
+      }
+      row.appendChild(valElem);
+      list.appendChild(row);
     }
   }
 
