@@ -1,6 +1,8 @@
 #ifndef SETTINGS_NAMES_H
 #define SETTINGS_NAMES_H
-
+#if defined(HAS_WIFI)
+void printSettings(bool printToWifi = false);
+#endif
 #define FV(x) (__FlashStringHelper*)(x)
 
 const char control_right[] PROGMEM = "CONTROL_RIGHT";

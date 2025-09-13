@@ -1,4 +1,5 @@
 #if defined(HAS_WIFI)
+#include "settings_names.h"
 
 const unsigned long signalLossTimeout = 1100;
 
