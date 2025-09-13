@@ -66,9 +66,9 @@
       row.appendChild(name);
       var valElem = document.createElement("td");
       if (settings[setting] == true || settings[setting] == false) {
-        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\"' + setting + '\", this.checked);"/>';
+        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\'' + setting + '\', this.checked);"/>';
       } else {
-        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\"' + setting + '\", this.value)"/>';
+        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
       }
       row.appendChild(valElem);
       list.appendChild(row);
