@@ -1,5 +1,12 @@
 #include "settings_names.h"
 int serialChecksum = 0;
+
+#if defined(HAS_WIFI)
+bool ptw = false;
+char wifiSettingsBuffer[3000];
+int wifiBufI = 0;
+#endif
+
 boolean printVariables(int interval) {
   ///// if interval is -1, nothing is printed /////
   if (interval < 0)
@@ -72,9 +79,6 @@ boolean printVariables(int interval) {
 }
 
 #if defined(HAS_WIFI)
-bool ptw = false;
-char wifiSettingsBuffer[3000];
-int wifiBufI = 0;
 void printSettings(bool printToWifi) {
   ptw = printToWifi;
   wifiBufI = 0;
