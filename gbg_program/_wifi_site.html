@@ -7,7 +7,7 @@
 
 <body>
   <p>Use the buttons below to turn the car's joystick on and off.</p>
-  <button onclick='fetch("/activate");' style='font-size: 100px;'>GO</button>
+  <button onclick='activate();' style='font-size: 100px;'>GO</button>
   <button onclick='fetch("/deactivate");' style='font-size: 200px; float: right;'>STOP</button>
   <br>
   <div style="font-size: 50px;">status:</div>
@@ -30,21 +30,25 @@
     <canvas id="ds-canvas" width="500" height="500"></canvas>
   </div>
 
-  <footer>
-    <button onclick="loadSettings();" style="font-size: large;">Edit Car Settings</button>
-    <table id="car-settings">
-    </table>
-  </footer>
+  <details>
+    <summary> <b>Edit Settings</b> <br> &#9888; Don't edit settings with a kid in the car. Editing settings can cause
+      the car to move. </summary>
+    <div>
+      <button onclick="loadSettings();" style="font-size: large;">Load Settings</button>
+      <button onclick="saveSettings();" style="font-size: large;">Save Settings</button>
+      <table id="car-settings">
+      </table>
+    </div>
 
 </body>
 <script>
   /*comments must be like this never with two slashes*/
-
-</script>
-<script>
-
   function settingsChange(name, value) {
-    fetch("/setSetting?name=" + name + "&value=" + value);
+    fetch("/setSetting?setData=" + name + ":" + value + ",");
+  }
+
+  function saveSettings() {
+    fetch('/setSetting?setData="SAVE,"');
   }
 
   async function loadSettings() {
@@ -58,13 +62,13 @@
       }
       var row = document.createElement("tr");
       var name = document.createElement("td");
-      name.text = setting;
+      name.innerHTML = setting;
       row.appendChild(name);
       var valElem = document.createElement("td");
-      if (settings[setting] == "true" || settings[setting] == "false") {
+      if (settings[setting] == true || settings[setting] == false) {
         valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\'' + setting + '\', this.checked);"/>';
       } else {
-        valElem.innerHTML = '<input type="text" inputmode="numeric" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
+        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
       }
       row.appendChild(valElem);
       list.appendChild(row);
@@ -203,11 +207,14 @@
 
   var joystick = new DSItemJoystick(document.getElementById("ds-canvas"));
 
+  kresp = await fetch('/key');
+  var key = await kresp.text();
+
   setInterval(loop, 250);
 
   async function loop() {
     joystick.run();
-    var remoteData = "?fb=" + joystick.GetY() + "&lr=" + joystick.GetX();
+    var remoteData = "?fb=" + joystick.GetY() + "&lr=" + joystick.GetX() + "&key=" + key;
     let errorTimeout;
     let abortcontroller = new AbortController();
     errorTimeout = setTimeout(() => {
@@ -239,6 +246,9 @@
         document.getElementById("status").innerHTML = "center car joystick to start car";
       }
 
+      if (fetchedResponse["k"] != key) {
+        document.getElementById("status").innerHTML = "reload page";
+      }
     } catch (e) {
       document.getElementById("status").innerHTML = "Disconnected";
     }
@@ -254,7 +264,11 @@
   }
 
   function sendRemoteMode(mode) {
-    fetch("/remoteMode?mode=" + mode);
+    fetch("/remoteMode?mode=" + mode + "&key=" + key);
+  }
+
+  function activate() {
+    fetch("/activate&key=" + key);
   }
 
 </script>

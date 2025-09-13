@@ -726,8 +726,13 @@ void loop()
   runWifi();
 #endif
 
-  if (use_memory)
+  if (use_memory){
+#if defined(HAS_WIFI)
+    settingsSerial(-1);
+#else
     settingsSerial();
+#endif
+  }
 
   timeInterval = calculateTimeInterval();
   ////////////////////////////// PUT INPUT READERS HERE /////////////////////////

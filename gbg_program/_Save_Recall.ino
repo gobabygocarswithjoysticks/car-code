@@ -89,9 +89,18 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
 };
 
 char phrase[20];
-
-void settingsSerial() {
+#if defined(HAS_WIFI)
+void settingsSerial(int8_t input) {
+  int8_t in;
+  if(input=-1){
+    in = Serial.read();
+  }else{
+    in=input;
+  }
+#else
+  void settingsSerial() {
   int8_t in = Serial.read();
+#endif
   if (in != -1) {
     if (in == ',') {
       buf[bufP] = 0;  // null terminator
