@@ -25,25 +25,155 @@
   <input type="checkbox" id='timeout' onclick='sendTimeout();'></input>
   <label for="timeout" style="font-size: larger;">deactivate if signal lost</label>
 
-  <div id="joyDiv" style="width:500px;height:500px;margin:200px;float: right;"></div>
+  <div id="joyDiv" style="width:500px;height:500px;margin:200px;float: right;">
+    <canvas id="ds-canvas" width="500" height="500"></canvas>
+  </div>
 
 </body>
 <script>
   /*comments must be like this never with two slashes*/
 
-  /*https://github.com/bobboteck/JoyStick/blob/7be970e9ad6f484964fa9bd8803b9d4314ed891c/joy.min.js*/
-  let StickStatus = { xPosition: 0, yPosition: 0, x: 0, y: 0, cardinalDirection: "C" }; var JoyStick = function (t, e, i) { var o = void 0 === (e = e || {}).title ? "joystick" : e.title, n = void 0 === e.width ? 0 : e.width, a = void 0 === e.height ? 0 : e.height, r = void 0 === e.internalFillColor ? "#00AA00" : e.internalFillColor, c = void 0 === e.internalLineWidth ? 2 : e.internalLineWidth, s = void 0 === e.internalStrokeColor ? "#003300" : e.internalStrokeColor, d = void 0 === e.externalLineWidth ? 2 : e.externalLineWidth, u = void 0 === e.externalStrokeColor ? "#008000" : e.externalStrokeColor, h = void 0 === e.autoReturnToCenter || e.autoReturnToCenter; i = i || function (t) { }; var S = document.getElementById(t); S.style.touchAction = "none"; var f = document.createElement("canvas"); f.id = o, 0 === n && (n = S.clientWidth), 0 === a && (a = S.clientHeight), f.width = n, f.height = a, S.appendChild(f); var l = f.getContext("2d"), k = 0, g = 2 * Math.PI, x = (f.width - (f.width / 2 + 10)) / 2, v = x + 5, P = x + 30, m = f.width / 2, C = f.height / 2, p = f.width / 10, y = -1 * p, w = f.height / 10, L = -1 * w, F = m, E = C; function W() { l.beginPath(), l.arc(m, C, P, 0, g, !1), l.lineWidth = d, l.strokeStyle = u, l.stroke() } function T() { l.beginPath(), F < x && (F = v), F + x > f.width && (F = f.width - v), E < x && (E = v), E + x > f.height && (E = f.height - v), l.arc(F, E, x, 0, g, !1); var t = l.createRadialGradient(m, C, 5, m, C, 200); t.addColorStop(0, r), t.addColorStop(1, s), l.fillStyle = t, l.fill(), l.lineWidth = c, l.strokeStyle = s, l.stroke() } function D() { let t = "", e = F - m, i = E - C; return i >= L && i <= w && (t = "C"), i < L && (t = "N"), i > w && (t = "S"), e < y && ("C" === t ? t = "W" : t += "W"), e > p && ("C" === t ? t = "E" : t += "E"), t } "ontouchstart" in document.documentElement ? (f.addEventListener("touchstart", function (t) { k = 1 }, !1), document.addEventListener("touchmove", function (t) { 1 === k && t.targetTouches[0].target === f && (F = t.targetTouches[0].pageX, E = t.targetTouches[0].pageY, "BODY" === f.offsetParent.tagName.toUpperCase() ? (F -= f.offsetLeft, E -= f.offsetTop) : (F -= f.offsetParent.offsetLeft, E -= f.offsetParent.offsetTop), l.clearRect(0, 0, f.width, f.height), W(), T(), StickStatus.xPosition = F, StickStatus.yPosition = E, StickStatus.x = ((F - m) / v * 100).toFixed(), StickStatus.y = ((E - C) / v * 100 * -1).toFixed(), StickStatus.cardinalDirection = D(), i(StickStatus)) }, !1), document.addEventListener("touchend", function (t) { k = 0, h && (F = m, E = C); l.clearRect(0, 0, f.width, f.height), W(), T(), StickStatus.xPosition = F, StickStatus.yPosition = E, StickStatus.x = ((F - m) / v * 100).toFixed(), StickStatus.y = ((E - C) / v * 100 * -1).toFixed(), StickStatus.cardinalDirection = D(), i(StickStatus) }, !1)) : (f.addEventListener("mousedown", function (t) { k = 1 }, !1), document.addEventListener("mousemove", function (t) { 1 === k && (F = t.pageX, E = t.pageY, "BODY" === f.offsetParent.tagName.toUpperCase() ? (F -= f.offsetLeft, E -= f.offsetTop) : (F -= f.offsetParent.offsetLeft, E -= f.offsetParent.offsetTop), l.clearRect(0, 0, f.width, f.height), W(), T(), StickStatus.xPosition = F, StickStatus.yPosition = E, StickStatus.x = ((F - m) / v * 100).toFixed(), StickStatus.y = ((E - C) / v * 100 * -1).toFixed(), StickStatus.cardinalDirection = D(), i(StickStatus)) }, !1), document.addEventListener("mouseup", function (t) { k = 0, h && (F = m, E = C); l.clearRect(0, 0, f.width, f.height), W(), T(), StickStatus.xPosition = F, StickStatus.yPosition = E, StickStatus.x = ((F - m) / v * 100).toFixed(), StickStatus.y = ((E - C) / v * 100 * -1).toFixed(), StickStatus.cardinalDirection = D(), i(StickStatus) }, !1)), W(), T(), this.GetWidth = function () { return f.width }, this.GetHeight = function () { return f.height }, this.GetPosX = function () { return F }, this.GetPosY = function () { return E }, this.GetX = function () { return ((F - m) / v * 100).toFixed() }, this.GetY = function () { return ((E - C) / v * 100 * -1).toFixed() }, this.GetDir = function () { return D() } };
 </script>
 <script>
 
-  var timeoutWasChecked = false;
+  class DSItemJoystick {
+    /*inspired by github.com/RCMgames/RCMv3*/
+    constructor(_dsCanvas) {
+      this.dsCanvas = _dsCanvas;
+      this.radius = 50;
 
-  const joystick = new JoyStick('joyDiv');
+      this.joyx = 0;
+      this.joyy = 0;
+
+      this.mousePressed = false;
+
+      this.onMouseDownBound = this.onMouseDown.bind(this);
+      this.onMouseUpBound = this.onMouseUp.bind(this);
+      this.onMouseMoveBound = this.onMouseMove.bind(this);
+      this.onTouchStartBound = this.onTouchStart.bind(this);
+      this.onTouchEndBound = this.onTouchEnd.bind(this);
+      this.onTouchMoveBound = this.onTouchMove.bind(this);
+
+      document.addEventListener('mousedown', this.onMouseDownBound);
+      document.addEventListener('mouseup', this.onMouseUpBound);
+      document.addEventListener('mousemove', this.onMouseMoveBound);
+      document.addEventListener('touchstart', this.onTouchStartBound);
+      document.addEventListener('touchend', this.onTouchEndBound);
+      document.addEventListener('touchmove', this.onTouchMoveBound, { passive: false });
+
+      this.draw();
+    }
+
+    onMouseDown(event) {
+      const rect = this.dsCanvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      if (mouseX >= 0 && mouseX <= this.dsCanvas.width && mouseY >= 0 && mouseY <= this.dsCanvas.height) {
+        this.offsetX = mouseX;
+        this.offsetY = mouseY;
+        this.mousePressed = true;
+        this.onMove(event.clientX, event.clientY);
+        this.draw();
+      }
+    }
+    onTouchStart(event) {
+      const rect = this.dsCanvas.getBoundingClientRect();
+      for (let i = 0; i < event.touches.length; i++) {
+        const touch = event.touches[i];
+        const mouseX = touch.clientX - rect.left;
+        const mouseY = touch.clientY - rect.top;
+        if (mouseX >= 0 && mouseX <= this.dsCanvas.width && mouseY >= 0 && mouseY <= this.dsCanvas.height) {
+          this.offsetX = mouseX;
+          this.offsetY = mouseY;
+          this.mousePressed = true;
+          this.activeTouchId = touch.identifier;
+          this.onMove(touch.clientX, touch.clientY);
+          this.draw();
+        }
+      }
+    }
+    onMouseUp() {
+      this.mousePressed = false;
+      this.draw();
+    }
+    onMouseMove(event) {
+      this.onMove(event.clientX, event.clientY);
+    }
+    onMove(x, y) {
+      if (this.mousePressed) {
+        const rect = this.dsCanvas.getBoundingClientRect();
+        this.joyx = (x - rect.left - this.dsCanvas.width / 2) / (this.dsCanvas.width / 2 - this.radius);
+        this.joyy = -(y - rect.top - this.dsCanvas.height / 2) / (this.dsCanvas.height / 2 - this.radius);
+        if (this.joyx > 1) this.joyx = 1;
+        if (this.joyx < -1) this.joyx = -1;
+        if (this.joyy > 1) this.joyy = 1;
+        if (this.joyy < -1) this.joyy = -1;
+        this.draw();
+      }
+    }
+    onTouchEnd(event) {
+      for (let i = 0; i < event.changedTouches.length; i++) {
+        const touch = event.changedTouches[i];
+        if (touch.identifier == this.activeTouchId) {
+          this.mousePressed = false;
+          this.activeTouchId = null;
+          this.draw();
+          break;
+        }
+      }
+    }
+    onTouchMove(event) {
+      event.preventDefault();
+      for (let i = 0; i < event.touches.length; i++) {
+        const touch = event.touches[i];
+        if (touch.identifier == this.activeTouchId) {
+          this.onMove(touch.clientX, touch.clientY);
+          break;
+        }
+      }
+    }
+
+    draw() {
+      const ctx = this.dsCanvas.getContext('2d');
+      ctx.beginPath();
+
+      ctx.fillStyle = "#00AA00";
+
+      ctx.roundRect(0, 0, this.dsCanvas.width, this.dsCanvas.height, [this.radius]);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = 'white';
+      ctx.arc(this.dsCanvas.width / 2 + this.joyx * (this.dsCanvas.width / 2 - this.radius), this.dsCanvas.height / 2 - this.joyy * (this.dsCanvas.height / 2 - this.radius), this.radius, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    run() {
+      if (!this.mousePressed) {
+        this.joyx = 0;
+        this.joyy = 0;
+      }
+      this.draw();
+    }
+
+    GetX() {
+      return Math.round(this.joyx * 100) / 100;
+    }
+
+    GetY() {
+      return Math.round(this.joyy * 100) / 100;
+    }
+
+  }
+
+  var joystick = new DSItemJoystick(document.getElementById("ds-canvas"));
 
   setInterval(loop, 250);
 
   async function loop() {
-    var remoteData = "?fb=" + joystick.GetY() / 100.0 + "&lr=" + joystick.GetX() / 100.0;
+    joystick.run();
+    var remoteData = "?fb=" + joystick.GetY() + "&lr=" + joystick.GetX();
+    console.log(remoteData);
     let errorTimeout;
     let abortcontroller = new AbortController();
     errorTimeout = setTimeout(() => {
