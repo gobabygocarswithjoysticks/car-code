@@ -61,10 +61,6 @@ void setupWifi() {
     webServer.send(200,"application/json", wifiSettingsBuffer);
   });
 
-  webServer.on("/favicon.ico", []() {
-    webServer.send(200,"image/ico;base64",F("AAABAAEAEBACAAAAAACwAAAAFgAAACgAAAAQAAAAIAAAAAEAAQAAAAAAQAAAAAAAAAAAAAAAAgAAAAAAAAD///8AqA5JAP//AADLWwAAuEcAALtbAAC7WwAAzMcAAP//AAD//wAA//8AAP//AADEcQAAta0AAKRpAAC9rwAAxHEAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-  });
-
   webServer.on("/setSetting", []() {
     if (webServer.args() == 1 && webServer.argName(0) == "setData") {
       for(int i = 0; i < webServer.arg(0).length(); i++){

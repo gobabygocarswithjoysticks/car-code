@@ -66,9 +66,21 @@
       row.appendChild(name);
       var valElem = document.createElement("td");
       if (settings[setting] == true || settings[setting] == false) {
-        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\'' + setting + '\', this.checked);"/>';
+        var inputElem=document.createElement("input");
+        inputElem.type="checkbox";
+        if(settings[setting]=="true"){
+          inputElem.checked=true;
+        }
+        inputElem.onchange=function(){settingsChange(setting,this.checked);};
+        valElem.appendChild(inputElem);
       } else {
-        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
+        var inputElem=document.createElement("input");
+        inputElem.type="text";
+        inputElem.maxLength=7;
+        inputElem.inputMode="decimal";
+        inputElem.value=settings[setting];
+        inputElem.onchange=function(){settingsChange(setting,this.value);};
+        valElem.appendChild(inputElem);
       }
       row.appendChild(valElem);
       list.appendChild(row);
