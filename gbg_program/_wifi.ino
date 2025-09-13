@@ -10,6 +10,8 @@ WebServer webServer(80);
 
 char statusBuffer[40];
 
+char wifiSettingsBuffer[3000];
+
 void setupWifi() {
   if (!USE_WIFI) {
     return;
@@ -48,6 +50,10 @@ void setupWifi() {
     }
     sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK);
     webServer.send(200, "application/json", statusBuffer);
+  });
+  webServer.on("/settings", []() {
+    printSettings(true);
+    webServer.send(200,"application/json", wifiSettingsBuffer);
   });
 
   webServer.on("/timeoutOn", []() {
