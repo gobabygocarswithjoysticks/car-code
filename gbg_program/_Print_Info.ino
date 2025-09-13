@@ -71,7 +71,7 @@ boolean printVariables(int interval) {
 bool ptw = false;
 char wifiSettingsBuffer[3000];
 int wifiBufI = 0;
-void printSettings(bool printToWifi) {
+void printSettings(bool printToWifi = false) {
   ptw = printToWifi;
   wifiBufI = 0;
 #else
