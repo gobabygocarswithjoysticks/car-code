@@ -25,15 +25,16 @@
   <input type="checkbox" id='timeout' onclick='sendTimeout();'></input>
   <label for="timeout" style="font-size: larger;">deactivate if signal lost</label>
 
-  <div id="joyDiv" style="width:500px;height:500px;margin:200px;float: right;">
+  <div id="joyDiv"
+    style="width:500px;height:500px;margin-left:100%;margin-right:200px;margin-bottom:20px;margin-top:20px;float:right;">
     <canvas id="ds-canvas" width="500" height="500"></canvas>
   </div>
 
-  <p>
-  <button onclick="loadSettings();" style="font-size: large;">Edit Car Settings</button>
-  <table id="car-settings">
-  </table>
-  </p>
+  <footer>
+    <button onclick="loadSettings();" style="font-size: large;">Edit Car Settings</button>
+    <table id="car-settings">
+    </table>
+  </footer>
 
 </body>
 <script>
@@ -45,7 +46,8 @@
   async function loadSettings() {
     var list = document.getElementById("car-settings");
     list.innerHTML = "";
-    settings = await fetch('/settings').json();
+    response = await fetch('/settings');
+    settings = await response.json();
     for (const setting in settings) {
       var entry = document.createElement("tr");
       entry.innerHTML = "<td>" + setting + "</td><td>" + settings[setting] + "</td>";
