@@ -66,10 +66,10 @@ void setupWifi() {
   });
 
   webServer.on("/setSetting", []() {
-    if (webServer.args() ==  && webServer.argName(0) == "setData") {
+    if (webServer.args() == 1 && webServer.argName(0) == "setData") {
       for(int i = 0; i < webServer.arg(0).length(); i++){
         settingsSerial(webServer.arg(0)[i]);
-      }
+      } 
     }
     webServer.send(200);
   });
@@ -91,6 +91,9 @@ void setupWifi() {
   webServer.on("/remoteMode", []() {
     if (webServer.args() == 2 && webServer.argName(0) == "mode" && webServer.argName(1)=="key" && webServer.arg(1).toInt()==key) {
       remoteMode = webServer.arg(0).toInt();
+      webServer.send(200);
+    }else{
+      webServer.send(403);
     }
     // webServer.send(200, "text/html", indexHTML);  #TODO: needed?
   });
