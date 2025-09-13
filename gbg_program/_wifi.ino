@@ -10,8 +10,6 @@ WebServer webServer(80);
 
 char statusBuffer[40];
 
-char wifiSettingsBuffer[3000];
-
 void setupWifi() {
   if (!USE_WIFI) {
     return;

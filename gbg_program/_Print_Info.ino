@@ -69,6 +69,7 @@ boolean printVariables(int interval) {
 
 #if defined(HAS_WIFI)
 bool ptw = false;
+char wifiSettingsBuffer[3000];
 int wifiBufI = 0;
 void printSettings(bool printToWifi = false) {
   ptw = printToWifi;
