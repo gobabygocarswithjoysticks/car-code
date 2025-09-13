@@ -11,7 +11,7 @@ WebServer webServer(80);
 
 char statusBuffer[40];
 
-uint16_t key=0;
+uint16_t key=1;
 
 void setupWifi() {
   if (!USE_WIFI) {
@@ -62,7 +62,7 @@ void setupWifi() {
   });
 
   webServer.on("/favicon.ico", []() {
-    webServer.send(200,"image/x-icon;base64",F("AAABAAEAEBACAAAAAACwAAAAFgAAACgAAAAQAAAAIAAAAAEAAQAAAAAAQAAAAAAAAAAAAAAAAgAAAAAAAAD///8AqA5JAP//AADLWwAAuEcAALtbAAC7WwAAzMcAAP//AAD//wAA//8AAP//AADEcQAAta0AAKRpAAC9rwAAxHEAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+    webServer.send(200,"image/ico;base64",F("AAABAAEAEBACAAAAAACwAAAAFgAAACgAAAAQAAAAIAAAAAEAAQAAAAAAQAAAAAAAAAAAAAAAAgAAAAAAAAD///8AqA5JAP//AADLWwAAuEcAALtbAAC7WwAAzMcAAP//AAD//wAA//8AAP//AADEcQAAta0AAKRpAAC9rwAAxHEAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
   });
 
   webServer.on("/setSetting", []() {
@@ -75,12 +75,20 @@ void setupWifi() {
   });
 
   webServer.on("/timeoutOn", []() {
-    deactivateIfRemoteDisconnects = true;
-    webServer.send(200);
+    if(webServer.args() ==  1 && webServer.argName(0) == "key" && webServer.arg(0).toInt() == key){
+      deactivateIfRemoteDisconnects = true;
+      webServer.send(200);
+    }else{
+      webServer.send(403);
+    }
   });
   webServer.on("/timeoutOff", []() {
-    deactivateIfRemoteDisconnects = false;
-    webServer.send(200);
+    if(webServer.args() ==  1 && webServer.argName(0) == "key" && webServer.arg(0).toInt() == key){
+      deactivateIfRemoteDisconnects = false;
+      webServer.send(200);
+    }else{
+      webServer.send(403);
+    }
   });
 
   webServer.on("/key",[](){
@@ -95,7 +103,6 @@ void setupWifi() {
     }else{
       webServer.send(403);
     }
-    // webServer.send(200, "text/html", indexHTML);  #TODO: needed?
   });
 
   webServer.begin();

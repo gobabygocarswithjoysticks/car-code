@@ -66,9 +66,9 @@
       row.appendChild(name);
       var valElem = document.createElement("td");
       if (settings[setting] == true || settings[setting] == false) {
-        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\'' + setting + '\', this.checked);"/>';
+        valElem.innerHTML = '<input type="checkbox" ' + (settings[setting] == "true" ? "checked" : "") + ' onchange="settingsChange(\"' + setting + '\", this.checked);"/>';
       } else {
-        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\'' + setting + '\', this.value)"/>';
+        valElem.innerHTML = '<input type="text" maxlength="7" inputmode="decimal" value="' + settings[setting] + '" onchange="settingsChange(\"' + setting + '\", this.value)"/>';
       }
       row.appendChild(valElem);
       list.appendChild(row);
@@ -207,9 +207,9 @@
 
   var joystick = new DSItemJoystick(document.getElementById("ds-canvas"));
 
-  kresp = await fetch('/key');
-  var key = await kresp.text();
-
+  fetch('/key').then(response => response.text()).then(data => {
+    key = data;
+  });
   setInterval(loop, 250);
 
   async function loop() {
@@ -218,7 +218,7 @@
     let errorTimeout;
     let abortcontroller = new AbortController();
     errorTimeout = setTimeout(() => {
-      abortcontroller.abort("aborted because timeout");
+      abortcontroller.abort("timeout");
     }, 200);
 
     try {
@@ -257,9 +257,9 @@
 
   function sendTimeout() {
     if (document.getElementById("timeout").checked) {
-      fetch("/timeoutOn");
+      fetch("/timeoutOn?key=" + key);
     } else {
-      fetch("/timeoutOff");
+      fetch("/timeoutOff?key=" + key);
     }
   }
 
@@ -268,7 +268,7 @@
   }
 
   function activate() {
-    fetch("/activate&key=" + key);
+    fetch("/activate?key=" + key);
   }
 
 </script>
