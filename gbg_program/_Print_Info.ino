@@ -5,6 +5,10 @@ boolean printVariables(int interval) {
   if (interval < 0)
     return false;
   if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
+#if defined(HAS_WIFI)
+    wifiBufI = 0;
+    ptw = false;
+#endif
     lastMillisPrintedValues = millis();
     serialChecksum = 1; Serial.print("{");
     prnt(F("current values, millis:"), millis());
