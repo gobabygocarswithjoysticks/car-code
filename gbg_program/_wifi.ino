@@ -129,7 +129,6 @@ void runWifiInput(float& speedInput, float& turnInput) {
   }
 }
 
-
 void runWifi() {
   if (!USE_WIFI) {
     return;

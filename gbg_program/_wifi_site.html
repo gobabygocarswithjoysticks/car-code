@@ -44,7 +44,13 @@
 <script>
   /*comments must be like this never with two slashes*/
   function settingsChange(name, value) {
-    fetch("/setSetting?setData=" + name + ":" + value + ",");
+    fetch("/setSetting?setData=" + name + ":" + value + ",").then(response => response.status()).then(data => {
+      if (data == 200) {
+        loadSettings();
+      } else {
+        console.log("error changing setting");
+      }
+    });
   }
 
   function saveSettings() {
@@ -66,20 +72,20 @@
       row.appendChild(name);
       var valElem = document.createElement("td");
       if (settings[setting] == true || settings[setting] == false) {
-        var inputElem=document.createElement("input");
-        inputElem.type="checkbox";
-        if(settings[setting]=="true"){
-          inputElem.checked=true;
+        var inputElem = document.createElement("input");
+        inputElem.type = "checkbox";
+        if (settings[setting] == "true") {
+          inputElem.checked = true;
         }
-        inputElem.onchange=function(){settingsChange(setting,this.checked);};
+        inputElem.onchange = function () { settingsChange(setting, this.checked); };
         valElem.appendChild(inputElem);
       } else {
-        var inputElem=document.createElement("input");
-        inputElem.type="text";
-        inputElem.maxLength=7;
-        inputElem.inputMode="decimal";
-        inputElem.value=settings[setting];
-        inputElem.onchange=function(){settingsChange(setting,this.value);};
+        var inputElem = document.createElement("input");
+        inputElem.type = "text";
+        inputElem.maxLength = 7;
+        inputElem.inputMode = "decimal";
+        inputElem.value = settings[setting];
+        inputElem.onchange = function () { settingsChange(setting, this.value); };
         valElem.appendChild(inputElem);
       }
       row.appendChild(valElem);

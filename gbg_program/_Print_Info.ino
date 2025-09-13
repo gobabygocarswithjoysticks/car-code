@@ -211,6 +211,7 @@ void printSettings() {
     Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
     Serial.println("}");
   }
+  ptw = false;
 #else
   printAndAppendToChecksum(F("\"CHECKSUM\":"));
   Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
