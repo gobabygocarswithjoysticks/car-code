@@ -1,6 +1,5 @@
 #ifndef SETTINGS_NAMES_H
 #define SETTINGS_NAMES_H
-
 #define FV(x) (__FlashStringHelper*)(x)
 
 const char control_right[] PROGMEM = "CONTROL_RIGHT";

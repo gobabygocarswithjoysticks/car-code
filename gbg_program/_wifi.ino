@@ -1,4 +1,5 @@
 #if defined(HAS_WIFI)
+#include "settings_names.h"
 
 const unsigned long signalLossTimeout = 1100;
 
@@ -48,6 +49,10 @@ void setupWifi() {
     }
     sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK);
     webServer.send(200, "application/json", statusBuffer);
+  });
+  webServer.on("/settings", []() {
+    printSettings(true);
+    webServer.send(200,"application/json", wifiSettingsBuffer);
   });
 
   webServer.on("/timeoutOn", []() {

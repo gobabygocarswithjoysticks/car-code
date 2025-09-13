@@ -67,10 +67,28 @@ boolean printVariables(int interval) {
   return false;
 }
 
+#if defined(HAS_WIFI)
+bool ptw = false;
+char wifiSettingsBuffer[3000];
+int wifiBufI = 0;
+void printSettings(bool printToWifi) {
+  ptw = printToWifi;
+  wifiBufI = 0;
+#else
 void printSettings() {
+#endif
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   serialChecksum = 2; // starting and ending brackets
+#if defined(HAS_WIFI)
+  if (printToWifi) {
+    wifiSettingsBuffer[wifiBufI++] = '{';
+  } else {
+    Serial.print(F("{"));
+  }
+#else
   Serial.print(F("{"));
+#endif
+
   prnt(F("current settings, version:"), version_number);
   prnt(FV(SETTING[S_CONTROL_RIGHT]), CONTROL_RIGHT);
   prnt(FV(SETTING[S_CONTROL_CENTER_X]), CONTROL_CENTER_X);
@@ -125,6 +143,30 @@ void printSettings() {
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
     printAndAppendToChecksum(F("\"DRIVE_BUTTON_"));
+#if defined(HAS_WIFI)
+    if (printToWifi) {
+      wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d", db + 1);
+      wifiSettingsBuffer[wifiBufI++] = '"';
+      wifiSettingsBuffer[wifiBufI++] = ':';
+      wifiSettingsBuffer[wifiBufI++] = '[';
+      wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d", driveButtons[db].pin);
+      wifiSettingsBuffer[wifiBufI++] = ',';
+      wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", driveButtons[db].speed);
+      wifiSettingsBuffer[wifiBufI++] = ',';
+      wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", driveButtons[db].turn);
+      wifiSettingsBuffer[wifiBufI++] = ']';
+      wifiSettingsBuffer[wifiBufI++] = ',';
+    } else {
+      serialChecksum += Serial.print(db + 1);
+      printAndAppendToChecksum(F("\":["));
+      serialChecksum += Serial.print(driveButtons[db].pin);
+      printAndAppendToChecksum(F(","));
+      serialChecksum += Serial.print(driveButtons[db].speed, 4);
+      printAndAppendToChecksum(F(","));
+      serialChecksum += Serial.print(driveButtons[db].turn, 4);
+      printAndAppendToChecksum(F("],"));
+    }
+#else
     serialChecksum += Serial.print(db + 1);
     printAndAppendToChecksum(F("\":["));
     serialChecksum += Serial.print(driveButtons[db].pin);
@@ -133,6 +175,7 @@ void printSettings() {
     printAndAppendToChecksum(F(","));
     serialChecksum += Serial.print(driveButtons[db].turn, 4);
     printAndAppendToChecksum(F("],"));
+#endif
   }
   prntbool(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH);
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
@@ -158,31 +201,119 @@ void printSettings() {
   prnt(FV(SETTING[S_CAR_WIFI_PASSWORD]), CAR_WIFI_PASSWORD);
 #endif
 
+#if defined(HAS_WIFI)
+  if (printToWifi) {
+    wifiSettingsBuffer[wifiBufI++] = '}';
+    wifiSettingsBuffer[wifiBufI++ ] = '\0';
+  } else {
+    printAndAppendToChecksum(F("\"CHECKSUM\":"));
+    Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
+    Serial.println("}");
+  }
+#else
   printAndAppendToChecksum(F("\"CHECKSUM\":"));
   Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
   Serial.println("}");
+#endif
 
 }
 
 void prnt(const __FlashStringHelper *fsh, int value) {
+#if defined(HAS_WIFI)
+  if (ptw) {
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%S", fsh);
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d", value);
+    wifiSettingsBuffer[wifiBufI++ ] = ',';
+    wifiSettingsBuffer[wifiBufI++ ] = ' ';
+  } else {
+    serialChecksum += 5;
+    Serial.print("\"");
+    serialChecksum += Serial.print(fsh);
+    Serial.print("\":");
+    serialChecksum += Serial.print(value);
+    Serial.print(", ");
+  }
+#else
   serialChecksum += 5;
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
   Serial.print("\":");
   serialChecksum += Serial.print(value);
   Serial.print(", ");
+#endif
 }
 
+#if defined(HAS_WIFI)
+char stringLabel[50];
+#endif
 void prntf(const __FlashStringHelper *fsh, float value) {
+#if defined(HAS_WIFI)
+  if (ptw) {
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    strcpy_P(stringLabel, (char *)fsh);
+    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", value);
+    wifiSettingsBuffer[wifiBufI++ ] = ',';
+    wifiSettingsBuffer[wifiBufI++ ] = ' ';
+  } else {
+    serialChecksum += 5;
+    Serial.print("\"");
+    serialChecksum += Serial.print(fsh);
+    Serial.print("\":");
+    serialChecksum += Serial.print(value, 4);
+    Serial.print(", ");
+  }
+#else
   serialChecksum += 5;
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
   Serial.print("\":");
   serialChecksum += Serial.print(value, 4);
   Serial.print(", ");
+#endif
 }
 
 void prntbool(const __FlashStringHelper *fsh, boolean value) {
+#if defined(HAS_WIFI)
+  if (ptw) {
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    strcpy_P(stringLabel, (char *)fsh);
+    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiSettingsBuffer[wifiBufI++ ] = '"';
+    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    if (value) {
+      wifiSettingsBuffer[wifiBufI++ ] = 't';
+      wifiSettingsBuffer[wifiBufI++ ] = 'r';
+      wifiSettingsBuffer[wifiBufI++ ] = 'u';
+      wifiSettingsBuffer[wifiBufI++ ] = 'e';
+      wifiSettingsBuffer[wifiBufI++ ] = ',';
+      wifiSettingsBuffer[wifiBufI++ ] = ' ';
+    } else {
+      wifiSettingsBuffer[wifiBufI++ ] = 'f';
+      wifiSettingsBuffer[wifiBufI++ ] = 'a';
+      wifiSettingsBuffer[wifiBufI++ ] = 'l';
+      wifiSettingsBuffer[wifiBufI++ ] = 's';
+      wifiSettingsBuffer[wifiBufI++ ] = 'e';
+      wifiSettingsBuffer[wifiBufI++ ] = ',';
+      wifiSettingsBuffer[wifiBufI++ ] = ' ';
+    }
+  } else {
+    serialChecksum += 3; // for the three total characters, " and ":
+    Serial.print("\"");
+    serialChecksum += Serial.print(fsh);
+    Serial.print("\":");
+    if (value) {
+      serialChecksum += Serial.print("true, ");
+    } else {
+      serialChecksum += Serial.print("false, ");
+    }
+  }
+#else
   serialChecksum += 3; // for the three total characters, " and ":
   Serial.print("\"");
   serialChecksum += Serial.print(fsh);
@@ -192,8 +323,18 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
   } else {
     serialChecksum += Serial.print("false, ");
   }
+#endif
 }
 
-void printAndAppendToChecksum(const __FlashStringHelper *fsh) {
+void printAndAppendToChecksum(const __FlashStringHelper * fsh) {
+#if defined(HAS_WIFI)
+  if (ptw) {
+    strcpy_P(stringLabel, (char *)fsh);
+    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+  } else {
+    serialChecksum += Serial.print(fsh);
+  }
+#else
   serialChecksum += Serial.print(fsh);
+#endif
 }
