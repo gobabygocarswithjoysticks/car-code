@@ -637,9 +637,20 @@ void setup() {
   startupPulse = ENABLE_STARTUP_PULSE;
 
   delay(120);
-  printSettings();  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
+#if defined(HAS_WIFI)
+  printSettings(false);
+#else
+  printSettings();
+#endif
+  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   delay(120);
-  printSettings();  // do it again to increase the chance of a valid message going through
+
+#if defined(HAS_WIFI)
+  printSettings(false);
+#else
+  printSettings();
+#endif
+  // do it again to increase the chance of a valid message going through
 
   setupPins();
 #if defined(HAS_WIFI)

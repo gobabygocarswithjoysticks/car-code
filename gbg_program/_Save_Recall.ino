@@ -397,7 +397,11 @@ void settingsSerial() {
         changedSomething = false;
         Serial.println(F("{\"result\": \"saved\"}"));
       } else if (strcmp(k, "SETTINGS") == 0) {
+#if defined(HAS_WIFI)
+        printSettings(false);
+#else
         printSettings();
+#endif
         changedSomething = false;
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
