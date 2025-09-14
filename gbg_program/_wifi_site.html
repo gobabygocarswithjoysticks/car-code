@@ -31,7 +31,7 @@
   </div>
 
   <div id="telem-div">
-    <table>
+    <table style="border:1px solid">
       <tr>
         <td>joystick left/right:</td>
         <td>joystick down/up:</td>
@@ -69,7 +69,6 @@
       val = String(value);
     }
     if (name.slice(0, -2) == "DRIVE_BUTTON") {
-      console.log(val);
       val = name.substring(name.lastIndexOf("_") + 1) + '_' + val.replaceAll(',', '_');
       name = 'DRIVE_BUTTONS';
     }
@@ -196,6 +195,7 @@
       }
       delete parsed["gbg settings backup, version"];
       num = 0;
+      document.getElementById(recall - settings - button).style.backgroundColor = "aqua";
       for (const setting in parsed) {
         document.getElementById('recall-stats').innerHTML = ' [' + Math.round(num / Object.keys(parsed).length * 100) + '%]';
         num++;
@@ -214,6 +214,9 @@
         }
       }
       loadSettings();
+      if (document.getElementById("recall-settings-button").style.backgroundColor != "yellow") {
+        document.getElementById("recall-settings-button").style.backgroundColor = "";
+      }
       document.getElementById('recall-stats').innerHTML = ' [loaded]';
       document.getElementById("save-settings-button").style.backgroundColor = "yellow";
     };
