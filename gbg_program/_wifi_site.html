@@ -37,6 +37,8 @@
       <button id="load-settings-button" onclick="loadSettings();" style="font-size: large;">Load Settings</button>
       <button id="save-settings-button" onclick="saveSettings();" style="font-size: large;">Save Settings</button>
       <button onclick="saveSettingsToFile();">save settings to file</button>
+      <button id='recall-settings-button' onclick="recallSettingsFromFile();">load settings from file<span
+          id='recall-stats'></span></button>
       <table id="car-settings">
       </table>
     </div>
@@ -44,7 +46,21 @@
 </body>
 <script>
   /*comments must be like this never with two slashes*/
+  function processValue(name, value) {
+    if (value === true || value === false) {
+      val = value ? 1 : 0;
+    } else {
+      val = String(value);
+    }
+    if (name.slice(0, -2) == "DRIVE_BUTTON") {
+      console.log(val);
+      val = name.substring(name.lastIndexOf("_") + 1) + '_' + val.replaceAll(',', '_');
+      name = 'DRIVE_BUTTONS';
+    }
+    return [name, val];
+  }
   function settingsChange(name, value) {
+    [name, value] = processValue(name, value);
     try {
       document.getElementById("load-settings-button").style.backgroundColor = "orange";
       fetch("/setSetting?setData=" + name + ":" + value + ",").then(response => response.status).then(data => {
@@ -102,7 +118,7 @@
         if (settings[setting] === true) {
           inputElem.checked = true;
         }
-        inputElem.onchange = function () { settingsChange(setting, this.checked ? 1 : 0); };
+        inputElem.onchange = function () { settingsChange(setting, this.value); };
         valElem.appendChild(inputElem);
       } else {
         var inputElem = document.createElement("input");
@@ -116,6 +132,76 @@
       row.appendChild(valElem);
       list.appendChild(row);
     }
+  }
+
+  async function saveSettingsToFile() {
+    responseV = await fetch('/settings');
+    settingsV = await responseV.json();
+    delete settingsV["current settings, version:"];
+    var resultString = '{"gbg settings backup, version": 10,';
+    resultString += JSON.stringify(settingsV, null, 2).slice(1);
+    downloadFile(resultString, "gbg car config.txt");
+  }
+
+  function downloadFile(input, fileName) {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([input]));
+    link.download = fileName;
+    document.body.append(link);
+    link.click();
+    link.remove();
+  };
+
+  function sleep(sec) {
+    return new Promise(resolve => setTimeout(resolve, sec * 1000.0));
+  }
+
+  async function recallSettingsFromFile() {
+    document.getElementById("recall-settings-button").style.backgroundColor = "";
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.txt';
+    input.onchange = async e => {
+      const file = e.target.files[0];
+      if (!file) {
+        return;
+      }
+      const text = await file.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        console.log("Error parsing JSON: " + e.message);
+        return;
+      }
+      if (parsed["gbg settings backup, version"] !== 10) {
+        console.log("Unsupported settings version");
+        return;
+      }
+      delete parsed["gbg settings backup, version"];
+      num = 0;
+      for (const setting in parsed) {
+        document.getElementById('recall-stats').innerHTML = ' [' + Math.round(num / Object.keys(parsed).length * 100) + '%]';
+        num++;
+        [name, valueToSend] = processValue(setting, parsed[setting]);
+        try {
+          const response = await fetch('/setSetting?setData=' + name + ":" + valueToSend + ",");
+          if (response.status !== 200) {
+            console.log("error setting " + name);
+            document.getElementById("recall-settings-button").style.backgroundColor = "yellow";
+          }
+          await sleep(0.1);
+        } catch (e) {
+          console.log("error setting " + name);
+          document.getElementById("recall-settings-button").style.backgroundColor = "yellow";
+          await sleep(0.15);
+        }
+      }
+      loadSettings();
+      document.getElementById('recall-stats').innerHTML = ' [loaded]';
+      document.getElementById("save-settings-button").style.backgroundColor = "yellow";
+    };
+    input.click();
   }
 
   class DSItemJoystick {
