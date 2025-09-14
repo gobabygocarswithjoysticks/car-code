@@ -39,6 +39,9 @@ void settingsMemory()
     movementAllowed = false;
   } // end of special case of overwriting using default values
   recallSettings();
+#if defined(HAS_WIFI)
+  USE_WIFI_val_on_startup = USE_WIFI;
+#endif
 }
 
 #include "settings_names.h"

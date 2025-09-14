@@ -34,8 +34,8 @@
     <summary> <b>Edit Settings</b> <br> &#9888; Don't edit settings with a kid in the car. Editing settings can cause
       the car to move. </summary>
     <div>
-      <button onclick="loadSettings();" style="font-size: large;">Load Settings</button>
-      <button onclick="saveSettings();" style="font-size: large;">Save Settings</button>
+      <button id="load-settings-button" onclick="loadSettings();" style="font-size: large;">Load Settings</button>
+      <button id="save-settings-button" onclick="saveSettings();" style="font-size: large;">Save Settings</button>
       <table id="car-settings">
       </table>
     </div>
@@ -44,24 +44,48 @@
 <script>
   /*comments must be like this never with two slashes*/
   function settingsChange(name, value) {
-    fetch("/setSetting?setData=" + name + ":" + value + ",").then(response => response.status()).then(data => {
-      if (data == 200) {
-        loadSettings();
-      } else {
-        console.log("error changing setting");
-      }
-    });
+    try {
+      document.getElementById("load-settings-button").style.backgroundColor = "orange";
+      fetch("/setSetting?setData=" + name + ":" + value + ",").then(response => response.status).then(data => {
+        if (data == 200) {
+          document.getElementById("save-settings-button").style.backgroundColor = "yellow";
+          loadSettings();
+        } else {
+          document.getElementById("load-settings-button").style.backgroundColor = "yellow";
+        }
+      });
+    } catch (e) {
+      document.getElementById("load-settings-button").style.backgroundColor = "yellow";
+    }
   }
 
   function saveSettings() {
-    fetch('/setSetting?setData="SAVE,"');
+    document.getElementById("save-settings-button").style.backgroundColor = "orange";
+    try {
+      fetch('/setSetting?setData="SAVE,"').then(response => response.status).then(data => {
+        if (data == 200) {
+          document.getElementById("save-settings-button").style.backgroundColor = "lightgreen";
+        } else {
+          document.getElementById("save-settings-button").style.backgroundColor = "red";
+        }
+      });
+    } catch (e) {
+      document.getElementById("save-settings-button").style.backgroundColor = "red";
+    }
   }
 
   async function loadSettings() {
     var list = document.getElementById("car-settings");
     list.innerHTML = "";
-    response = await fetch('/settings');
-    settings = await response.json();
+    document.getElementById("load-settings-button").style.backgroundColor = "orange";
+    try {
+      response = await fetch('/settings');
+      settings = await response.json();
+      document.getElementById("load-settings-button").style.backgroundColor = "";
+    } catch (e) {
+      document.getElementById("load-settings-button").style.backgroundColor = "red";
+      return;
+    }
     for (const setting in settings) {
       if (setting == "current settings, version:") {
         continue;
@@ -71,13 +95,13 @@
       name.innerHTML = setting;
       row.appendChild(name);
       var valElem = document.createElement("td");
-      if (settings[setting] == true || settings[setting] == false) {
+      if (settings[setting] === true || settings[setting] === false) {
         var inputElem = document.createElement("input");
         inputElem.type = "checkbox";
-        if (settings[setting] == "true") {
+        if (settings[setting] === true) {
           inputElem.checked = true;
         }
-        inputElem.onchange = function () { settingsChange(setting, this.checked); };
+        inputElem.onchange = function () { settingsChange(setting, this.checked ? 1 : 0); };
         valElem.appendChild(inputElem);
       } else {
         var inputElem = document.createElement("input");
@@ -194,13 +218,13 @@
       const ctx = this.dsCanvas.getContext('2d');
       ctx.beginPath();
 
-      ctx.fillStyle = "#00AA00";
+      ctx.fillStyle = "#88FF99";
 
       ctx.roundRect(0, 0, this.dsCanvas.width, this.dsCanvas.height, [this.radius]);
       ctx.fill();
 
       ctx.beginPath();
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = 'black';
       ctx.arc(this.dsCanvas.width / 2 + this.joyx * (this.dsCanvas.width / 2 - this.radius), this.dsCanvas.height / 2 - this.joyy * (this.dsCanvas.height / 2 - this.radius), this.radius, 0, 2 * Math.PI);
       ctx.fill();
     }
@@ -224,10 +248,11 @@
   }
 
   var joystick = new DSItemJoystick(document.getElementById("ds-canvas"));
-
+  var key = 0;
   fetch('/key').then(response => response.text()).then(data => {
-    key = data;
+    key = parseInt(data);
   });
+  loadSettings();
   setInterval(loop, 250);
 
   async function loop() {

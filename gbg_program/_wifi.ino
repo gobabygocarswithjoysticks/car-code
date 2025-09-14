@@ -1,6 +1,8 @@
 #if defined(HAS_WIFI)
 #include "settings_names.h"
 
+boolean USE_WIFI_val_on_startup = false;
+
 const unsigned long signalLossTimeout = 1100;
 
 #include <WiFi.h>
@@ -89,6 +91,7 @@ void setupWifi() {
 
   webServer.on("/key",[](){
     key+=random(10,10000);
+    if(key==0) key=1;
     webServer.send(200,"text/plain",String(key));
   });
 
@@ -130,7 +133,7 @@ void runWifiInput(float& speedInput, float& turnInput) {
 }
 
 void runWifi() {
-  if (!USE_WIFI) {
+  if (!USE_WIFI_val_on_startup) {
     return;
   }
   webServer.handleClient();
