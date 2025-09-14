@@ -274,6 +274,8 @@ const int16_t rcControlDeadband = 50;
 #if defined(HAS_WIFI)
 boolean activatedByRemote = true;
 
+boolean USE_WIFI_val_on_startup = false;
+
 boolean deactivateIfRemoteDisconnects = false;
 byte remoteMode = 0; //0 is car, 1 is remote
 float remoteFB = 0;

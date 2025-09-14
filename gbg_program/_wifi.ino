@@ -1,8 +1,6 @@
 #if defined(HAS_WIFI)
 #include "settings_names.h"
 
-boolean USE_WIFI_val_on_startup = false;
-
 const unsigned long signalLossTimeout = 1100;
 
 #include <WiFi.h>
