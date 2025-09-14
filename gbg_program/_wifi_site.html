@@ -30,6 +30,22 @@
     <canvas id="ds-canvas" width="500" height="500"></canvas>
   </div>
 
+  <div id="telem-div">
+    <table>
+      <tr>
+        <td>joystick left/right:</td>
+        <td>joystick down/up:</td>
+        <td>left motor:</td>
+        <td>right motor:</td>
+      </tr>
+      <tr>
+        <td id="telem-x">0</td>
+        <td id="telem-y">0</td>
+        <td id="telem-l">0</td>
+        <td id="telem-r">0</td>
+      </tr>
+    </table>
+  </div>
   <details>
     <summary> <b>Edit Settings</b> <br> &#9888; Don't edit settings with a kid in the car. Editing settings can cause
       the car to move. </summary>
@@ -379,6 +395,12 @@
       if (fetchedResponse["k"] != key) {
         document.getElementById("status").innerHTML = "reload page";
       }
+
+      document.getElementById("telem-x").innerHTML = fetchedResponse["x"];
+      document.getElementById("telem-y").innerHTML = fetchedResponse["y"];
+      document.getElementById("telem-l").innerHTML = fetchedResponse["l"];
+      document.getElementById("telem-r").innerHTML = fetchedResponse["r"];
+
     } catch (e) {
       document.getElementById("status").innerHTML = "Disconnected";
     }
