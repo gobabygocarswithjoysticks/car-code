@@ -1,23 +1,26 @@
-At the request of many families and physical therapists, we added features to this code to allow remote control of the go baby go car.
+## At the request of many families and physical therapists, we added features to this code to allow remote control of the go baby go car.
 
+* wifi/website remote control
 * on/off switch
 * on/off buttons
 * joystick/button toggling
 * RC receiver input
 
-Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: 
+## Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: 
 
-(remote control user manual coming soon)
+* (remote control user manual coming soon)
 
-Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
+## Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
-## Notes on Wifi/website remote control
+## Notes on wifi/website remote control
 
 This feature is available with ESP32, Pico 1W, and Pico 2W processors.
 
 Check the “use wifi” setting on the programmer website, then follow the instructions and QR codes on the programmer website.
 
-The Pico will create a wifi network and will serve a webpage that allows you to control the car from a phone, tablet, or computer.
+The car will create a wifi network and will serve a webpage that allows you to control the car and edit settings from a phone, tablet, or computer.
+
+The wifi network that the car creates is separate from the internet, so when you're connected to the car you won't have internet access.
 
 The wifi range is unreliable (sometimes measured as 10 feet sometimes as over 100 feet).
 
