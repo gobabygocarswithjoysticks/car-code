@@ -95,13 +95,13 @@ char phrase[20];
 #if defined(HAS_WIFI)
 void settingsSerial(int8_t input) {
   int8_t in;
-  if(input==-1){
+  if (input == -1) {
     in = Serial.read();
-  }else{
-    in=input;
+  } else {
+    in = input;
   }
 #else
-  void settingsSerial() {
+void settingsSerial() {
   int8_t in = Serial.read();
 #endif
   if (in != -1) {

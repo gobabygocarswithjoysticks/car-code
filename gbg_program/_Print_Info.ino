@@ -211,7 +211,7 @@ void printSettings() {
 
 #if defined(HAS_WIFI)
   if (printToWifi) {
-    wifiBufI-=2; // delete space and comma from prnt CAR_WIFI_PASSWORD
+    wifiBufI -= 2; // delete space and comma from prnt CAR_WIFI_PASSWORD
     wifiSettingsBuffer[wifiBufI++] = '}';
     wifiSettingsBuffer[wifiBufI++ ] = '\0';
   } else {

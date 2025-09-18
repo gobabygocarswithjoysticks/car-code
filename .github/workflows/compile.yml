@@ -343,7 +343,6 @@ jobs:
          # delete files other than programName.ino.hex (for AVR), programName.ino.uf2 (for Pico), or programName.ino.bin (for esp32) since others aren't needed
 
          if [[ "${{ matrix.fqbn }}" != "esp32:esp32:esp32" ]]; then rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.bin; fi
-         rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.elf
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.eep
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.bin
          rm -f hex/${{ matrix.configName }}/${{ matrix.code-dir }}.ino.with_bootloader.hex
