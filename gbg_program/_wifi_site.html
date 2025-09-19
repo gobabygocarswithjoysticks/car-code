@@ -248,7 +248,7 @@
       document.addEventListener('mousemove', this.onMouseMoveBound);
       document.addEventListener('touchstart', this.onTouchStartBound);
       document.addEventListener('touchend', this.onTouchEndBound);
-      document.addEventListener('touchmove', this.onTouchMoveBound, { passive: false });
+      document.addEventListener('touchmove', this.onTouchMoveBound, { passive: true });
 
       this.draw();
     }
