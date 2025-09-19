@@ -26,7 +26,7 @@ void setupWifi() {
   WiFi.softAP(nameBuffer, passBuffer);
 
   webServer.on("/", []() {
-    webServer.send(200, "text/html", indexHTML);
+    webServer.send_P(200, "text/html", indexHTML);
   });
   webServer.on("/activate", []() {
     if (webServer.args() == 1 && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {

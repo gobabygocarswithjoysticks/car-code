@@ -41,7 +41,7 @@ jobs:
           tr '\n' ' ' < ./gbg_program/_website.ino > ./gbg_program/_website.ino.tmp
           mv -f ./gbg_program/_website.ino.tmp ./gbg_program/_website.ino
 
-          sed -i 's:^:\/\/ Do not edit. Auto generated from _wifi_site.html \n#if defined(HAS_WIFI)\n  const char indexHTML[] = " :' ./gbg_program/_website.ino
+          sed -i 's:^:\/\/ Do not edit. Auto generated from _wifi_site.html \n#if defined(HAS_WIFI)\n  const char indexHTML[] PROGMEM = " :' ./gbg_program/_website.ino
           printf '"; \n#endif' >> ./gbg_program/_website.ino
 
           git add .
