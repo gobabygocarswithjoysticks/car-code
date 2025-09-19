@@ -248,7 +248,7 @@
       document.addEventListener('mousemove', this.onMouseMoveBound);
       document.addEventListener('touchstart', this.onTouchStartBound);
       document.addEventListener('touchend', this.onTouchEndBound);
-      document.addEventListener('touchmove', this.onTouchMoveBound, { passive: true });
+      document.addEventListener('touchmove', this.onTouchMoveBound, { passive: false });
 
       this.draw();
     }
@@ -312,7 +312,9 @@
       }
     }
     onTouchMove(event) {
-      event.preventDefault();
+      if (this.mousePressed) {
+        event.preventDefault();
+      }
       for (let i = 0; i < event.touches.length; i++) {
         const touch = event.touches[i];
         if (touch.identifier == this.activeTouchId) {
