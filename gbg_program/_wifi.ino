@@ -9,7 +9,7 @@ const unsigned long signalLossTimeout = 1100;
 IPAddress apIP(10, 0, 0, 1);
 WebServer webServer(80);
 
-char statusBuffer[40];
+char statusBuffer[120];
 
 uint16_t key = 1;
 
