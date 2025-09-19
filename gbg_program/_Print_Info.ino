@@ -246,6 +246,7 @@ void prnt(const __FlashStringHelper *fsh, int value) {
     serialChecksum += Serial.print(value);
     Serial.print(", ");
   }
+  delay(0);
 #else
   serialChecksum += 5;
   Serial.print("\"");
@@ -278,6 +279,7 @@ void prntf(const __FlashStringHelper *fsh, float value) {
     serialChecksum += Serial.print(value, 4);
     Serial.print(", ");
   }
+  delay(0);
 #else
   serialChecksum += 5;
   Serial.print("\"");
@@ -323,6 +325,7 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
       serialChecksum += Serial.print("false, ");
     }
   }
+  delay(0);
 #else
   serialChecksum += 3; // for the three total characters, " and ":
   Serial.print("\"");
@@ -344,6 +347,7 @@ void printAndAppendToChecksum(const __FlashStringHelper * fsh) {
   } else {
     serialChecksum += Serial.print(fsh);
   }
+  delay(0);
 #else
   serialChecksum += Serial.print(fsh);
 #endif
