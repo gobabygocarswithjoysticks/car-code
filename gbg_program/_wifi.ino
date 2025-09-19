@@ -29,7 +29,7 @@ void setupWifi() {
     webServer.send(200, "text/html", indexHTML);
   });
   webServer.on("/activate", []() {
-    if (webServer.args() == 1 && webServer.argName(0) == "key" && webServer.arg(0).toInt() == key) {
+    if (webServer.args() == 1 && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       activatedByRemote = true;
       webServer.send(200);
     } else {
@@ -41,7 +41,7 @@ void setupWifi() {
     webServer.send(200);
   });
   webServer.on("/status", []() {
-    if (webServer.args() == 3 && webServer.argName(0) == "fb" && webServer.argName(1) == "lr" && webServer.argName(2) == "key" && webServer.arg(2).toInt() == key) {
+    if (webServer.args() == 3 && webServer.hasArg("fb") && webServer.hasArg("lr") && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       lastRemoteCommandMillis = millis();
       remoteFB = webServer.arg("fb").toFloat();
       remoteLR = webServer.arg("lr").toFloat();
@@ -62,16 +62,17 @@ void setupWifi() {
   });
 
   webServer.on("/setSetting", []() {
-    if (webServer.args() == 1 && webServer.argName(0) == "setData") {
-      for (int i = 0; i < webServer.arg(0).length(); i++) {
-        settingsSerial(webServer.arg(0)[i]);
+    if (webServer.args() == 1 && webServer.hasArg("setData")) {
+      for (int i = 0; i < webServer.arg("setData").length(); i++) {
+        settingsSerial(webServer.arg("setData")[i]);
+        delay(0);
       }
     }
     webServer.send(200);
   });
 
   webServer.on("/timeoutOn", []() {
-    if (webServer.args() ==  1 && webServer.argName(0) == "key" && webServer.arg(0).toInt() == key) {
+    if (webServer.args() ==  1 && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       deactivateIfRemoteDisconnects = true;
       webServer.send(200);
     } else {
@@ -79,7 +80,7 @@ void setupWifi() {
     }
   });
   webServer.on("/timeoutOff", []() {
-    if (webServer.args() ==  1 && webServer.argName(0) == "key" && webServer.arg(0).toInt() == key) {
+    if (webServer.args() ==  1 && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       deactivateIfRemoteDisconnects = false;
       webServer.send(200);
     } else {
@@ -94,8 +95,8 @@ void setupWifi() {
   });
 
   webServer.on("/remoteMode", []() {
-    if (webServer.args() == 2 && webServer.argName(0) == "mode" && webServer.argName(1) == "key" && webServer.arg(1).toInt() == key) {
-      remoteMode = webServer.arg(0).toInt();
+    if (webServer.args() == 2 && webServer.hasArg("mode") && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
+      remoteMode = webServer.arg("mode").toInt();
       webServer.send(200);
     } else {
       webServer.send(403);
