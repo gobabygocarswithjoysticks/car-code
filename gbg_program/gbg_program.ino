@@ -360,6 +360,11 @@ class Servo {
       pin2 = _pin2;
       pinMode(pinEn, OUTPUT);
       digitalWrite(pinEn, HIGH);
+      delay(1);
+      digitalWrite(pinEn, LOW);
+      delayMicroseconds(35); 
+      // reset drv8245 and turn off nsleep
+      digitalWrite(pinEn, HIGH);
       pinMode(pin1, OUTPUT);
       analogWrite(pin1, 0);
       pinMode(pin2, OUTPUT);
