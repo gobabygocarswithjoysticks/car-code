@@ -358,6 +358,10 @@ class Servo {
       pinEn = _pinEn;
       pin1 = _pin1;
       pin2 = _pin2;
+      pinMode(pin1, OUTPUT);
+      analogWrite(pin1, 0);
+      pinMode(pin2, OUTPUT);
+      analogWrite(pin2, 0);
       pinMode(pinEn, OUTPUT);
       digitalWrite(pinEn, HIGH);
       delay(5);
@@ -365,10 +369,6 @@ class Servo {
       delayMicroseconds(35); 
       // reset drv8245 and turn off nsleep
       digitalWrite(pinEn, HIGH);
-      pinMode(pin1, OUTPUT);
-      analogWrite(pin1, 0);
-      pinMode(pin2, OUTPUT);
-      analogWrite(pin2, 0);
     }
     void writeMicroseconds(int microseconds) {
       if (isAttached) {
