@@ -582,7 +582,8 @@ float batVoltage = NAN;
 float leftCurrent = NAN;
 float rightCurrent = NAN;
 
-void i2cReceive()
+void i2cReceive(){
+}
 
 void setupPCB() {
   Wire1.setSDA(14);
