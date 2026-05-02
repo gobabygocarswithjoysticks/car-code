@@ -575,7 +575,7 @@ void runRCInput(float &speed, float &turn) {
 }
 
 #ifdef IS_PCB
-
+#include <Wire.h>
 boolean pcbSensorsAvailable = false;
 
 float batVoltage = NAN;
