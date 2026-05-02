@@ -366,8 +366,7 @@ class Servo {
       digitalWrite(pinEn, HIGH);
       delay(5);
       digitalWrite(pinEn, LOW);
-      delayMicroseconds(35); 
-      // reset drv8245 and turn off nsleep
+      delayMicroseconds(12); // reset drv8245 and turn off nsleep
       digitalWrite(pinEn, HIGH);
     }
     void writeMicroseconds(int microseconds) {
@@ -419,11 +418,11 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef IS_PCB
 #if defined(HAS_WIFI)
-const int version_number = 15;  // pcb with picoW or pico2W
-const byte settings_memory_key = 15;
+const int version_number = 31;  // pcb with picoW or pico2W
+const byte settings_memory_key = 31;
 #else
-const int version_number = 14;  // pcb with pico or pico2
-const byte settings_memory_key = 14;
+const int version_number = 30;  // pcb with pico or pico2
+const byte settings_memory_key = 30;
 #endif
 #else
 #if defined(HAS_WIFI)
@@ -575,6 +574,28 @@ void runRCInput(float &speed, float &turn) {
   }
 }
 
+#ifdef IS_PCB
+
+boolean pcbSensorsAvailable = false;
+
+float batVoltage = NAN;
+float leftCurrent = NAN;
+float rightCurrent = NAN;
+
+void i2cReceive()
+
+void setupPCB() {
+  Wire1.setSDA(14);
+  Wire1.setSCL(15);
+  Wire1.begin();
+}
+
+void runPCBSensors() {
+
+}
+
+#endif
+
 const boolean use_memory = true;  // recall and save settings from EEPROM, and allow for changing settings using the serial monitor.
 
 boolean movementAllowed;
@@ -651,6 +672,10 @@ void setup() {
 #endif
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   delay(120);
+
+#ifdef IS_PCB
+//  setupPCB();
+#endif
 
 #if defined(HAS_WIFI)
   printSettings(false);
