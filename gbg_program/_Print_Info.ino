@@ -70,6 +70,14 @@ boolean printVariables(int interval) {
       }
     }
 
+#ifdef IS_PCB
+    prntbool(F("pcbSen"), pcbSensorsAvailable);
+    prnt(F("batV"), batVoltage);
+    prnt(F("leftI"), leftCurrent);
+    prnt(F("rightI"), rightCurrent);
+#endif
+
+
     serialChecksum += Serial.print(F(",\"CHECKSUM\":"));
     Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
     Serial.println("}");
