@@ -32,6 +32,13 @@ boolean printVariables(int interval) {
     prntf(F("speedKnobVal"), speedKnobVal);
     prntbool(F("movementAllowed"), movementAllowed);
     prntbool(F("joyOK"), joyOK);
+#ifdef IS_PCB
+    prntbool(F("pcbSen"), pcbSensorsAvailable);
+    prntf(F("batV"), batVoltage);
+    prntf(F("leftI"), leftCurrent);
+    prntf(F("rightI"), rightCurrent);
+#endif
+
     int buttonBits = 0;
     if (ENABLE_BUTTON_CTRL) {
       int button;
@@ -69,15 +76,6 @@ boolean printVariables(int interval) {
         serialChecksum += Serial.print("\"B\"");
       }
     }
-
-#ifdef IS_PCB
-    serialChecksum += Serial.print(",");
-    prntbool(F("pcbSen"), pcbSensorsAvailable);
-    prntf(F("batV"), batVoltage);
-    prntf(F("leftI"), leftCurrent);
-    prntf(F("rightI"), rightCurrent);
-#endif
-
 
     serialChecksum += Serial.print(F(",\"CHECKSUM\":"));
     Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
