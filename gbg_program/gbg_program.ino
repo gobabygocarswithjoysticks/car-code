@@ -587,8 +587,8 @@ float leftCurrent = NAN;
 float rightCurrent = NAN;
 
 const float batVoltMultiplier = 8.33;
-const float leftCurrentMultiplier = 1;
-const float rightCurrentMultiplier = 1;
+const float leftCurrentMultiplier = 6150.0 / 604;
+const float rightCurrentMultiplier = 6150.0 / 604;
 
 uint8_t i2cWriteBuffer[4];
 uint8_t i2cReadBuffer[4];
