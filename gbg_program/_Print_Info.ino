@@ -72,9 +72,9 @@ boolean printVariables(int interval) {
 
 #ifdef IS_PCB
     prntbool(F("pcbSen"), pcbSensorsAvailable);
-    prnt(F("batV"), batVoltage);
-    prnt(F("leftI"), leftCurrent);
-    prnt(F("rightI"), rightCurrent);
+    prntf(F("batV"), batVoltage);
+    prntf(F("leftI"), leftCurrent);
+    prntf(F("rightI"), rightCurrent);
 #endif
 
 
