@@ -582,9 +582,9 @@ boolean pcbSensorsAvailable = true;
 uint32_t lastSensorMillis = 0;
 boolean newI2CData = false;
 
-float batVoltage = NAN;
-float leftCurrent = NAN;
-float rightCurrent = NAN;
+float batVoltage = -1;
+float leftCurrent = -1;
+float rightCurrent = -1;
 
 const float batVoltMultiplier = 8.33;
 const float leftCurrentMultiplier = 6150.0 / 604;
