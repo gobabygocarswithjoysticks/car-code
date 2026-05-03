@@ -71,6 +71,7 @@ boolean printVariables(int interval) {
     }
 
 #ifdef IS_PCB
+    serialChecksum += Serial.print(",");
     prntbool(F("pcbSen"), pcbSensorsAvailable);
     prntf(F("batV"), batVoltage);
     prntf(F("leftI"), leftCurrent);
