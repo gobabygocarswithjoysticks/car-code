@@ -586,7 +586,7 @@ float batVoltage = -1;
 float leftCurrent = -1;
 float rightCurrent = -1;
 
-const float batVoltMultiplier = 8.33;
+const float batVoltMultiplier = 13.92;
 const float leftCurrentMultiplier = 6150.0 / 604;
 const float rightCurrentMultiplier = 6150.0 / 604;
 
