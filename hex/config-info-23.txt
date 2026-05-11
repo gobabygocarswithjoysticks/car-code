@@ -1,1 +1,0 @@
-blink-esp32, blink, ESP, ESP32
