@@ -53,7 +53,11 @@ void setupWifi() {
     else {
       reportedDeactivateIfRemoteDisconnects = true;
     }
-    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d,\"k\":%d,\"x\":%d,\"y\":%d,\"l\":%d,\"r\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK, key, joyXVal, joyYVal, leftMotorWriteVal, rightMotorWriteVal);
+#ifdef IS_PCB
+    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d,\"k\":%d,\"x\":%d,\"y\":%d,\"l\":%d,\"r\":%d,\"b\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK, key, joyXVal, joyYVal, leftMotorWriteVal, rightMotorWriteVal);
+#else
+    sprintf(statusBuffer, "{\"a\":%d,\"d\":%d,\"m\":%d,\"j\":%d,\"k\":%d,\"x\":%d,\"y\":%d,\"l\":%d,\"r\":%d}", activatedByRemote, reportedDeactivateIfRemoteDisconnects, remoteMode, joyOK, key, joyXVal, joyYVal, leftMotorWriteVal, rightMotorWriteVal, (int)(batVoltage * 100));
+#endif
     webServer.send(200, "application/json", statusBuffer);
   });
   webServer.on("/settings", []() {

@@ -37,12 +37,14 @@
         <td>joystick down/up:</td>
         <td>left motor:</td>
         <td>right motor:</td>
+        <td hidden id="telem-v-lbl">battery voltage:</td>
       </tr>
       <tr>
         <td id="telem-x">0</td>
         <td id="telem-y">0</td>
         <td id="telem-l">0</td>
         <td id="telem-r">0</td>
+        <td hidden id="telem-v">0</td>
       </tr>
     </table>
   </div>
@@ -407,6 +409,11 @@
       document.getElementById("telem-y").innerHTML = fetchedResponse["y"];
       document.getElementById("telem-l").innerHTML = fetchedResponse["l"];
       document.getElementById("telem-r").innerHTML = fetchedResponse["r"];
+      if (fetchedResponse["b"] != undefined) {
+        document.getElementById("telem-v").innerHTML = fetchedResponse["b"] / 100.0;
+        document.getElementById("telem-v").hidden = false;
+        document.getElementById("telem-v-lbl").hidden = false;
+      }
 
     } catch (e) {
       document.getElementById("status").innerHTML = "Disconnected";
