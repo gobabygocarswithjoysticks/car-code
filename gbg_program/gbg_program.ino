@@ -131,8 +131,8 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 
 byte SPEED_KNOB_PIN = 28;
 
-byte BUTTON_MODE_PIN = 8; // can turn button control mode on and off
-byte STEERING_OFF_SWITCH_PIN = 7;
+byte BUTTON_MODE_PIN = 5; // can turn button control mode on and off
+byte STEERING_OFF_SWITCH_PIN = 9;
 
 #elif defined(ESP32)
 ///// joystick reader pins /////
