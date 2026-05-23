@@ -16,6 +16,9 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
+      - name: Configure git for authenticated push
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -24,6 +27,7 @@ jobs:
         run: |
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
+          
           git pull # get the most recent state of the repo
           [ -d "./hex" ] && git rm -r ./hex
           git commit . -m "BOT delete old files" --allow-empty
