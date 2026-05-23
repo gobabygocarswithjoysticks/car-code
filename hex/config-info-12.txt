@@ -1,1 +1,0 @@
-clear_eeprom-nanoOld, clear_eeprom, nanoOldBootloader, old nano
