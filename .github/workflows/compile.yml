@@ -20,14 +20,10 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
-      - name: Configure git for authenticated push
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: delete file # so that the matrix has a blank file to log info into
         run: |
           git config --global user.name 'gbg-with-joysticks'
           git config --global user.email 'gbg-with-joysticks@users.noreply.github.com'
-          
           git pull # get the most recent state of the repo
           [ -d "./hex" ] && git rm -r ./hex
           git commit . -m "BOT delete old files" --allow-empty
@@ -351,9 +347,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli@v2
-        with:
-          version: "1.x"
+        uses: arduino/setup-arduino-cli@v2.0.0
 
       - name: Install Arduino platforms
         run: |
