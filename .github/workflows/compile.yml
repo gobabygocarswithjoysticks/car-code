@@ -16,13 +16,13 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure git for authenticated push
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: Checkout
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
+      - name: Configure git for authenticated push
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       - name: delete file # so that the matrix has a blank file to log info into
         run: |
           git config --global user.name 'gbg-with-joysticks'
