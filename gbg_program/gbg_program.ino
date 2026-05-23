@@ -252,8 +252,8 @@ boolean USE_ON_OFF_BUTTONS = false;
 byte ON_BUTTON = 16;
 byte OFF_BUTTON = 17;
 #elif defined(IS_PCB)
-byte ON_BUTTON = 5;
-byte OFF_BUTTON = 6;
+byte ON_BUTTON = 7;
+byte OFF_BUTTON = 8;
 #else
 byte ON_BUTTON = 11; // pin for the on button
 byte OFF_BUTTON = 12; // pin for the off button
