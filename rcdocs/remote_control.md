@@ -176,6 +176,8 @@ Program the transmitter to send the following signals on 4 channels:
 * "control" switch with off under 1400 and on above 1600
 * "stop" switch with off under 1400 and on above 1600
 
+Video of how to program a FS-i6 transmitter so that forward/backwards is channel 2, left/right is channel 1, left switch is channel 5 and right switch is channel 6: [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o) 
+
 
 Using the programming website (connect to car then press "show all"):
 * check "use rc"
