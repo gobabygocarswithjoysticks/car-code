@@ -144,7 +144,7 @@ void settingsSerial() {
         strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_int[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
         if (strcmp(k, phrase) == 0) {
           *settingsPtr_int[i] = atoi(v);
-          sprintf(resultBuf, "%d", *settingsPtr_int[i]);
+          printInt(*settingsPtr_int[i]);
           found = true;
           break;
         }
@@ -183,15 +183,15 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_PIN]) == 0) {
         SPEED_KNOB_PIN = atoi(v);
         pinMode(SPEED_KNOB_PIN, INPUT);
-        sprintf(resultBuf, "%d", SPEED_KNOB_PIN);
+        printInt(SPEED_KNOB_PIN);
       } else if (strcmp_P(k, SETTING[S_JOY_X_PIN]) == 0) {
         JOY_X_PIN = atoi(v);
         pinMode(JOY_X_PIN, INPUT);
-        sprintf(resultBuf, "%d", JOY_X_PIN);
+        printInt(JOY_X_PIN);
       } else if (strcmp_P(k, SETTING[S_JOY_Y_PIN]) == 0) {
         JOY_Y_PIN = atoi(v);
         pinMode(JOY_Y_PIN, INPUT);
-        sprintf(resultBuf, "%d", JOY_Y_PIN);
+        printInt(JOY_Y_PIN);
 #ifdef IS_PCB
       } else if (strcmp_P(k, SETTING[S_SWAP_MOTORS]) == 0) {
         SWAP_MOTORS = atoi(v);
@@ -220,7 +220,7 @@ void settingsSerial() {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
-        sprintf(resultBuf, "%d", LEFT_MOTOR_CONTROLLER_PIN);
+        printInt(LEFT_MOTOR_CONTROLLER_PIN);
       } else if (strcmp_P(k, SETTING[S_RIGHT_MOTOR_CONTROLLER_PIN]) == 0) {
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         leftMotorController.detach();
@@ -232,7 +232,7 @@ void settingsSerial() {
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         leftMotorController.attach(LEFT_MOTOR_CONTROLLER_PIN);
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
-        sprintf(resultBuf, "%d", RIGHT_MOTOR_CONTROLLER_PIN);
+        printInt(RIGHT_MOTOR_CONTROLLER_PIN);
 #endif
 
       } else if (strcmp_P(k, SETTING[S_ENABLE_STARTUP_PULSE]) == 0) {
@@ -240,7 +240,7 @@ void settingsSerial() {
         printTrueOrFalse(ENABLE_STARTUP_PULSE);
       } else if (strcmp_P(k, SETTING[S_START_MOTOR_PULSE_TIME]) == 0) {
         START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
-        sprintf(resultBuf, "%d", START_MOTOR_PULSE_TIME);
+        printInt(START_MOTOR_PULSE_TIME);
       } else if (strcmp_P(k, SETTING[S_ENABLE_BUTTON_CTRL]) == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
@@ -269,7 +269,7 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_BUTTON_MODE_PIN]) == 0) {
         BUTTON_MODE_PIN = atoi(v);
         pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
-        sprintf(resultBuf, "%d", BUTTON_MODE_PIN);
+        printInt(BUTTON_MODE_PIN);
       } else if (strcmp_P(k, SETTING[S_BUTTONS_ACTIVE_HIGH]) == 0) {
         BUTTONS_ACTIVE_HIGH = atoi(v);
         printTrueOrFalse(BUTTONS_ACTIVE_HIGH);
@@ -283,7 +283,7 @@ void settingsSerial() {
             pinMode(driveButtons[i].pin, INPUT_PULLUP);
           }
         }
-        sprintf(resultBuf, "%d", NUM_DRIVE_BUTTONS);
+        printInt(NUM_DRIVE_BUTTONS);
       } else if (strcmp(k, "DRIVE_BUTTONS") == 0) {
         int db = atoi(v); // which row of the driveButtons array?
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
@@ -328,7 +328,7 @@ void settingsSerial() {
       else if (strcmp_P(k, SETTING[S_STEERING_OFF_SWITCH_PIN]) == 0) {
         STEERING_OFF_SWITCH_PIN = atoi(v);
         pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
-        sprintf(resultBuf, "%d", STEERING_OFF_SWITCH_PIN);
+        printInt(STEERING_OFF_SWITCH_PIN);
       }
       else if (strcmp_P(k, SETTING[S_USE_RC_CONTROL]) == 0) {
         USE_RC_CONTROL = atoi(v);
@@ -344,29 +344,29 @@ void settingsSerial() {
         detachRCControl();
         RC_PIN[SPEED_RC] = atoi(v);
         setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[SPEED_RC]);
+        printInt(RC_PIN[SPEED_RC]);
       } else if (strcmp_P(k, SETTING[S_TURN_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[TURN_RC] = atoi(v);
         setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[TURN_RC]);
+        printInt(RC_PIN[TURN_RC]);
       } else if (strcmp_P(k, SETTING[S_CTRL_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[CTRL_RC] = atoi(v);
         setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[CTRL_RC]);
+        printInt(RC_PIN[CTRL_RC]);
       } else if (strcmp_P(k, SETTING[S_STOP_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[STOP_RC] = atoi(v);
         setupRCControl();
-        sprintf(resultBuf, "%d", RC_PIN[STOP_RC]);
+        printInt(RC_PIN[STOP_RC]);
       } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START]) == 0) {
         NO_RC_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_RC_STOP_UNTIL_START);
       } else if (strcmp_P(k, SETTING[S_RC_MODE]) == 0) {
         RC_MODE = atoi(v);
         RC_MODE = constrain(RC_MODE, 0, 2);
-        printTrueOrFalse(RC_MODE);
+        printInt(RC_MODE);
       } else if (strcmp_P(k, SETTING[S_ADD_BUTTONS_TO_JOYSTICK]) == 0) {
         ADD_BUTTONS_TO_JOYSTICK = atoi(v);
         printTrueOrFalse(ADD_BUTTONS_TO_JOYSTICK);
@@ -382,7 +382,7 @@ void settingsSerial() {
         if (USE_STOP_SWITCH) {
           pinMode(STOP_PIN, INPUT_PULLUP);
         }
-        sprintf(resultBuf, "%d", STOP_PIN);
+        printInt(STOP_PIN);
       } else if (strcmp_P(k, SETTING[S_ON_OFF_ACTIVE_HIGH]) == 0) {
         STOP_PIN_HIGH = atoi(v);
         printTrueOrFalse(STOP_PIN_HIGH);
@@ -400,11 +400,11 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_ON_BUTTON]) == 0) {
         ON_BUTTON = atoi(v);
         pinMode(ON_BUTTON, INPUT_PULLUP);
-        sprintf(resultBuf, "%d", ON_BUTTON);
+        printInt(ON_BUTTON);
       } else if (strcmp_P(k, SETTING[S_OFF_BUTTON]) == 0) {
         OFF_BUTTON = atoi(v);
         pinMode(OFF_BUTTON, INPUT_PULLUP);
-        sprintf(resultBuf, "%d", OFF_BUTTON);
+        printInt(OFF_BUTTON);
       } else if (strcmp_P(k, SETTING[S_ON_OFF_BUTTONS_ACTIVE_HIGH]) == 0) {
         ON_OFF_BUTTONS_ACTIVE_HIGH = atoi(v);
         printTrueOrFalse(ON_OFF_BUTTONS_ACTIVE_HIGH);
@@ -413,12 +413,12 @@ void settingsSerial() {
 #if defined(HAS_WIFI)
       else if (strcmp_P(k, SETTING[S_CAR_WIFI_NAME]) == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
-        sprintf(resultBuf, "%d", CAR_WIFI_NAME);
+        printInt(CAR_WIFI_NAME);
       }
       else if (strcmp_P(k, SETTING[S_CAR_WIFI_PASSWORD]) == 0) {
         CAR_WIFI_PASSWORD = atoi(v);
         CAR_WIFI_PASSWORD = constrain(CAR_WIFI_PASSWORD, 0, 999999999);
-        sprintf(resultBuf, "%d", CAR_WIFI_PASSWORD);
+        printInt(CAR_WIFI_PASSWORD);
       }
       else if (strcmp_P(k, SETTING[S_USE_WIFI]) == 0) {
         USE_WIFI = atoi(v);
@@ -659,8 +659,8 @@ void recallSettings()
   EEPROMread(addressR, RC_PIN[STOP_RC]);
   EEPROMread(addressR, RC_PIN[CTRL_RC]);
   EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
-  EEPROMread(addressR, S_RC_MODE);
-  EEPROMread(addressR, S_ADD_BUTTONS_TO_JOYSTICK);
+  EEPROMread(addressR, RC_MODE);
+  EEPROMread(addressR, ADD_BUTTONS_TO_JOYSTICK);
 
 #if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);
@@ -781,6 +781,9 @@ void printTrueOrFalse(bool val) {
     sprintf(resultBuf, "true");
   else
     sprintf(resultBuf, "false");
+}
+void printInt(int val) {
+  sprintf(resultBuf, "%d", val);
 }
 
 // for calculating checksum of EEPROM data
