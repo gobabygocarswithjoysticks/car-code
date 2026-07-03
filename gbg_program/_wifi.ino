@@ -46,8 +46,11 @@ void setupWifi() {
     if (webServer.args() == 3 && webServer.hasArg("sp")  && webServer.arg("key").toInt() == key) {
       remoteSpeedScaler = webServer.arg("sp").toFloat();
       remoteSpeedScaler = constrain(remoteSpeedScaler, 0, 3);
+      webServer.send(200);
+    }else{
+      webServer.send(403);
     }
-  }
+  });
   webServer.on("/status", []() {
     if (webServer.args() == 3 && webServer.hasArg("fb") && webServer.hasArg("lr") && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       lastRemoteCommandMillis = millis();
