@@ -201,7 +201,7 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {5, 1, 1}, //RF
   {6, 1, -1} //LF
 };
-#else
+#else // nano/uno or non-pcb-pico
 boolean ENABLE_BUTTON_CTRL = false;
 boolean BUTTON_MODE_TOGGLE = false;
 boolean USE_BUTTON_MODE_PIN = false;
@@ -231,7 +231,7 @@ enum {
 boolean USE_RC_CONTROL = false;
 #if defined(ESP32)
 byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 22};
-#else
+#else // nano/uno or non-pcb-pico or pcb-pico
 byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 #endif
 

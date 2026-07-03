@@ -18,6 +18,65 @@
 * On: the car is moving
 * Blinking: the car is being told to move but the input hasn't been held at zero for a couple seconds yet
 
+### default pins
+
+#### nano/uno
+JOY_X_PIN = A4
+
+JOY_Y_PIN = A1
+
+LEFT_MOTOR_CONTROLLER_PIN = 3
+
+RIGHT_MOTOR_CONTROLLER_PIN = 6
+
+SPEED_KNOB_PIN = A3
+
+BUTTON_MODE_PIN = 2
+
+STEERING_OFF_SWITCH_PIN = 4
+
+BUTTON PINS: 7, 8, 9, 10, 11, 12 are forwards, left, right, left+forwards, right+forwards, backwards
+
+RC PINS: 5, 6, 7, 8 are speed, turn, control, stop
+
+#### rpi pico
+JOY_X_PIN = 26
+
+JOY_Y_PIN = 27
+
+LEFT_MOTOR_CONTROLLER_PIN = 19
+
+RIGHT_MOTOR_CONTROLLER_PIN = 21
+
+SPEED_KNOB_PIN = 28
+
+BUTTON_MODE_PIN = 5
+
+STEERING_OFF_SWITCH_PIN = 9
+
+BUTTON PINS: 7, 8, 9, 10, 11, 12 are forwards, left, right, left+forwards, right+forwards, backwards
+
+RC PINS: 5, 6, 7, 8 are speed, turn, control, stop
+
+#### esp32
+JOY_X_PIN = 39
+
+JOY_Y_PIN = 25
+
+LEFT_MOTOR_CONTROLLER_PIN = 18
+
+RIGHT_MOTOR_CONTROLLER_PIN = 21
+
+SPEED_KNOB_PIN = 33
+
+BUTTON_MODE_PIN = 23
+
+STEERING_OFF_SWITCH_PIN=4
+
+BUTTON PINS: 16, 17, 19, 26, 22, 25 are forwards, left, right, left+forwards, right+forwards, backwards
+
+RC PINS: 16, 17, 19, 22 are speed, turn, control, stop
+
 ### Acknowledgements
 * Arduino
 * https://github.com/earlephilhower/arduino-pico
