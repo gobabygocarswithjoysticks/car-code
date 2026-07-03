@@ -13,6 +13,11 @@
 ### Remote Control
 [notes and instructions for remote control](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/remote_control.md)
 
+### LED blink codes
+* Off: the car is not moving
+* On: the car is moving
+* Blinking: the car is being told to move but the input hasn't been held at zero for a couple seconds yet
+
 ### Acknowledgements
 * Arduino
 * https://github.com/earlephilhower/arduino-pico

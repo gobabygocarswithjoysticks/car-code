@@ -13,6 +13,8 @@ char statusBuffer[120];
 
 uint16_t key = 1;
 
+float remoteSpeedScaler = 1.0;
+
 void setupWifi() {
   if (!USE_WIFI) {
     return;
@@ -40,6 +42,12 @@ void setupWifi() {
     activatedByRemote = false;
     webServer.send(200);
   });
+  webServer.on("/speedScale", []() {
+    if (webServer.args() == 3 && webServer.hasArg("sp")  && webServer.arg("key").toInt() == key) {
+      remoteSpeedScaler = webServer.arg("sp").toFloat();
+      remoteSpeedScaler = constrain(remoteSpeedScaler, 0, 3);
+    }
+  }
   webServer.on("/status", []() {
     if (webServer.args() == 3 && webServer.hasArg("fb") && webServer.hasArg("lr") && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       lastRemoteCommandMillis = millis();
@@ -111,7 +119,7 @@ void setupWifi() {
 
 }
 
-void runWifiInput(float& speedInput, float& turnInput) {
+void runWifiInput(float & speedInput, float & turnInput) {
   if (!USE_WIFI) {
     return;
   }
@@ -121,15 +129,36 @@ void runWifiInput(float& speedInput, float& turnInput) {
       if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
+      } else {
+        speedInput = speedInput * remoteSpeedScaler;
+        turnInput = turnInput * remoteSpeedScaler;
       }
       break;
-    case 1:
-      if (true && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
-        speedInput = 0;
+    case 1: // remote is driving
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) { // disconnected
+        speedInput = 0; // stop
         turnInput = 0;
       } else {
         speedInput = remoteFB;
         turnInput = remoteLR;
+      }
+      break;
+    case 2: // remote and car share control "add"
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      } else {
+        speedInput = speedInput * remoteSpeedScaler + remoteFB;
+        turnInput = turnInput * remoteSpeedScaler + remoteLR;
+      }
+      break;
+    case 3: // remote controls if car input says to move "and"
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      } else {
+        speedInput = speedInput * remoteSpeedScaler + remoteFB;
+        turnInput = turnInput * remoteSpeedScaler + remoteLR;
       }
       break;
   }

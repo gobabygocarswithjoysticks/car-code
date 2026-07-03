@@ -237,6 +237,9 @@ byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 
 boolean NO_RC_STOP_UNTIL_START = false;
 
+byte RC_MODE = 0;
+boolean ADD_BUTTONS_TO_JOYSTICK = true;
+
 boolean USE_STOP_SWITCH = false;
 #if defined(ESP32)
 byte STOP_PIN = 22;
@@ -421,21 +424,21 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef IS_PCB
 #if defined(HAS_WIFI)
-const int version_number = 31;  // pcb with picoW or pico2W
-const byte settings_memory_key = 31;
+const int version_number = 33;  // pcb with picoW or pico2W
+const byte settings_memory_key = 33;
 #else
-const int version_number = 30;  // pcb with pico or pico2
-const byte settings_memory_key = 30;
+const int version_number = 32;  // pcb with pico or pico2
+const byte settings_memory_key = 32;
 #endif
 #else
 #if defined(HAS_WIFI)
-const int version_number = 19;  // esp32, picoW or pico2W
-const byte settings_memory_key = 19;
+const int version_number = 21;  // esp32, picoW or pico2W
+const byte settings_memory_key = 21;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-const int version_number = 18;  // nano or uno
+const int version_number = 20;  // nano or uno
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-const byte settings_memory_key = 18;
+const byte settings_memory_key = 20;
 #endif
 #endif
 
@@ -555,20 +558,34 @@ void runRCInput(float &speed, float &turn) {
     } else if (copiedRemoteInput[STOP_RC] < -rcControlSwitchDeadband) {
       rcFlags.RCStop = false;
     }
+    if (abs(copiedRemoteInput[SPEED_RC]) < rcControlDeadband) {
+      copiedRemoteInput[SPEED_RC] = 0;
+    }
+    if (abs(copiedRemoteInput[TURN_RC]) < rcControlDeadband) {
+      copiedRemoteInput[TURN_RC] = 0;
+    }
     if (rcFlags.RCOverride) {
-      speed = copiedRemoteInput[SPEED_RC];
-      turn = copiedRemoteInput[TURN_RC];
-      if (abs(speed) < rcControlDeadband) {
-        speed = 0;
+      // RC overwrites
+      speed = copiedRemoteInput[SPEED_RC] / 500.0;
+      turn = copiedRemoteInput[TURN_RC] / 500.0;
+    } else { // RCOverride switch is off
+      if (RC_MODE == 1) { // RC adds to joystick and button inputs
+        speed += copiedRemoteInput[SPEED_RC] / 500.0;
+        turn += copiedRemoteInput[TURN_RC] / 500.0;
+      } else if (RC_MODE == 2) {
+        if (abs(speed) > 0.001 || abs(turn) > 0.001) { // local controls are activated...
+          // so follow RC input
+          speed = copiedRemoteInput[SPEED_RC] / 500.0;
+          turn = copiedRemoteInput[TURN_RC] / 500.0;
+        } else { // local controls are deactivated so don't move
+          speed = 0;
+          turn = 0;
+        }
+      } else {
+        // else, override is off and mode=0 so don't affect local controls
       }
-      if (abs(turn) < rcControlDeadband) {
-        turn = 0;
-      }
-      speed = speed / 500.0;
-      turn = turn / 500.0;
     }
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
-
   } else { // receiving invalid signal
     // if the no_stop_until_start setting is false, always turn off the car if the signal stops
     // if the no_stop_until_start setting is true, turn off the car only if the rc control has ever been activated
@@ -908,7 +925,7 @@ void loop()
     } else {
       buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == BUTTONS_ACTIVE_HIGH);
     }
-    InputReader_Buttons(buttonModeActive, true, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
+    InputReader_Buttons(buttonModeActive, ADD_BUTTONS_TO_JOYSTICK, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
   } else {
     buttonModeActive = false;
   }
@@ -944,8 +961,8 @@ void loop()
 #endif
     turnProcessed = turnInput;
     speedProcessed = speedInput;
-#if defined(HAS_WIFI) //using wifi and not activated by remote
-  } else {
+#if defined(HAS_WIFI)
+  } else { //using wifi and not activated by remote
     turnProcessed = 0; // soft stop, not e stop - website connection is less reliable than RC control
     speedProcessed = 0;
   }
@@ -995,13 +1012,13 @@ void loop()
   }
 
   if (USE_STOP_SWITCH) {
-    if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) {
-      if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) {
-        speedToDrive = 0;
+    if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) { // if switch is saying stop...
+      if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) { // and the NO_STOP_UNTIL_START setting is active or the stop switch has previously been switched to on
+        speedToDrive = 0; // stop
         turnToDrive = 0;
       }
     } else { // switch is saying "go"
-      rcFlags.Start_Switch_Ever_Activated = true; // switch has activated the car
+      rcFlags.Start_Switch_Ever_Activated = true; // remember that switch has said to "go" at some point
     }
   }
 

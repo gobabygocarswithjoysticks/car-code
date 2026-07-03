@@ -154,6 +154,7 @@ void printSettings() {
   prnt(FV(SETTING[S_BUTTON_MODE_PIN]), BUTTON_MODE_PIN);
   prntbool(FV(SETTING[S_BUTTON_MODE_TOGGLE]), BUTTON_MODE_TOGGLE);
   prntbool(FV(SETTING[S_BUTTONS_ACTIVE_HIGH]), BUTTONS_ACTIVE_HIGH);
+  prntbool(FV(SETTING[S_ADD_BUTTONS_TO_JOYSTICK]), ADD_BUTTONS_TO_JOYSTICK);
   prnt(FV(SETTING[S_NUM_DRIVE_BUTTONS]), NUM_DRIVE_BUTTONS);
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
@@ -201,6 +202,7 @@ void printSettings() {
   prnt(FV(SETTING[S_CTRL_RC_PIN]), RC_PIN[CTRL_RC]);
   prnt(FV(SETTING[S_STOP_RC_PIN]), RC_PIN[STOP_RC]);
   prntbool(FV(SETTING[S_NO_RC_STOP_UNTIL_START]), NO_RC_STOP_UNTIL_START);
+  prntbool(FV(SETTING[S_RC_MODE]), RC_MODE);
   prntbool(FV(SETTING[S_USE_STOP_SWITCH]), USE_STOP_SWITCH);
   prnt(FV(SETTING[S_ON_OFF_SWITCH_PIN]), STOP_PIN);
   prntbool(FV(SETTING[S_ON_OFF_ACTIVE_HIGH]), STOP_PIN_HIGH);
@@ -306,19 +308,12 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     if (value) {
-      wifiSettingsBuffer[wifiBufI++ ] = 't';
-      wifiSettingsBuffer[wifiBufI++ ] = 'r';
-      wifiSettingsBuffer[wifiBufI++ ] = 'u';
-      wifiSettingsBuffer[wifiBufI++ ] = 'e';
-      wifiSettingsBuffer[wifiBufI++ ] = ',';
+      sprintf(wifiSettingsBuffer + wifiBufI, "true,");
+      wifiBufI += 5;
       wifiSettingsBuffer[wifiBufI++ ] = ' ';
     } else {
-      wifiSettingsBuffer[wifiBufI++ ] = 'f';
-      wifiSettingsBuffer[wifiBufI++ ] = 'a';
-      wifiSettingsBuffer[wifiBufI++ ] = 'l';
-      wifiSettingsBuffer[wifiBufI++ ] = 's';
-      wifiSettingsBuffer[wifiBufI++ ] = 'e';
-      wifiSettingsBuffer[wifiBufI++ ] = ',';
+      sprintf(wifiSettingsBuffer + wifiBufI, "false,");
+      wifiBufI += 6;
       wifiSettingsBuffer[wifiBufI++ ] = ' ';
     }
   } else {

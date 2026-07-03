@@ -91,6 +91,32 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &SPEED_KNOB_FAST_VAL,
 };
 
+#define NUM_SETTINGS_ID_FLOAT 10
+const SettingID settingsID_float[NUM_SETTINGS_ID_FLOAT] = {
+  S_ACCELERATION_FORWARD,
+  S_DECELERATION_FORWARD,
+  S_ACCELERATION_BACKWARD,
+  S_DECELERATION_BACKWARD,
+  S_ACCELERATION_TURNING,
+  S_DECELERATION_TURNING,
+  S_FASTEST_FORWARD,
+  S_FASTEST_BACKWARD,
+  S_TURN_SPEED,
+  S_SCALE_TURNING_WHEN_MOVING,
+};
+float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
+  &ACCELERATION_FORWARD,      //0, abs
+  &DECELERATION_FORWARD,      //1, abs
+  &ACCELERATION_BACKWARD,     //2, abs
+  &DECELERATION_BACKWARD,     //3, abs
+  &ACCELERATION_TURNING,      //4, abs
+  &DECELERATION_TURNING,      //5, abs
+  &FASTEST_FORWARD,           //6, abs, constrained to 0-1
+  &FASTEST_BACKWARD,          //7, abs, constrained to 0-1
+  &TURN_SPEED,                //8, abs, constrained to 0-1
+  &SCALE_TURNING_WHEN_MOVING, //9
+};
+
 char phrase[20];
 #if defined(HAS_WIFI)
 void settingsSerial(int8_t input) {
@@ -117,44 +143,34 @@ void settingsSerial() {
       for (byte i = 0; i < NUM_SETTINGS_ID_INT; i++) { // check if the key matches any of the simple integer settings
         strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_int[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
         if (strcmp(k, phrase) == 0) {
-          *settingsPtr_int[i] = atoi(v);;
+          *settingsPtr_int[i] = atoi(v);
           sprintf(resultBuf, "%d", *settingsPtr_int[i]);
           found = true;
           break;
         }
       }
+      if (!found) {
+        for (byte i = 0; i < NUM_SETTINGS_ID_FLOAT; i++) { // check if the key matches any of the simple float settings
+          strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_float[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
+          if (strcmp(k, phrase) == 0) {
+            *settingsPtr_float[i] = atof(v);
+            // special cases since different variables get processed and constrained differently
+            if (i != 9) {
+              *settingsPtr_float[i] = abs(*settingsPtr_float[i]);
+            }
+            if (i == 6 || i == 7 || i == 8) {
+              *settingsPtr_float[i] = constrain(*settingsPtr_float[i], 0, 1);
+            }
+
+            dtostrf(*settingsPtr_float[i], 0, 4, resultBuf);
+            found = true;
+            break;
+          }
+        }
+      }
 
       if (found) {
-      } else if (strcmp_P(k, SETTING[S_ACCELERATION_FORWARD]) == 0) {
-        ACCELERATION_FORWARD = abs(atof(v));
-        dtostrf(ACCELERATION_FORWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_DECELERATION_FORWARD]) == 0) {
-        DECELERATION_FORWARD = abs(atof(v));
-        dtostrf(DECELERATION_FORWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_ACCELERATION_BACKWARD]) == 0) {
-        ACCELERATION_BACKWARD = abs(atof(v));
-        dtostrf(ACCELERATION_BACKWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_DECELERATION_BACKWARD]) == 0) {
-        DECELERATION_BACKWARD = abs(atof(v));
-        dtostrf(DECELERATION_BACKWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_ACCELERATION_TURNING]) == 0) {
-        ACCELERATION_TURNING = abs(atof(v));
-        dtostrf(ACCELERATION_TURNING, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_DECELERATION_TURNING]) == 0) {
-        DECELERATION_TURNING = abs(atof(v));
-        dtostrf(DECELERATION_TURNING, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_FASTEST_FORWARD]) == 0) {
-        FASTEST_FORWARD = constrain(abs(atof(v)), 0, 1);
-        dtostrf(FASTEST_FORWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_FASTEST_BACKWARD]) == 0) {
-        FASTEST_BACKWARD = constrain(abs(atof(v)), 0, 1);
-        dtostrf(FASTEST_BACKWARD, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_TURN_SPEED]) == 0) {
-        TURN_SPEED = constrain(abs(atof(v)), 0, 1);
-        dtostrf(TURN_SPEED, 0, 4, resultBuf);
-      } else if (strcmp_P(k, SETTING[S_SCALE_TURNING_WHEN_MOVING]) == 0) {
-        SCALE_TURNING_WHEN_MOVING = atof(v);
-        dtostrf(SCALE_TURNING_WHEN_MOVING, 0, 4, resultBuf);
+        // already handled
       } else if (strcmp_P(k, SETTING[S_REVERSE_TURN_IN_REVERSE]) == 0) {
         REVERSE_TURN_IN_REVERSE = atoi(v);
         printTrueOrFalse(REVERSE_TURN_IN_REVERSE);
@@ -347,7 +363,15 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START]) == 0) {
         NO_RC_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_RC_STOP_UNTIL_START);
-      } else if (strcmp_P(k, SETTING[S_USE_STOP_SWITCH]) == 0) {
+      } else if (strcmp_P(k, SETTING[S_RC_MODE]) == 0) {
+        RC_MODE = atoi(v);
+        RC_MODE = constrain(RC_MODE, 0, 2);
+        printTrueOrFalse(RC_MODE);
+      } else if (strcmp_P(k, SETTING[S_ADD_BUTTONS_TO_JOYSTICK]) == 0) {
+        ADD_BUTTONS_TO_JOYSTICK = atoi(v);
+        printTrueOrFalse(ADD_BUTTONS_TO_JOYSTICK);
+      }
+      else if (strcmp_P(k, SETTING[S_USE_STOP_SWITCH]) == 0) {
         USE_STOP_SWITCH = atoi(v);
         if (USE_STOP_SWITCH) {
           pinMode(STOP_PIN, INPUT_PULLUP);
@@ -543,6 +567,8 @@ void saveSettings()
   EEPROMwrite(addressW, RC_PIN[STOP_RC]);
   EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
   EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
+  EEPROMwrite(addressW, RC_MODE);
+  EEPROMwrite(addressW, ADD_BUTTONS_TO_JOYSTICK);
 
 #if defined(HAS_WIFI)
   EEPROMwrite(addressW, CAR_WIFI_NAME);
@@ -633,6 +659,8 @@ void recallSettings()
   EEPROMread(addressR, RC_PIN[STOP_RC]);
   EEPROMread(addressR, RC_PIN[CTRL_RC]);
   EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
+  EEPROMread(addressR, S_RC_MODE);
+  EEPROMread(addressR, S_ADD_BUTTONS_TO_JOYSTICK);
 
 #if defined(HAS_WIFI)
   EEPROMread(addressR, CAR_WIFI_NAME);

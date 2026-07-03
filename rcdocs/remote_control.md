@@ -6,9 +6,7 @@
 * joystick/button toggling
 * RC receiver input
 
-## Please talk to a physical therapist about the best way to use a remote control to benefit the kid, and take a look at these resources: 
-
-* (remote control user manual coming soon)
+## Please talk to a physical therapist about the best way to use a remote control to benefit the kid and balance safety, social interaction, and independence. 
 
 ## Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
@@ -20,9 +18,11 @@ Check the “use wifi” setting on the programmer website, then follow the inst
 
 The car will create a wifi network and will serve a webpage that allows you to control the car and edit settings from a phone, tablet, or computer.
 
+The remote control website also has a setting for increasing or decreasing the speed limit of the kid's controls.
+
 The wifi network that the car creates is separate from the internet, so when you're connected to the car you won't have internet access.
 
-The wifi range is unreliable (sometimes measured as 10 feet sometimes as over 100 feet).
+The wifi range is unreliable (sometimes measured as 10 feet sometimes as over 100 feet, depending on interference).
 
 No hardware is required for this method of remote control.
 
@@ -53,7 +53,7 @@ Press one button on a keyfob remote to stop the car, and another button to start
 ### Instructions:
 Get a keyfob remote and receiver module with at least 2 (probably 4) buttons. (search for 2262/2272 4CH key remote control).
 
-It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+It is important to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
 
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
 
@@ -88,7 +88,7 @@ Get a keyfob remote and receiver module with at least 1 button. (search for 2262
 
 Open the keyfob remote and wire a toggle switch parallel to one of the buttons. When the switch is on the remote should transmit continuously. Check that it is legal to transmit for minutes at a time on the frequency of the remote in your country. Optionally, replace the battery with a larger one to give a longer battery life.
 
-It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+It is important to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
 
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively.
 
@@ -123,7 +123,7 @@ Use a keyfob remote to override and drive the car. One button will toggle betwee
 ### Instructions:
 Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
 
-It is recommended to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+It is important to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
 
 Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
 
@@ -176,8 +176,6 @@ Program the transmitter to send the following signals on 4 channels:
 * "control" switch with off under 1400 and on above 1600
 * "stop" switch with off under 1400 and on above 1600
 
-Video of how to program a FS-i6 transmitter so that forward/backwards is channel 2, left/right is channel 1, left switch is channel 5 and right switch is channel 6: [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o) 
-
 
 Using the programming website (connect to car then press "show all"):
 * check "use rc"
@@ -195,3 +193,46 @@ When the "control" switch is on, the joystick on the transmitter's joystick can 
 When the "stop" switch is on, the car will stop driving.
 
 If the transmitter is turned off or goes out of range, the car will stop driving.
+
+## keyfob steering, joystick or button to drive forwards
+### Advantages:
+* kid can learn that pressing a button can make them move like in a classic button go baby go car
+* kid gets assistance in steering towards goals and friends from someone using a remote control
+
+### Disadvantages:
+* remote control only has buttons so control is a bit imprecise
+* car won't turn off if the transmitter is out of range
+* the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car could only be driven within the shorter 20 foot range.
+
+### Instructions:
+
+### How to use:
+* If the kid presses a button the car will move
+* If a button on the remote is pressed the car will steer
+
+## RC receiver steering, joystick or button to drive forwards
+### Advantages:
+* kid can learn that pressing a button can make them move like in a classic button go baby go car
+* kid gets assistance in steering towards goals and friends from someone using a remote control
+
+### Disadvantages:
+* more expensive
+* more complicated
+* the kid may have more trouble associating the button with movement, since movement can happen because of remote inputs
+
+### Instructions:
+* check "use rc"
+* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
+* set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
+* set "rc control pin" to the pin connected to the receiver channel for the "control" switch
+* set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
+* set "rc inactive until connected"
+  * If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
+  * If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
+* check "rc plus"
+* uncheck "rc and"
+
+### How to use
+* the kid controls the car normally with a joystick and/or buttons
+* if an RC transmitter is connected and the remote override switch is off, the RC input and the kid's input are added together allowing for shared control and steering help.
+
