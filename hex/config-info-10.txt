@@ -1,1 +1,0 @@
-PCB-rpiPico-2, PCB_gbg_program, RPIPICO2, rpi pico 2
