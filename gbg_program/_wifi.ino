@@ -43,7 +43,7 @@ void setupWifi() {
     webServer.send(200);
   });
   webServer.on("/speedScale", []() {
-    if (webServer.args() == 3 && webServer.hasArg("sp")  && webServer.arg("key").toInt() == key) {
+    if (webServer.args() == 2 && webServer.hasArg("sp")  && webServer.arg("key").toInt() == key) {
       remoteSpeedScaler = webServer.arg("sp").toFloat();
       remoteSpeedScaler = constrain(remoteSpeedScaler, 0, 3);
       webServer.send(200);

@@ -925,7 +925,7 @@ void loop()
     } else {
       buttonModeActive = !USE_BUTTON_MODE_PIN || (digitalRead(BUTTON_MODE_PIN) == BUTTONS_ACTIVE_HIGH);
     }
-    InputReader_Buttons(buttonModeActive, ADD_BUTTONS_TO_JOYSTICK, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
+    InputReader_Buttons(buttonModeActive, !ADD_BUTTONS_TO_JOYSTICK, NUM_DRIVE_BUTTONS, driveButtons, turnInput, speedInput, BUTTONS_ACTIVE_HIGH);
   } else {
     buttonModeActive = false;
   }
