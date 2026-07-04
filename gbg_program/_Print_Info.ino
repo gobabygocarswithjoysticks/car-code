@@ -154,6 +154,7 @@ void printSettings() {
   prnt(FV(SETTING[S_BUTTON_MODE_PIN]), BUTTON_MODE_PIN);
   prntbool(FV(SETTING[S_BUTTON_MODE_TOGGLE]), BUTTON_MODE_TOGGLE);
   prntbool(FV(SETTING[S_BUTTONS_ACTIVE_HIGH]), BUTTONS_ACTIVE_HIGH);
+  // prntbool(FV(SETTING[S_ADD_BUTTONS_TO_JOYSTICK]), ADD_BUTTONS_TO_JOYSTICK);
   prnt(FV(SETTING[S_NUM_DRIVE_BUTTONS]), NUM_DRIVE_BUTTONS);
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
@@ -201,6 +202,7 @@ void printSettings() {
   prnt(FV(SETTING[S_CTRL_RC_PIN]), RC_PIN[CTRL_RC]);
   prnt(FV(SETTING[S_STOP_RC_PIN]), RC_PIN[STOP_RC]);
   prntbool(FV(SETTING[S_NO_RC_STOP_UNTIL_START]), NO_RC_STOP_UNTIL_START);
+  // prnt(FV(SETTING[S_RC_MODE]), RC_MODE);
   prntbool(FV(SETTING[S_USE_STOP_SWITCH]), USE_STOP_SWITCH);
   prnt(FV(SETTING[S_ON_OFF_SWITCH_PIN]), STOP_PIN);
   prntbool(FV(SETTING[S_ON_OFF_ACTIVE_HIGH]), STOP_PIN_HIGH);
@@ -272,7 +274,7 @@ void prntf(const __FlashStringHelper *fsh, float value) {
   if (ptw) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", value);
@@ -302,7 +304,7 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
   if (ptw) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     if (value) {
@@ -350,7 +352,7 @@ void printAndAppendToChecksum(const __FlashStringHelper * fsh) {
 #if defined(HAS_WIFI)
   if (ptw) {
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
   } else {
     serialChecksum += Serial.print(fsh);
   }
