@@ -1,0 +1,1 @@
+blink-rpiPico-2W, blink, RPIPICO2W, rpi pico 2 W
