@@ -141,7 +141,7 @@ void runWifiInput(float & speedInput, float & turnInput) {
       if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) { // disconnected
         speedInput = 0; // stop
         turnInput = 0;
-      } else {
+      } else { // connected
         speedInput = remoteFB;
         turnInput = remoteLR;
       }
@@ -150,7 +150,7 @@ void runWifiInput(float & speedInput, float & turnInput) {
       if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
-      } else {
+      } else { // connected
         speedInput = speedInput * remoteSpeedScaler + remoteFB;
         turnInput = turnInput * remoteSpeedScaler + remoteLR;
       }
@@ -159,9 +159,14 @@ void runWifiInput(float & speedInput, float & turnInput) {
       if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
-      } else {
-        speedInput = speedInput * remoteSpeedScaler + remoteFB;
-        turnInput = turnInput * remoteSpeedScaler + remoteLR;
+      } else { // connected
+        if(abs(speedInput) >= 0.001 && abs(turnInput) >= 0.001) { // car input says to move
+          speedInput = remoteFB; // remote control
+          turnInput = remoteLR;
+        }else{
+          speedInput = 0;
+          turnInput = 0;
+        }
       }
       break;
   }
