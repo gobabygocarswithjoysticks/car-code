@@ -800,10 +800,6 @@ void setup() {
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
   delay(250);
 
-#ifdef IS_PCB
-  //  setupPCB();
-#endif
-
 #if defined(HAS_WIFI)
   printSettings(false);
 #else

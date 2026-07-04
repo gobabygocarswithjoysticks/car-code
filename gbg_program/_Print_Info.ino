@@ -267,14 +267,14 @@ void prnt(const __FlashStringHelper *fsh, int value) {
 }
 
 #if defined(HAS_WIFI)
-char stringLabel[50];
+char stringLabel[30];
 #endif
 void prntf(const __FlashStringHelper *fsh, float value) {
 #if defined(HAS_WIFI)
   if (ptw) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", value);
@@ -305,7 +305,7 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
   if (ptw) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     if (value) {
@@ -354,7 +354,7 @@ void printAndAppendToChecksum(const __FlashStringHelper * fsh) {
 #if defined(HAS_WIFI)
   if (ptw) {
     strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf_P(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
   } else {
     serialChecksum += Serial.print(fsh);
   }
