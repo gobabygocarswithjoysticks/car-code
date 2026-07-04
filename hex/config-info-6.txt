@@ -1,1 +1,0 @@
-standard-rpiPico-2, gbg_program, RPIPICO2, rpi pico 2

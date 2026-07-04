@@ -1,1 +1,0 @@
-PCB-rpiPico-2W, PCB_gbg_program, RPIPICO2W, rpi pico 2 W
