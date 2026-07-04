@@ -3,8 +3,9 @@ int serialChecksum = 0;
 
 #if defined(HAS_WIFI)
 bool ptw = false;
-char wifiSettingsBuffer[3000];
+char wifiSettingsBuffer[2000];
 int wifiBufI = 0;
+bool printing=false;
 #endif
 
 boolean printVariables(int interval) {
@@ -87,6 +88,10 @@ boolean printVariables(int interval) {
 
 #if defined(HAS_WIFI)
 void printSettings(bool printToWifi) {
+  if (printing) {
+    return; // prevent printing simultaneously to wifi and serial
+  }
+  printing = true;
   ptw = printToWifi;
   wifiBufI = 0;
 #else
@@ -229,6 +234,7 @@ void printSettings() {
     Serial.println("}");
   }
   ptw = false;
+  printing = false;
 #else
   printAndAppendToChecksum(F("\"CHECKSUM\":"));
   Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);

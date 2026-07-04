@@ -21,9 +21,27 @@
   <input type="radio" id="ctl-remote" name="remote-mode" value="1" onclick='sendRemoteMode(1);' />
   <label for="ctl-remote" style="font-size: x-large;">remote has control</label>
   <br>
+  <input type="radio" id="ctl-add" name="remote-mode" value="2" checked onclick='sendRemoteMode(2);' />
+  <label for="ctl-add" style="font-size: x-large;">remote plus car</label>
+  <br>
+  <input type="radio" id="ctl-and" name="remote-mode" value="3" onclick='sendRemoteMode(3);' />
+  <label for="ctl-and" style="font-size: x-large;">remote if car</label>
+  <br>
   <br>
   <input type="checkbox" id='timeout' onclick='sendTimeout();'></input>
   <label for="timeout" style="font-size: larger;">deactivate if signal lost</label>
+  <br>
+  <div>
+    speed:
+    <button onclick='setSpeed(0.10);' style='font-size: large;'>10%</button>
+    <button onclick='setSpeed(0.20);' style='font-size: large;'>20%</button>
+    <button onclick='setSpeed(0.30);' style='font-size: large;'>30%</button>
+    <button onclick='setSpeed(0.50);' style='font-size: large;'>50%</button>
+    <button onclick='setSpeed(0.75);' style='font-size: large;'>75%</button>
+    <button onclick='setSpeed(1.0);' style='font-size: large;'>100%</button>
+    <button onclick='setSpeed(1.5);' style='font-size: large;'>150%</button>
+    <button onclick='setSpeed(2.0);' style='font-size: large;'>200%</button>
+  </div>
 
   <div id="joyDiv"
     style="width:500px;height:500px;margin-left:100%;margin-right:200px;margin-bottom:20px;margin-top:20px;float:right;">
@@ -431,6 +449,10 @@
 
   function sendRemoteMode(mode) {
     fetch("/remoteMode?mode=" + mode + "&key=" + key);
+  }
+
+  function setSpeed(scale) {
+    fetch("/speedScale?sp=" + scale + "&key=" + key);
   }
 
   function activate() {

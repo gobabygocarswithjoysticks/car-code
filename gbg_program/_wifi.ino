@@ -72,8 +72,13 @@ void setupWifi() {
     webServer.send(200, "application/json", statusBuffer);
   });
   webServer.on("/settings", []() {
+    memset(wifiSettingsBuffer, '\0', sizeof(wifiSettingsBuffer));
     printSettings(true);
+    if(strlen(wifiSettingsBuffer) > 0) {
     webServer.send(200, "application/json", wifiSettingsBuffer);
+    } else {
+      webServer.send(500);
+    }
   });
 
   webServer.on("/setSetting", []() {

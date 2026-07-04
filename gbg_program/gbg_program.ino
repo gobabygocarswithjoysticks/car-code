@@ -798,7 +798,7 @@ void setup() {
   printSettings();
 #endif
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  delay(120);
+  delay(130);
 
 #ifdef IS_PCB
   //  setupPCB();
@@ -813,6 +813,7 @@ void setup() {
 
   setupPins();
 #if defined(HAS_WIFI)
+  delay(50);
   setupWifi();
 #endif
 
