@@ -308,12 +308,19 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
     wifiSettingsBuffer[wifiBufI++ ] = '"';
     wifiSettingsBuffer[wifiBufI++ ] = ':';
     if (value) {
-      sprintf(wifiSettingsBuffer + wifiBufI, "true,");
-      wifiBufI += 5;
+      wifiSettingsBuffer[wifiBufI++ ] = 't';
+      wifiSettingsBuffer[wifiBufI++ ] = 'r';
+      wifiSettingsBuffer[wifiBufI++ ] = 'u';
+      wifiSettingsBuffer[wifiBufI++ ] = 'e';
+      wifiSettingsBuffer[wifiBufI++ ] = ',';
       wifiSettingsBuffer[wifiBufI++ ] = ' ';
     } else {
-      sprintf(wifiSettingsBuffer + wifiBufI, "false,");
-      wifiBufI += 6;
+      wifiSettingsBuffer[wifiBufI++ ] = 'f';
+      wifiSettingsBuffer[wifiBufI++ ] = 'a';
+      wifiSettingsBuffer[wifiBufI++ ] = 'l';
+      wifiSettingsBuffer[wifiBufI++ ] = 's';
+      wifiSettingsBuffer[wifiBufI++ ] = 'e';
+      wifiSettingsBuffer[wifiBufI++ ] = ',';
       wifiSettingsBuffer[wifiBufI++ ] = ' ';
     }
   } else {
