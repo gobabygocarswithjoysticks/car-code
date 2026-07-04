@@ -155,7 +155,8 @@
         if (settings[setting] === true) {
           inputElem.checked = true;
         }
-        inputElem.onchange = function () { settingsChange(setting, this.value); };
+        var valu = settings[setting] ? 1 : 0;
+        inputElem.onchange = function () { settingsChange(setting, valu); };
         valElem.appendChild(inputElem);
       } else {
         var inputElem = document.createElement("input");
