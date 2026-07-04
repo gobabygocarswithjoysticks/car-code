@@ -3,7 +3,7 @@ int serialChecksum = 0;
 
 #if defined(HAS_WIFI)
 bool ptw = false;
-char wifiSettingsBuffer[3000];
+char wifiSettingsBuffer[2000];
 int wifiBufI = 0;
 #endif
 
@@ -267,7 +267,7 @@ void prnt(const __FlashStringHelper *fsh, int value) {
 }
 
 #if defined(HAS_WIFI)
-char stringLabel[50];
+char stringLabel[30];
 #endif
 void prntf(const __FlashStringHelper *fsh, float value) {
 #if defined(HAS_WIFI)
@@ -296,6 +296,7 @@ void prntf(const __FlashStringHelper *fsh, float value) {
   Serial.print("\":");
   serialChecksum += Serial.print(value, 4);
   Serial.print(", ");
+  Serial.flush();
 #endif
 }
 
@@ -333,6 +334,7 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
     } else {
       serialChecksum += Serial.print("false, ");
     }
+    Serial.flush();
   }
   delay(0);
 #else

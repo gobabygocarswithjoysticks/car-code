@@ -117,7 +117,7 @@ float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
   &SCALE_TURNING_WHEN_MOVING, //9
 };
 
-char phrase[20];
+char phrase[30];
 #if defined(HAS_WIFI)
 void settingsSerial(int8_t input) {
   int8_t in;

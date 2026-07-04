@@ -13,6 +13,8 @@ char statusBuffer[120];
 
 uint16_t key = 1;
 
+float remoteSpeedScaler = 1.0;
+
 void setupWifi() {
   if (!USE_WIFI) {
     return;
@@ -40,6 +42,15 @@ void setupWifi() {
     activatedByRemote = false;
     webServer.send(200);
   });
+  webServer.on("/speedScale", []() {
+    if (webServer.args() == 2 && webServer.hasArg("sp")  && webServer.arg("key").toInt() == key) {
+      remoteSpeedScaler = webServer.arg("sp").toFloat();
+      remoteSpeedScaler = constrain(remoteSpeedScaler, 0, 3);
+      webServer.send(200);
+    }else{
+      webServer.send(403);
+    }
+  });
   webServer.on("/status", []() {
     if (webServer.args() == 3 && webServer.hasArg("fb") && webServer.hasArg("lr") && webServer.hasArg("key") && webServer.arg("key").toInt() == key) {
       lastRemoteCommandMillis = millis();
@@ -61,8 +72,13 @@ void setupWifi() {
     webServer.send(200, "application/json", statusBuffer);
   });
   webServer.on("/settings", []() {
+    memset(wifiSettingsBuffer, '\0', sizeof(wifiSettingsBuffer));
     printSettings(true);
+    if(strlen(wifiSettingsBuffer) > 0) {
     webServer.send(200, "application/json", wifiSettingsBuffer);
+    } else {
+      webServer.send(500);
+    }
   });
 
   webServer.on("/setSetting", []() {
@@ -111,7 +127,7 @@ void setupWifi() {
 
 }
 
-void runWifiInput(float& speedInput, float& turnInput) {
+void runWifiInput(float & speedInput, float & turnInput) {
   if (!USE_WIFI) {
     return;
   }
@@ -121,15 +137,41 @@ void runWifiInput(float& speedInput, float& turnInput) {
       if (deactivateIfRemoteDisconnects && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
         speedInput = 0;
         turnInput = 0;
+      } else {
+        speedInput = speedInput * remoteSpeedScaler;
+        turnInput = turnInput * remoteSpeedScaler;
       }
       break;
-    case 1:
-      if (true && ((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
-        speedInput = 0;
+    case 1: // remote is driving
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) { // disconnected
+        speedInput = 0; // stop
         turnInput = 0;
-      } else {
+      } else { // connected
         speedInput = remoteFB;
         turnInput = remoteLR;
+      }
+      break;
+    case 2: // remote and car share control "add"
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      } else { // connected
+        speedInput = speedInput * remoteSpeedScaler + remoteFB;
+        turnInput = turnInput * remoteSpeedScaler + remoteLR;
+      }
+      break;
+    case 3: // remote controls if car input says to move "and"
+      if (((millis() - lastRemoteCommandMillis) > signalLossTimeout)) {
+        speedInput = 0;
+        turnInput = 0;
+      } else { // connected
+        if(abs(speedInput) >= 0.001 && abs(turnInput) >= 0.001) { // car input says to move
+          speedInput = remoteFB; // remote control
+          turnInput = remoteLR;
+        }else{
+          speedInput = 0;
+          turnInput = 0;
+        }
       }
       break;
   }
