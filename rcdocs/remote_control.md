@@ -249,7 +249,7 @@ Using the programming website (connect to car then press "show all"):
 * select the "rc mode" for either taking turns with controlling the car or helping with steering
   * mode 0 "car": car has control (unless the control switch overrides)
   * mode 1 "add": the car's input is added to the remote input, so the remote control can be used to help with steering at the same time as the kid is making the car move forwards or backwards.
-  * mode 2 "and": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
+  * mode 2 "if": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
 
 ### How to use:
 When the "stop" switch is on, the car will stop driving.
