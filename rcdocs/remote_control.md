@@ -4,7 +4,8 @@
 * on/off switch
 * on/off buttons
 * joystick/button toggling
-* RC receiver input
+* joystick/button shared control
+* a few modes of RC receiver input
 
 ## Please talk to a physical therapist about the best way to use a remote control to benefit the kid and balance safety, social interaction, and independence. 
 
@@ -39,7 +40,8 @@ These instructions will use the numbers instead of the inconsistent letter label
 If the range is really short, try adjusting the screw on the receiver. I tried to tune it to the middle of the range in which it received a signal. You could also try adjusting the screw while someone else walks away with the remote. Remove the screwdriver from the screw before evaluating each adjustment to the screw, since the receiver is effected by the screwdriver touching the screw.
 
 ---
-## keyfob on/off toggle
+
+## keyfob remote on/off toggle
 ### Description: 
 Press one button on a keyfob remote to stop the car, and another button to start it again.
 
@@ -69,7 +71,8 @@ Using the programming website (connect to car then press "show all"):
 Press button D0 on the keyfob to turn the car off, and button D3 to turn it back on.
 
 ---
-## keyfob on/off switch
+
+## keyfob remote on/off switch
 ### Description: 
 Modify a keyfob remote with a switch that stops the car or allows it to drive.
 
@@ -106,7 +109,8 @@ Using the programming website (connect to car then press "show all"):
 Turn on the switch on the remote to allow the car to drive. Turn it off to stop the car. If the car goes out of range of the remote, it will stop driving.
 
 ---
-## keyfob that can drive the car
+
+## keyfob remote that can drive the car
 ### Description:
 Use a keyfob remote to override and drive the car. One button will toggle between car control and remote control, and three buttons make the car drive forward, left, and right.
 ### Advantages: 
@@ -119,6 +123,7 @@ Use a keyfob remote to override and drive the car. One button will toggle betwee
 * prevents the car from being driven by buttons on the car
 * car decelerates instead of stopping immediately
 * the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car could only be driven within the shorter 20 foot range.
+* remotely driving the car could make it harder for the kid to learn the association between using their controls and moving
 
 ### Instructions:
 Get a keyfob remote and receiver module with four buttons. (search for 2262/2272 4CH key remote control).
@@ -154,14 +159,69 @@ Press button D0 on the keyfob to toggle between car control and remote control. 
 
 ---
 
-## RC receiver
+## keyfob remote steering, joystick or button to drive forwards
+### Description:
+Use a keyfob remote to stop and start a car and also steer left and right. The car's onboard joystick or button(s) make the car move forwards (and other directions).
+
+### Advantages:
+* simple
+* cheap
+* kid can practice with a single button
+* remote control can help with steering towards goals and away from obstacles
+keyfob: on, off, left, right. joystick or other buttons: movement (can't override but can remotely stop)
+
+### Disadvantages: 
+* car won't turn off if the transmitter is out of range
+* challenging to drive precisely
+* since remote steering makes the car move even if the kid isn't using a control it could make it harder for the kid to learn the association between using their controls and moving
+
+### Instructions:
+Get a keyfob remote and receiver module with at least 2 (probably 4) buttons. (search for 2262/2272 4CH key remote control).
+
+It is important to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
+
+Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively. 
+
+Wire the D1 and D2 pins of the receiver module to 2 pins of the Arduino.
+
+Using the programming website (connect to car then press "show all"):
+* check "use on off buttons"
+* set "on button" to the pin connected to the receiver module D2 pin
+* set "off button" to the pin connected to the receiver module D1 pin
+* check "on off buttons active high"
+* check "enable button ctrl"
+* check "add buttons to joystick" if the car has a joystick
+* set "num drive buttons" to (number of buttons on the car) + 2
+* drive button n+1
+  * set "drive button 1" "pin" to the pin connected to the receiver module D0 pin
+  * set "drive button 1" "speed" to 0
+  * set "drive button 1" "turn" to 1
+* drive button n+2
+  * set "drive button 3" "pin" to the pin connected to the receiver module D3 pin
+  * set "drive button 3" "speed" to 0
+  * set "drive button 3" "turn" to -1
+
+### How to use:
+* keyfob remote button D1 stops the car
+* keyfob remote button D2 allows the car to move
+* keyfob remote button D3 turns left
+* keyfob remote button D0 turns right
+* the normal button or joystick controls for the car still work
+
+---
+
+## RC receiver (with options for remotely helping with steering)
+### Description:
+Use a RC receiver and transmitter to remotely stop, override, and optionally provide help with steering.
 ### Advantages: 
 * drive the car precisely with the remote control
 * car will turn off if the transmitter is out of range
+* there are options for remotely helping with steering for a kid who is still learning to press just one button
 
 ### Disadvantages: 
 * more expensive
 * more complicated
+* remotely driving the car could make it harder for the kid to learn the association between using their controls and moving
 
 ### Instructions:
 Get a RC transmitter with at least 4 channels, 1 joystick, and 2 switches. This is probably sold as a 6-channel transmitter. Also, get a receiver that is compatible with the transmitter.
@@ -170,7 +230,7 @@ Wire the receiver module GND and power pins to the Arduino GND and 5V pins, resp
 
 Wire 4 signal pins from the receiver to 4 pins of the Arduino.
 
-Program the transmitter to send the following signals on 4 channels:
+Program the transmitter to send the following signals on 4 channels (here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)):
 * Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
 * Left/right joystick axis with center at 1500, left at 1000, right at 2000
 * "control" switch with off under 1400 and on above 1600
@@ -186,53 +246,14 @@ Using the programming website (connect to car then press "show all"):
 * set "rc inactive until connected"
   * If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
   * If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
+* select the "rc mode" for either taking turns with controlling the car or helping with steering
+  * mode 0 "car": car has control (unless the control switch overrides)
+  * mode 1 "add": the car's input is added to the remote input, so the remote control can be used to help with steering at the same time as the kid is making the car move forwards or backwards.
+  * mode 2 "and": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
 
 ### How to use:
-When the "control" switch is on, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the joystick or buttons on the car can be used to drive the car.
-
 When the "stop" switch is on, the car will stop driving.
 
 If the transmitter is turned off or goes out of range, the car will stop driving.
 
-## keyfob steering, joystick or button to drive forwards
-### Advantages:
-* kid can learn that pressing a button can make them move like in a classic button go baby go car
-* kid gets assistance in steering towards goals and friends from someone using a remote control
-
-### Disadvantages:
-* remote control only has buttons so control is a bit imprecise
-* car won't turn off if the transmitter is out of range
-* the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car could only be driven within the shorter 20 foot range.
-
-### Instructions:
-
-### How to use:
-* If the kid presses a button the car will move
-* If a button on the remote is pressed the car will steer
-
-## RC receiver steering, joystick or button to drive forwards
-### Advantages:
-* kid can learn that pressing a button can make them move like in a classic button go baby go car
-* kid gets assistance in steering towards goals and friends from someone using a remote control
-
-### Disadvantages:
-* more expensive
-* more complicated
-* the kid may have more trouble associating the button with movement, since movement can happen because of remote inputs
-
-### Instructions:
-* check "use rc"
-* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
-* set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
-* set "rc control pin" to the pin connected to the receiver channel for the "control" switch
-* set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
-* set "rc inactive until connected"
-  * If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
-  * If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
-* check "rc plus"
-* uncheck "rc and"
-
-### How to use
-* the kid controls the car normally with a joystick and/or buttons
-* if an RC transmitter is connected and the remote override switch is off, the RC input and the kid's input are added together allowing for shared control and steering help.
-
+When the "control" switch is on, in any rc mode, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the car follows the "rc mode"
