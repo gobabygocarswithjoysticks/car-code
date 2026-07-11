@@ -5,7 +5,7 @@
   If the checksum reveals data corruption, the car enters a safe mode instead of driving with wrong values.
 */
 
-const unsigned int repeat_space = 200; // space between each copy of a variable (larger than number of bytes needed for settings)
+const unsigned int repeat_space = 256; // space between each copy of a variable (larger than number of bytes needed for settings)
 
 byte bufP = 0;
 char buf[60] = { 0 }; // buffer to fill with Serial input
