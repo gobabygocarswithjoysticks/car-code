@@ -20,6 +20,7 @@ const char fastest_forward[] PROGMEM = "FASTEST_FORWARD";
 const char fastest_backward[] PROGMEM = "FASTEST_BACKWARD";
 const char turn_speed[] PROGMEM = "TURN_SPEED";
 const char scale_turning_when_moving[] PROGMEM = "SCALE_TURNING_WHEN_MOVING";
+const char scale_turning_when_moving_backwards[] PROGMEM = "STWMB";
 const char reverse_turn_in_reverse[] PROGMEM = "REVERSE_TURN_IN_REVERSE";
 const char left_motor_center[] PROGMEM = "LEFT_MOTOR_CENTER";
 const char left_motor_slow[] PROGMEM = "LEFT_MOTOR_SLOW";
@@ -100,6 +101,7 @@ const char* const SETTING[] PROGMEM = {
   fastest_backward,
   turn_speed,
   scale_turning_when_moving,
+  scale_turning_when_moving_backwards,
   reverse_turn_in_reverse,
   left_motor_center,
   left_motor_slow,
@@ -175,6 +177,7 @@ enum SettingID {
   S_FASTEST_BACKWARD,
   S_TURN_SPEED,
   S_SCALE_TURNING_WHEN_MOVING,
+  S_SCALE_TURNING_WHEN_MOVING_BACKWARDS,
   S_REVERSE_TURN_IN_REVERSE,
   S_LEFT_MOTOR_CENTER,
   S_LEFT_MOTOR_SLOW,

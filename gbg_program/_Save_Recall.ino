@@ -91,7 +91,7 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &SPEED_KNOB_FAST_VAL,
 };
 
-#define NUM_SETTINGS_ID_FLOAT 10
+#define NUM_SETTINGS_ID_FLOAT 11
 const SettingID settingsID_float[NUM_SETTINGS_ID_FLOAT] = {
   S_ACCELERATION_FORWARD,
   S_DECELERATION_FORWARD,
@@ -103,6 +103,7 @@ const SettingID settingsID_float[NUM_SETTINGS_ID_FLOAT] = {
   S_FASTEST_BACKWARD,
   S_TURN_SPEED,
   S_SCALE_TURNING_WHEN_MOVING,
+  S_SCALE_TURNING_WHEN_MOVING_BACKWARDS,
 };
 float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
   &ACCELERATION_FORWARD,      //0, abs
@@ -115,6 +116,7 @@ float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
   &FASTEST_BACKWARD,          //7, abs, constrained to 0-1
   &TURN_SPEED,                //8, abs, constrained to 0-1
   &SCALE_TURNING_WHEN_MOVING, //9
+  &SCALE_TURNING_WHEN_MOVING_BACKWARDS, //10
 };
 
 char phrase[30]; // must be large enough to hold the longest setting name string
@@ -155,7 +157,7 @@ void settingsSerial() {
           if (strcmp(k, phrase) == 0) {
             *settingsPtr_float[i] = atof(v);
             // special cases since different variables get processed and constrained differently
-            if (i != 9) {
+            if (i != 9 && i != 10) {
               *settingsPtr_float[i] = abs(*settingsPtr_float[i]);
             }
             if (i == 6 || i == 7 || i == 8) {
@@ -513,6 +515,7 @@ void saveSettings()
   EEPROMwrite(addressW, FASTEST_BACKWARD);
   EEPROMwrite(addressW, TURN_SPEED);
   EEPROMwrite(addressW, SCALE_TURNING_WHEN_MOVING);
+  EEPROMwrite(addressW, SCALE_TURNING_WHEN_MOVING_BACKWARDS);
   EEPROMwrite(addressW, REVERSE_TURN_IN_REVERSE);
   EEPROMwrite(addressW, LEFT_MOTOR_CENTER);
   EEPROMwrite(addressW, LEFT_MOTOR_SLOW);
@@ -605,6 +608,7 @@ void recallSettings()
   EEPROMread(addressR, FASTEST_BACKWARD);
   EEPROMread(addressR, TURN_SPEED);
   EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING);
+  EEPROMread(addressR, SCALE_TURNING_WHEN_MOVING_BACKWARDS);
   EEPROMread(addressR, REVERSE_TURN_IN_REVERSE);
   EEPROMread(addressR, LEFT_MOTOR_CENTER);
   EEPROMread(addressR, LEFT_MOTOR_SLOW);

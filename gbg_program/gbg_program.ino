@@ -46,6 +46,7 @@ float FASTEST_BACKWARD = 0.2;   //change # to limit the backward speed [0.0-1.0]
 float TURN_SPEED = 0.15;        //change # to limit the turning speed (greater than 0)
 
 float SCALE_TURNING_WHEN_MOVING = 1.0;  // what amount of TURN_SPEED to use when moving forward or backward (this adjusts what turn radius the car has when the joystick is pushed to a corner)
+float SCALE_TURNING_WHEN_MOVING_BACKWARDS = 1.0;  // multiplied by SCALE_TURNING_WHEN_MOVING when moving backwards (this adjusts what turn radius the car has when the joystick is pushed to a corner and is going backwards)
 
 boolean SCALE_ACCEL_WITH_SPEED = true;  //set true if using a speed knob and you want to keep time to max speed constant instead of acceleration being constant
 
@@ -980,7 +981,7 @@ void loop()
   InputProcessor_ScaleInput(speedKnobScaler, turnProcessed, speedProcessed, FASTEST_FORWARD, FASTEST_BACKWARD, TURN_SPEED);
 
   //reduce the turning when moving forward or backward. change SCALE_TURNING_WHEN_MOVING to change the turn radius when the joystick is pushed to a corner.
-  turnProcessed = InputProcessor_ScaleTurningWhenMoving(SCALE_TURNING_WHEN_MOVING, turnProcessed, speedProcessed, speedProcessed >= 0 ? FASTEST_FORWARD : FASTEST_BACKWARD);
+  turnProcessed = InputProcessor_ScaleTurningWhenMoving((speedProcessed >= 0 ? 1 : SCALE_TURNING_WHEN_MOVING_BACKWARDS) * SCALE_TURNING_WHEN_MOVING, turnProcessed, speedProcessed, speedProcessed >= 0 ? FASTEST_FORWARD : FASTEST_BACKWARD);
   turnProcessed = constrain(turnProcessed, -1, 1);
 
   // option to make the car go in the direction the joystick is pointed when in reverse
