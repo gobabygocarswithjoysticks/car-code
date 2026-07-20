@@ -239,7 +239,7 @@ byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 boolean NO_RC_STOP_UNTIL_START = false;
 
 byte RC_MODE = 0;
-boolean ADD_BUTTONS_TO_JOYSTICK = true;
+boolean ADD_BUTTONS_TO_JOYSTICK = false;
 
 boolean USE_STOP_SWITCH = false;
 #if defined(ESP32)
