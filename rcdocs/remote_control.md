@@ -213,6 +213,10 @@ Using the programming website (connect to car then press "show all"):
 ## RC receiver (with options for remotely helping with steering)
 ### Description:
 Use a RC receiver and transmitter to remotely stop, override, and optionally provide help with steering.
+
+### Videos:
+[https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
+
 ### Advantages: 
 * drive the car precisely with the remote control
 * car will turn off if the transmitter is out of range
