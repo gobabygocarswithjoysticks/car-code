@@ -41,6 +41,64 @@ If the range is really short, try adjusting the screw on the receiver. I tried t
 
 ---
 
+## RC receiver (with options for remotely helping with steering)
+### Description:
+Use a RC receiver and transmitter to remotely stop, override, and optionally provide help with steering.
+
+### [RC guide](/rcdocs/RC_guide.md)
+Documentation to inform physical therapists about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's family.
+
+### Videos:
+[https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
+
+### Advantages: 
+* drive the car precisely with the remote control
+* car will turn off if the transmitter is out of range
+* there are options for remotely helping with steering for a kid who is still learning to press just one button
+
+### Disadvantages: 
+* more expensive
+* more complicated
+* remotely driving the car could make it harder for the kid to learn the association between using their controls and moving
+
+### Instructions:
+Get a RC transmitter with at least 4 channels, 1 joystick, and 2 switches. This is probably sold as a 6-channel transmitter. Also, get a receiver that is compatible with the transmitter.
+
+Wire the receiver module GND and power pins to the Arduino GND and 5V pins, respectively.
+
+Wire 4 signal pins from the receiver to 4 pins of the Arduino.
+
+Program the transmitter to send the following signals on 4 channels (here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)):
+* Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
+* Left/right joystick axis with center at 1500, left at 1000, right at 2000
+* "control" switch with off under 1400 and on above 1600
+* "stop" switch with off under 1400 and on above 1600
+
+
+Using the programming website (connect to car then press "show all"):
+* check "use rc"
+* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
+* set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
+* set "rc control pin" to the pin connected to the receiver channel for the "control" switch
+* set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
+* set "rc inactive until connected"
+  * If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
+  * If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
+* select the "rc mode" for either taking turns with controlling the car or helping with steering
+  * mode 0 "car": car has control (unless the control switch overrides)
+  * mode 1 "add": the car's input is added to the remote input, so the remote control can be used to help with steering at the same time as the kid is making the car move forwards or backwards.
+  * mode 2 "if": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
+
+### How to use:
+When the "stop" switch is on, the car will stop driving.
+
+If the transmitter is turned off or goes out of range, the car will stop driving.
+
+When the "control" switch is on, in any rc mode, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the car follows the "rc mode"
+
+
+---
+
 ## keyfob remote on/off toggle
 ### Description: 
 Press one button on a keyfob remote to stop the car, and another button to start it again.
@@ -207,57 +265,3 @@ Using the programming website (connect to car then press "show all"):
 * keyfob remote button D3 turns left
 * keyfob remote button D0 turns right
 * the normal button or joystick controls for the car still work
-
----
-
-## RC receiver (with options for remotely helping with steering)
-### Description:
-Use a RC receiver and transmitter to remotely stop, override, and optionally provide help with steering.
-
-### Videos:
-[https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
-
-### Advantages: 
-* drive the car precisely with the remote control
-* car will turn off if the transmitter is out of range
-* there are options for remotely helping with steering for a kid who is still learning to press just one button
-
-### Disadvantages: 
-* more expensive
-* more complicated
-* remotely driving the car could make it harder for the kid to learn the association between using their controls and moving
-
-### Instructions:
-Get a RC transmitter with at least 4 channels, 1 joystick, and 2 switches. This is probably sold as a 6-channel transmitter. Also, get a receiver that is compatible with the transmitter.
-
-Wire the receiver module GND and power pins to the Arduino GND and 5V pins, respectively.
-
-Wire 4 signal pins from the receiver to 4 pins of the Arduino.
-
-Program the transmitter to send the following signals on 4 channels (here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)):
-* Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
-* Left/right joystick axis with center at 1500, left at 1000, right at 2000
-* "control" switch with off under 1400 and on above 1600
-* "stop" switch with off under 1400 and on above 1600
-
-
-Using the programming website (connect to car then press "show all"):
-* check "use rc"
-* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
-* set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
-* set "rc control pin" to the pin connected to the receiver channel for the "control" switch
-* set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
-* set "rc inactive until connected"
-  * If you want the car to be able to drive without the remote, check "rc inactive until connected". If "rc inactive until connected" is checked, the car will be able to drive until the transmitter is first turned on. After that, until the car is turned off, it will stop if the transmitter is turned off or goes out of range.
-  * If "rc inactive until connected" is not checked, the car will not be able to drive until the transmitter is turned on. This means the remote is required for using the car.
-* select the "rc mode" for either taking turns with controlling the car or helping with steering
-  * mode 0 "car": car has control (unless the control switch overrides)
-  * mode 1 "add": the car's input is added to the remote input, so the remote control can be used to help with steering at the same time as the kid is making the car move forwards or backwards.
-  * mode 2 "if": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
-
-### How to use:
-When the "stop" switch is on, the car will stop driving.
-
-If the transmitter is turned off or goes out of range, the car will stop driving.
-
-When the "control" switch is on, in any rc mode, the joystick on the transmitter's joystick can be used to drive the car. When the "control" switch is off, the car follows the "rc mode"
