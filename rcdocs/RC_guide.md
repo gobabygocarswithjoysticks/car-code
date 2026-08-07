@@ -23,7 +23,7 @@ Any other switches or controls on the remote control have no function.
 
 # There are 2 decisions about how the remote control should work that need to be made when the car is being programmed. 
 
-## Mode: 
+## 1. Mode: 
 The first decision is about the "mode" setting. There are 3 choices:
 
 ### Standard Mode
@@ -36,7 +36,7 @@ In this mode, the remote influences the driving of the car but does not complete
 
 Shared mode can be used to help a kid steer without needing to use the remote override switch.
 
-An advantage of this mode is that it can give easy, smooth, nudges to the car to redirect it away from walls. Compared to flipping the override switch, driving the car remotely for a second to turn it, and flipping the switch back, it's easier and will likely be a smoother motion as the remote's joystick can just be pushed to the side for a second to redirect the car without having to fully override.
+An advantage of this mode is that it can give easy, smooth, nudges to the car to redirect it away from walls.
 
 For button cars, the advantage of shared mode is that the caregiver would be able to spin the car in place when the child isn’t pressing the button, and steer the car when the child is pressing the button.
 
@@ -49,7 +49,7 @@ In steered mode, the remote drives the car, except the car only moves if the kid
 
 A tip for caregivers using this mode is to always point the remote’s joystick in whatever direction (forwards, turning, backwards) they want the car to go once the kid presses the button on the car.
 
-## Whether the car operates without the remote present
+## 2. Whether the car operates without the remote present:
 The second decision to be made about how the car is programmed concerns what the car should do if the car is turned on without the remote control also being turned on. There are 2 choices:
 
 ### Can't drive without remote
