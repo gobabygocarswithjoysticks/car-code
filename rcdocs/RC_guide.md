@@ -24,7 +24,7 @@ Any other switches or controls on the remote control have no function.
 # There are 2 decisions about how the remote control should work that need to be made when the car is being programmed. 
 
 ## Mode: 
-The first decision is about the "mode' setting. There are 3 choices:
+The first decision is about the "mode" setting. There are 3 choices:
 
 ### Standard Mode
 The kid has complete control of the car in this mode unless the caregiver uses the override or stop switches on the remote. The standard mode is best for kids who don’t need much intervention or for families who want the simplest option for the remote. In standard mode, there is the sharpest division between who is driving the car: either the kid drives the car completely by themselves, or the caregiver uses the override switch and has complete control over the car.
