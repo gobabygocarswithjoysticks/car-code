@@ -15,7 +15,7 @@ If the remote is turned from on to off or the car goes out of the remote's range
     * The stop switch is on the right and labeled “Stop”
     * The switch stops the car when it is flipped towards you
 
-When the Override and Stop switches are both in the “off” position, the car will drive according to the mode it was programmed with (see below)
+When neither the Override nor Stop switches are flipped, the car will drive according to the mode it was programmed with (see below)
 
 The remote control also has a power switch. When not using the car, turn the remote off.
 
