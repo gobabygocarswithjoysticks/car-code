@@ -13,7 +13,7 @@ If the remote is turned from on to off or the car goes out of the remote's range
     * If the joystick is in the neutral position when the override switch is flipped the car will smoothly come to a stop
 * __Stop switch__: when this is flipped, the car will stop driving (abruptly, not smoothly)
     * The stop switch is on the right and labeled “Stop”
-    * The switch isstopes the car when it is flipped towards you
+    * The switch stops the car when it is flipped towards you
 
 When the Override and Stop switches are both in the “off” position, the car will drive according to the mode it was programmed with (see below)
 
