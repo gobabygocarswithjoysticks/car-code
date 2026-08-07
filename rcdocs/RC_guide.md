@@ -35,7 +35,7 @@ In this mode, the remote influences the driving of the car but does not complete
 (In this mode, the kid’s controls are summed with the remote’s joystick so that both inputs have influence).
 
 Shared mode can be used to help a kid steer without needing to use the remote override switch.
-
+Compared to flipping the override switch, driving the car remotely for a second to turn it, and flipping the switch back, shared mode allows the caregiver to just give a small turning input in an easier and smoother way.
 An advantage of this mode is that it can give easy, smooth, nudges to the car to redirect it away from walls.
 
 For button cars, the advantage of shared mode is that the caregiver would be able to spin the car in place when the child isn’t pressing the button, and steer the car when the child is pressing the button.
