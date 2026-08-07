@@ -34,7 +34,7 @@ In this mode, the remote influences the driving of the car but does not complete
 
 (In this mode, the kid’s controls are summed with the remote’s joystick so that both inputs have influence).
 
-Shared mode can be used to help a kid steer without needing to use the remote override switch. Compared to flipping the override switch, driving the car remotely for a second to turn it, and flipping the switch back, shared mode allows the caregiver to just give a small turning input in an easier and smoother way.
+Shared mode can be used to help a kid steer without needing to use the remote override switch.
 
 An advantage of this mode is that it can give easy, smooth, nudges to the car to redirect it away from walls. Compared to flipping the override switch, driving the car remotely for a second to turn it, and flipping the switch back, it's easier and will likely be a smoother motion as the remote's joystick can just be pushed to the side for a second to redirect the car without having to fully override.
 
@@ -52,7 +52,7 @@ A tip for caregivers using this mode is to always point the remote’s joystick 
 ## Whether the car operates without the remote present
 The second decision to be made about how the car is programmed concerns what the car should do if the car is turned on without the remote control also being turned on. There are 2 choices:
 
-### Can't start without remote
+### Can't drive without remote
 
 With this option, the car will not move unless the remote is also turned on.
 
