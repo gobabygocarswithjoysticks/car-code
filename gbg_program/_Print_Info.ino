@@ -59,6 +59,31 @@ boolean printVariables(int interval) {
       } //else  buttons off
     }
     prnt(F("buttons"), buttonBits);
+
+    int stopBits = 0;
+    if (USE_STOP_SWITCH) {
+      if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) { // if switch is saying stop...
+        if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) { // and the NO_STOP_UNTIL_START setting is active or the stop switch has previously been switched to on
+          bitSet(stopBits, 0);
+        }
+      }
+    }
+
+    if (rcFlags.Start_Stop_Buttons_e_stop) {
+      bitSet(stopBits, 1);
+    }
+
+    if (rcFlags.RC_make_motors_e_stop) {
+      bitSet(stopBits, 2);
+    }
+
+#if defined(HAS_WIFI)
+    if (!(activatedByRemote || !USE_WIFI)) {
+      bitSet(stopBits, 3);
+    }
+#endif
+    prnt(F("stopBits"), stopBits);
+
     serialChecksum += Serial.print(F("\"b_m_p\":"));
     if (rcFlags.RCOverride) {
       serialChecksum += Serial.print("\"R\"");
