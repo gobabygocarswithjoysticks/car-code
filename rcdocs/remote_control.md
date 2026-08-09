@@ -74,6 +74,8 @@ Program the transmitter to send the following signals on 4 channels (here's a vi
 * "control" switch with off under 1400 and on above 1600
 * "stop" switch with off under 1400 and on above 1600
 
+The FS-i6 transmitter beeps annoyingly if you stop using the controls for more than a minute. That's useful for a remote control plane but not a good feature for a remote override that is only sometimes used. To deactivate the beeper, cut the trace that is circled in red in this image: [cut trace to stop beeper](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/rc-tx-beeper.jpg)
+
 
 Using the programming website (connect to car then press "show all"):
 * check "use rc"
