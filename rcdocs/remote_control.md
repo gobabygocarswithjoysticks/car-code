@@ -130,44 +130,6 @@ Press button D0 on the keyfob to turn the car off, and button D3 to turn it back
 
 ---
 
-## keyfob remote on/off switch
-### Description: 
-Modify a keyfob remote with a switch that stops the car or allows it to drive.
-
-### Advantages: 
-* cheap
-* car will turn off if the transmitter is out of range
-
-### Disadvantages: 
-* modifying the keyfob makes it more complicated
-* the signal from the keyfob needs to be continuous, and the keyfob I tested had a continuous signal for 20 feet, then a blinking, inconsistent signal out to 100 feet because of trouble transmitting longer distances. The car would only be useful within the shorter 20 foot range.
-
-### Instructions:
-Get a keyfob remote and receiver module with at least 1 button. (search for 2262/2272 4CH key remote control).
-
-**Modify the keyfob to add a switch:**
-
-Open the keyfob remote and wire a toggle switch parallel to one of the buttons. When the switch is on the remote should transmit continuously. Check that it is legal to transmit for minutes at a time on the frequency of the remote in your country. Optionally, replace the battery with a larger one to give a longer battery life.
-
-It is important to open up the keyfob and add solder bridges to the 8 addressing pins to set a unique address for the remote. This will prevent other remotes from interfering with the car. Try to give each car that you build a different address. Also add solder bridges to the 8 addressing pins on the receiver module to match the address of the remote.
-
-Wire the receiver module GND and 5V pins to the Arduino GND and 5V pins, respectively.
-
-Wire an output pin of the receiver module to a pin of the Arduino.
-
-Using the programming website (connect to car then press "show all"):
-* check "use stop switch"
-* set "stop pin" to the pin connected to the receiver module output pin
-* uncheck "stop pin high"
-* set "no stop until start"
-  * If you want the car to be able to drive without the remote, check "no stop until start". If "no stop until start" is checked, the car will be able to drive until the switch on the remote is turned on then off again.
-  * If "no stop until start" is not checked, the car will not be able to drive until the switch on the remote is turned on. This means the remote is required for using the car.
-
-### How to use:
-Turn on the switch on the remote to allow the car to drive. Turn it off to stop the car. If the car goes out of range of the remote, it will stop driving.
-
----
-
 ## keyfob remote that can drive the car
 ### Description:
 Use a keyfob remote to override and drive the car. One button will toggle between car control and remote control, and three buttons make the car drive forward, left, and right.
