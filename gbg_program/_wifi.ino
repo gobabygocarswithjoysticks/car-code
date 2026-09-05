@@ -47,7 +47,7 @@ void setupWifi() {
       remoteSpeedScaler = webServer.arg("sp").toFloat();
       remoteSpeedScaler = constrain(remoteSpeedScaler, 0, 3);
       webServer.send(200);
-    }else{
+    } else {
       webServer.send(403);
     }
   });
@@ -74,8 +74,8 @@ void setupWifi() {
   webServer.on("/settings", []() {
     memset(wifiSettingsBuffer, '\0', sizeof(wifiSettingsBuffer));
     printSettings(true);
-    if(strlen(wifiSettingsBuffer) > 0) {
-    webServer.send(200, "application/json", wifiSettingsBuffer);
+    if (strlen(wifiSettingsBuffer) > 0) {
+      webServer.send(200, "application/json", wifiSettingsBuffer);
     } else {
       webServer.send(500);
     }
@@ -165,10 +165,10 @@ void runWifiInput(float & speedInput, float & turnInput) {
         speedInput = 0;
         turnInput = 0;
       } else { // connected
-        if(abs(speedInput) >= 0.001 && abs(turnInput) >= 0.001) { // car input says to move
+        if (abs(speedInput) >= 0.001 && abs(turnInput) >= 0.001) { // car input says to move
           speedInput = remoteFB; // remote control
           turnInput = remoteLR;
-        }else{
+        } else {
           speedInput = 0;
           turnInput = 0;
         }

@@ -477,9 +477,10 @@ void ctrlRCISR(void) {
 void stopRCISR(void) {
   RCISR(STOP_RC);
 }
+// must match the enum for x_RC
 void (*RCISRs[])() = {
-  speedRCISR,
   turnRCISR,
+  speedRCISR,
   ctrlRCISR,
   stopRCISR
 };
