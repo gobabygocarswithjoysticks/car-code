@@ -237,7 +237,6 @@ byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 #endif
 
 boolean NO_RC_STOP_UNTIL_START = false; // RC INACTIVE UNTIL CONNECTED
-boolean INVERT_RC_STOP_SWITCH = false;
 
 byte RC_MODE = 0;
 boolean ADD_BUTTONS_TO_JOYSTICK = false;
@@ -426,21 +425,21 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef IS_PCB
 #if defined(HAS_WIFI)
-const int version_number = 35;  // pcb with picoW or pico2W
-const byte settings_memory_key = 35;
+const int version_number = 33;  // pcb with picoW or pico2W
+const byte settings_memory_key = 33;
 #else
-const int version_number = 34;  // pcb with pico or pico2
-const byte settings_memory_key = 34;
+const int version_number = 32;  // pcb with pico or pico2
+const byte settings_memory_key = 32;
 #endif
 #else
 #if defined(HAS_WIFI)
-const int version_number = 23;  // esp32, picoW or pico2W
-const byte settings_memory_key = 23;
+const int version_number = 21;  // esp32, picoW or pico2W
+const byte settings_memory_key = 21;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-const int version_number = 22;  // nano or uno
+const int version_number = 20;  // nano or uno
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-const byte settings_memory_key = 22;
+const byte settings_memory_key = 20;
 #endif
 #endif
 
@@ -556,9 +555,9 @@ void runRCInput(float &speed, float &turn) {
       rcFlags.RCOverride = false;
     }
     if (copiedRemoteInput[STOP_RC] > rcControlSwitchDeadband) {
-      rcFlags.RCStop = !INVERT_RC_STOP_SWITCH;
+      rcFlags.RCStop = true;
     } else if (copiedRemoteInput[STOP_RC] < -rcControlSwitchDeadband) {
-      rcFlags.RCStop = INVERT_RC_STOP_SWITCH;
+      rcFlags.RCStop = false;
     }
     if (abs(copiedRemoteInput[SPEED_RC]) < rcControlDeadband) {
       copiedRemoteInput[SPEED_RC] = 0;
