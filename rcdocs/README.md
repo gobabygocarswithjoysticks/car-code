@@ -96,10 +96,13 @@ Using the programming website (connect to car then press "show all"):
 #### Instructions specifically for the DS-600 
 The DS-600 is a somewhat unique transmitter that is small and advertised for controlling boats
 * Here's a video of how to program the DS-600 transmitter [https://youtu.be]()
-* It is very important to use the programming website to check the box for "invert rc switches" for these instructions to be accurate and for the car to stop if the remote goes out of range or is disconnected.
-* Connect channel 2 to the speed pin, channel 1 to the turn pin, channel 3 to the stop pin, and your for the control pin
+* It is very important to use the programming website to check the box for "invert rc stop switch" for these instructions to be accurate and for the car to stop if the remote goes out of range or is disconnected.
+* FYI, the DS-600 receiver runs from 5 or 3.3 volts and outputs 3.3v signals.
+* Connect channel 2 to the speed pin, channel 1 to the turn pin, channel 3 to the stop pin, and one of the following for the control pin
   * If channel 5 is used for the control pin, pushing button 5 will override and pushing button 5 again will stop overriding.
   * If channel 6 is used for the control pin, holding button 6 will override and releasing button 6 will stop overriding.
+* Button #3 will stop the car, Button #4 will allow it to move.
+* Make sure to test that when you turn the transmitter off the programming website displays "Stopped by Remote Control".
 * [User Guide](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/RC_guide-ds-600.md) This is documentation to inform car builders and clinicians about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's caretakers.
 
 ### How to use:
