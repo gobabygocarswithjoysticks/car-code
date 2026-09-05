@@ -11,7 +11,7 @@
 #### Instructions for modifying go baby go cars to use this code can be found here: https://gobabygocarswithjoysticks.github.io/index/ 
 
 ### Remote Control
-[notes and instructions for remote control](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/remote_control.md)
+[notes and instructions for remote control](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/README.md)
 
 ### LED blink codes
 * Off: the car is not moving

@@ -236,7 +236,8 @@ byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 22};
 byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 #endif
 
-boolean NO_RC_STOP_UNTIL_START = false;
+boolean NO_RC_STOP_UNTIL_START = false; // RC INACTIVE UNTIL CONNECTED
+boolean INVERT_RC_SWITCHES = false;
 
 byte RC_MODE = 0;
 boolean ADD_BUTTONS_TO_JOYSTICK = false;
@@ -275,7 +276,7 @@ boolean USE_WIFI = true;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
 
-const int16_t rcControlSwitchDeadband = 50;
+const int16_t rcControlSwitchDeadband = 100;
 const int16_t rcControlDeadband = 50;
 
 #if defined(HAS_WIFI)
@@ -425,21 +426,21 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef IS_PCB
 #if defined(HAS_WIFI)
-const int version_number = 33;  // pcb with picoW or pico2W
-const byte settings_memory_key = 33;
+const int version_number = 35;  // pcb with picoW or pico2W
+const byte settings_memory_key = 35;
 #else
-const int version_number = 32;  // pcb with pico or pico2
-const byte settings_memory_key = 32;
+const int version_number = 34;  // pcb with pico or pico2
+const byte settings_memory_key = 34;
 #endif
 #else
 #if defined(HAS_WIFI)
-const int version_number = 21;  // esp32, picoW or pico2W
-const byte settings_memory_key = 21;
+const int version_number = 23;  // esp32, picoW or pico2W
+const byte settings_memory_key = 23;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-const int version_number = 20;  // nano or uno
+const int version_number = 22;  // nano or uno
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-const byte settings_memory_key = 20;
+const byte settings_memory_key = 22;
 #endif
 #endif
 
@@ -550,14 +551,14 @@ void runRCInput(float &speed, float &turn) {
   if (validSignal) {
     rcFlags.everActivated = true;
     if (copiedRemoteInput[CTRL_RC] > rcControlSwitchDeadband) {
-      rcFlags.RCOverride = true;
+      rcFlags.RCOverride = !INVERT_RC_SWITCHES;
     } else if (copiedRemoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
-      rcFlags.RCOverride = false;
+      rcFlags.RCOverride = INVERT_RC_SWITCHES;
     }
     if (copiedRemoteInput[STOP_RC] > rcControlSwitchDeadband) {
-      rcFlags.RCStop = true;
+      rcFlags.RCStop = !INVERT_RC_SWITCHES;
     } else if (copiedRemoteInput[STOP_RC] < -rcControlSwitchDeadband) {
-      rcFlags.RCStop = false;
+      rcFlags.RCStop = INVERT_RC_SWITCHES;
     }
     if (abs(copiedRemoteInput[SPEED_RC]) < rcControlDeadband) {
       copiedRemoteInput[SPEED_RC] = 0;

@@ -7,7 +7,8 @@
 * joystick/button shared control
 * a few modes of RC receiver input
 
-## Please talk to a physical therapist about the best way to use a remote control to benefit the kid and balance safety, social interaction, and independence. 
+## Please talk to the kid's clinician about the best way to use a remote control to benefit the kid and balance safety, social interaction, and independence. 
+Please carefully consider whether a kid will benefit overall from a remote being added to their car.
 
 ## Questions about the car software or these instructions? Please email us at gobabygocarswithjoysticks@gmail.com
 
@@ -45,12 +46,6 @@ If the range is really short, try adjusting the screw on the receiver. I tried t
 ### Description:
 Use a RC receiver and transmitter to remotely stop, override, and optionally provide help with steering.
 
-### [RC guide](/rcdocs/RC_guide.md)
-Documentation to inform physical therapists about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's family.
-
-### Videos:
-[https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
-
 ### Advantages: 
 * drive the car precisely with the remote control
 * car will turn off if the transmitter is out of range
@@ -68,14 +63,15 @@ Wire the receiver module GND and power pins to the Arduino GND and 5V pins, resp
 
 Wire 4 signal pins from the receiver to 4 pins of the Arduino.
 
-Program the transmitter to send the following signals on 4 channels (here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)):
+Program the transmitter to send the following signals on 4 channels:
 * Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
 * Left/right joystick axis with center at 1500, left at 1000, right at 2000
-* "control" switch with off under 1400 and on above 1600
-* "stop" switch with off under 1400 and on above 1600
-
-The FS-i6 transmitter beeps annoyingly if you stop using the controls for more than a minute. That's useful for a remote control plane but not a good feature for a remote override that is only sometimes used. To deactivate the beeper, cut the trace that is circled in red in this image: [cut trace to stop beeper](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/rc-tx-beeper.jpg)
-
+* if "invert rc switches" is false (normal mode)
+  * "control" switch with off below 1300 and on above 1700
+  * "stop" switch with off below 1300 and on above 1700
+* if "invert rc switches" is true
+  * "control" switch with off above 1700 and on below 1300
+  * "stop" switch with off above 1700 and on below 1300
 
 Using the programming website (connect to car then press "show all"):
 * check "use rc"
@@ -90,6 +86,21 @@ Using the programming website (connect to car then press "show all"):
   * mode 0 "standard": car has control (unless the control switch overrides)
   * mode 1 "shared": the car's input is added to the remote input, so the remote control can be used to help with steering at the same time as the kid is making the car move forwards or backwards.
   * mode 2 "steered": the car follows the remote input only if a button or joystick on the car is activated, so direction and speed is fully controlled by the remote but the kid controls whether they move (unless the control switch overrides)
+
+#### Instructions specifically for the FS-i6 (similar for other RC airplane transmitters):
+* Here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)
+* If you're following the video, connect channel 2 to the speed pin, channel 1 to the turn pin, channel 5 to the control pin, and channel 6 to the stop pin.
+* here's a playlist of videos demonstrating how the settings [https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
+* The FS-i6 transmitter beeps annoyingly if you stop using the controls for more than a minute. That's useful for a remote control plane but not a good feature for a remote override that is only sometimes used. To deactivate the beeper, cut the trace that is circled in red in this image: [cut trace to stop beeper](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/rc-tx-beeper-fs-i6.jpg)
+* [User Guide](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/RC_guide-fs-i6.md) This is documentation to inform car builders and clinicians about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's caretakers.
+
+#### Instructions specifically for the DS-600 (a somewhat unique transmitter that is small and advertised for controlling boats):
+* Here's a video of how to program the DS-600 transmitter [https://youtu.be]()
+* It is very important to use the programming website to check the box for "invert rc switches" for these instructions to be accurate and for the car to stop if the remote goes out of range or is disconnected.
+* Connect channel 2 to the speed pin, channel 1 to the turn pin, channel 3 to the stop pin, and your for the control pin
+  * If channel 5 is used for the control pin, pushing button 5 will override and pushing button 5 again will stop overriding.
+  * If channel 6 is used for the control pin, holding button 6 will override and releasing button 6 will stop overriding.
+* [User Guide](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/RC_guide-ds-600.md) This is documentation to inform car builders and clinicians about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's caretakers.
 
 ### How to use:
 When the "stop" switch is on, the car will stop driving.

@@ -1,8 +1,10 @@
 # Instructions for using the remote:
 
-![rc-controller.drawio.png](./rc-controller.drawio.png)
+![rc-controller.drawio.png](./rc-controller-fs-i6.drawio.png)
 
 If the remote is turned from on to off or the car goes out of the remote's range, the car will stop until the remote is connected again so that the car can't run away.
+
+If the remote displays "place all switches in their up position and lower the throttle" when you turn it it, push all 4 switches away from you and pull the left joystick on the remote fully towards you.
 
 ### These are the controls for the remote:
 
