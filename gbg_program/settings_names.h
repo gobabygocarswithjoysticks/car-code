@@ -72,7 +72,7 @@ const char turn_rc_pin[] PROGMEM = "RTP";//"RC_TURN_PIN";
 const char stop_rc_pin[] PROGMEM = "RPP";//"RC_STOP_PIN";
 const char ctrl_rc_pin[] PROGMEM = "RCP";//"RC_CTRL_PIN";
 const char no_rc_stop_until_start[] PROGMEM = "NRS";//"NO_RC_STOP_UNTIL_START";
-const char invert_rc_switches[] PROGMEM = "IRS";//"INVERT_RC_SWITCHES";
+const char invert_rc_stop_switch[] PROGMEM = "IRS";//"INVERT_RC_STOP_SWITCH";
 
 const char rc_mode[] PROGMEM = "RM"; //"RC_MODE";
 const char add_buttons_to_joystick[] PROGMEM = "AB";//"ADD_BUTTONS_TO_JOYSTICK";
@@ -150,7 +150,7 @@ const char* const SETTING[] PROGMEM = {
   stop_rc_pin,
   ctrl_rc_pin,
   no_rc_stop_until_start,
-  invert_rc_switches,
+  invert_rc_stop_switch,
   rc_mode,
   add_buttons_to_joystick,
 #ifdef HAS_WIFI
@@ -227,7 +227,7 @@ enum SettingID {
   S_STOP_RC_PIN,
   S_CTRL_RC_PIN,
   S_NO_RC_STOP_UNTIL_START,
-  S_INVERT_RC_SWITCHES,
+  S_INVERT_RC_STOP_SWITCH,
   S_RC_MODE,
   S_ADD_BUTTONS_TO_JOYSTICK,
 #ifdef HAS_WIFI

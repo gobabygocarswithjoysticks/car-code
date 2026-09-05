@@ -66,11 +66,10 @@ Wire 4 signal pins from the receiver to 4 pins of the Arduino.
 Program the transmitter to send the following signals on 4 channels:
 * Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
 * Left/right joystick axis with center at 1500, left at 1000, right at 2000
-* if "invert rc switches" is false (normal mode)
-  * "control" switch with off below 1300 and on above 1700
+* "control" switch with override inactive below 1300 and override active above 1700
+* if "invert rc stop switch" is false (normal mode)
   * "stop" switch with off below 1300 and on above 1700
-* if "invert rc switches" is true
-  * "control" switch with off above 1700 and on below 1300
+* if "invert rc stop switch" is true
   * "stop" switch with off above 1700 and on below 1300
 
 Using the programming website (connect to car then press "show all"):

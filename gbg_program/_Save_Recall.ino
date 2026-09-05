@@ -365,9 +365,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_NO_RC_STOP_UNTIL_START]) == 0) {
         NO_RC_STOP_UNTIL_START = atoi(v);
         printTrueOrFalse(NO_RC_STOP_UNTIL_START);
-      } else if (strcmp_P(k, SETTING[S_INVERT_RC_SWITCHES]) == 0) {
-        INVERT_RC_SWITCHES = atoi(v);
-        printTrueOrFalse(INVERT_RC_SWITCHES);
+      } else if (strcmp_P(k, SETTING[S_INVERT_RC_STOP_SWITCH]) == 0) {
+        INVERT_RC_STOP_SWITCH = atoi(v);
+        printTrueOrFalse(INVERT_RC_STOP_SWITCH);
       } else if (strcmp_P(k, SETTING[S_RC_MODE]) == 0) {
         RC_MODE = atoi(v);
         RC_MODE = constrain(RC_MODE, 0, 2);
@@ -573,7 +573,7 @@ void saveSettings()
   EEPROMwrite(addressW, RC_PIN[STOP_RC]);
   EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
   EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
-  EEPROMwrite(addressW, INVERT_RC_SWITCHES);
+  EEPROMwrite(addressW, INVERT_RC_STOP_SWITCH);
   EEPROMwrite(addressW, RC_MODE);
   EEPROMwrite(addressW, ADD_BUTTONS_TO_JOYSTICK);
 
@@ -667,7 +667,7 @@ void recallSettings()
   EEPROMread(addressR, RC_PIN[STOP_RC]);
   EEPROMread(addressR, RC_PIN[CTRL_RC]);
   EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
-  EEPROMread(addressR, INVERT_RC_SWITCHES);
+  EEPROMread(addressR, INVERT_RC_STOP_SWITCH);
   EEPROMread(addressR, RC_MODE);
   EEPROMread(addressR, ADD_BUTTONS_TO_JOYSTICK);
 

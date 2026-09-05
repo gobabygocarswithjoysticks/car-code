@@ -237,7 +237,7 @@ byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 #endif
 
 boolean NO_RC_STOP_UNTIL_START = false; // RC INACTIVE UNTIL CONNECTED
-boolean INVERT_RC_SWITCHES = false;
+boolean INVERT_RC_STOP_SWITCH = false;
 
 byte RC_MODE = 0;
 boolean ADD_BUTTONS_TO_JOYSTICK = false;
@@ -551,14 +551,14 @@ void runRCInput(float &speed, float &turn) {
   if (validSignal) {
     rcFlags.everActivated = true;
     if (copiedRemoteInput[CTRL_RC] > rcControlSwitchDeadband) {
-      rcFlags.RCOverride = !INVERT_RC_SWITCHES;
+      rcFlags.RCOverride = true;
     } else if (copiedRemoteInput[CTRL_RC] < -rcControlSwitchDeadband) {
-      rcFlags.RCOverride = INVERT_RC_SWITCHES;
+      rcFlags.RCOverride = false;
     }
     if (copiedRemoteInput[STOP_RC] > rcControlSwitchDeadband) {
-      rcFlags.RCStop = !INVERT_RC_SWITCHES;
+      rcFlags.RCStop = !INVERT_RC_STOP_SWITCH;
     } else if (copiedRemoteInput[STOP_RC] < -rcControlSwitchDeadband) {
-      rcFlags.RCStop = INVERT_RC_SWITCHES;
+      rcFlags.RCStop = INVERT_RC_STOP_SWITCH;
     }
     if (abs(copiedRemoteInput[SPEED_RC]) < rcControlDeadband) {
       copiedRemoteInput[SPEED_RC] = 0;
