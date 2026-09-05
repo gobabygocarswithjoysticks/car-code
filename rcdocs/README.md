@@ -64,15 +64,15 @@ Wire the receiver module GND and power pins to the Arduino GND and 5V pins, resp
 Wire 4 signal pins from the receiver to 4 pins of the Arduino.
 
 Program the transmitter to send the following signals on 4 channels:
-* Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
 * Left/right joystick axis with center at 1500, left at 1000, right at 2000
+* Forward/backward joystick axis with center at 1500, forward at 2000, backward at 1000
 * "control" switch with override inactive below 1300 and override active above 1700
 * "stop" switch with go below 1300 and stop above 1700
 
 Using the programming website (connect to car then press "show all"):
 * check "use rc"
-* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
 * set "rc turn pin" to the pin connected to the receiver channel for the left/right joystick axis
+* set "rc speed pin" to the pin connected to the receiver channel for the forward/backward joystick axis
 * set "rc control pin" to the pin connected to the receiver channel for the "control" switch
 * set "rc stop pin" to the pin connected to the receiver channel for the "stop" switch
 * set "rc inactive until connected"
@@ -85,7 +85,7 @@ Using the programming website (connect to car then press "show all"):
 
 #### Instructions specifically for the FS-i6 (similar for other RC airplane transmitters):
 * Here's a video of how to program a FS-i6 transmitter [https://youtu.be/-Aqq8SPoG2o](https://youtu.be/-Aqq8SPoG2o)
-* If you're following the video, connect channel 2 to the speed pin, channel 1 to the turn pin, channel 5 to the control pin, and channel 6 to the stop pin.
+* If you're following the video, connect channel 1 to the turn pin, channel 2 to the speed pin, channel 5 to the control pin, and channel 6 to the stop pin.
 * here's a playlist of videos demonstrating how the settings [https://www.youtube.com/playlist?list=PLLhllnnMXDLs](https://www.youtube.com/playlist?list=PLLhllnnMXDLs)
 * The FS-i6 transmitter beeps annoyingly if you stop using the controls for more than a minute. That's useful for a remote control plane but not a good feature for a remote override that is only sometimes used. To deactivate the beeper, cut the trace that is circled in red in this image: [cut trace to stop beeper](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/rc-tx-beeper-fs-i6.jpg)
 * [User Guide](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/RC_guide-fs-i6.md) This is documentation to inform car builders and clinicians about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's caretakers.
@@ -94,7 +94,7 @@ Using the programming website (connect to car then press "show all"):
 The DS-600 is a somewhat unique transmitter that is small and advertised for controlling boats
 * Here's a video of how to program the DS-600 transmitter [https://youtu.be]()
 * FYI, the DS-600 receiver runs from 5 or 3.3 volts and outputs 3.3v signals.
-* Connect channel 2 to the speed pin, channel 1 to the turn pin, channel 3 to the stop pin, and one of the following for the control pin
+* Connect channel 1 to the turn pin, channel 2 to the speed pin, channel 3 to the stop pin, and one of the following for the control pin
   * If channel 5 is used for the control pin, pushing button 5 will override and pushing button 5 again will stop overriding.
   * If channel 6 is used for the control pin, holding button 6 will override and releasing button 6 will stop overriding.
 * Button #3 will stop the car, Button #4 will allow it to move.
