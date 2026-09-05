@@ -94,7 +94,8 @@ Using the programming website (connect to car then press "show all"):
 * The FS-i6 transmitter beeps annoyingly if you stop using the controls for more than a minute. That's useful for a remote control plane but not a good feature for a remote override that is only sometimes used. To deactivate the beeper, cut the trace that is circled in red in this image: [cut trace to stop beeper](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/rc-tx-beeper-fs-i6.jpg)
 * [User Guide](https://github.com/gobabygocarswithjoysticks/car-code/blob/main/rcdocs/RC_guide-fs-i6.md) This is documentation to inform car builders and clinicians about the different remote control modes so they can make a decision about which mode is best for the kid. The top section of the guide should be given to the kid's caretakers.
 
-#### Instructions specifically for the DS-600 (a somewhat unique transmitter that is small and advertised for controlling boats):
+#### Instructions specifically for the DS-600 
+The DS-600 is a somewhat unique transmitter that is small and advertised for controlling boats
 * Here's a video of how to program the DS-600 transmitter [https://youtu.be]()
 * It is very important to use the programming website to check the box for "invert rc switches" for these instructions to be accurate and for the car to stop if the remote goes out of range or is disconnected.
 * Connect channel 2 to the speed pin, channel 1 to the turn pin, channel 3 to the stop pin, and your for the control pin
