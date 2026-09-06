@@ -1,6 +1,6 @@
 # Instructions for using the remote:
 
-![rc-controller.drawio.png](./rc-controller-fs-i6.drawio.png)
+![rc-controller.drawio.png](https://raw.githubusercontent.com/gobabygocarswithjoysticks/car-code/refs/heads/main/rcdocs/rc-controller-fs-i6.drawio.png)
 
 If the remote is turned from on to off or the car goes out of the remote's range, the car will stop until the remote is connected again so that the car can't run away.
 

@@ -92,7 +92,7 @@ Using the programming website (connect to car then press "show all"):
 
 #### Instructions specifically for the DS-600 
 The DS-600 is a somewhat unique transmitter that is small and advertised for controlling boats
-* Here's a video of how to program the DS-600 transmitter [https://youtu.be]()
+* Here's a video of how to program the DS-600 transmitter [https://youtu.be/SAHNm2fh8rk](https://youtu.be/SAHNm2fh8rk)
 * FYI, the DS-600 receiver runs from 5 or 3.3 volts and outputs 3.3v signals.
 * Connect channel 1 to the turn pin, channel 2 to the speed pin, channel 4 to the stop pin, and one of the following for the control pin
   * If channel 5 is used for the control pin, pushing button 5 will override and pushing button 5 again will stop overriding.
