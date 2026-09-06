@@ -56,7 +56,7 @@ STEERING_OFF_SWITCH_PIN = 9
 
 BUTTON PINS: 7, 8, 9, 10, 11, 12 are forwards, left, right, left+forwards, right+forwards, backwards
 
-RC PINS: 5, 6, 7, 8 are speed, turn, control, stop
+RC PINS: 5, 6, 7, 8 are turn, speed, control, stop
 
 #### esp32
 JOY_X_PIN = 39
