@@ -20,6 +20,18 @@ struct RCFlags { // https://en.cppreference.com/w/cpp/language/bit_field.html
   uint8_t lastButtonModePinState: 1; // used for toggling button mode
 } rcFlags; // a bunch of booleans for remote control, stored efficiently
 
+void RCISR(byte whichRCInput) {
+  if (digitalRead(RC_PIN[whichRCInput]) == HIGH) {
+    lastRisingMicros[whichRCInput] = micros();
+    anyRCRisingMillis = millis();
+  } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
+    unsigned long pulseTime = micros() - lastRisingMicros[whichRCInput];
+    if (pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
+      remoteInput[whichRCInput] = constrain((int16_t)pulseTime - 1500, -500, 500); // convert to range -500 to 500
+    }
+  }
+}
+
 void speedRCISR(void) {
   RCISR(SPEED_RC);
 }
@@ -39,18 +51,6 @@ void (*RCISRs[])() = {
   ctrlRCISR,
   stopRCISR
 };
-
-void RCISR(byte whichRCInput) {
-  if (digitalRead(RC_PIN[whichRCInput]) == HIGH) {
-    lastRisingMicros[whichRCInput] = micros();
-    anyRCRisingMillis = millis();
-  } else if ((micros() - lastRisingMicros[whichRCInput]) <= rcTimeoutMicros) {
-    unsigned long pulseTime = micros() - lastRisingMicros[whichRCInput];
-    if (pulseTime > 500 && pulseTime < 2500) { // only accept pulses between 500 and 2500 microseconds
-      remoteInput[whichRCInput] = constrain((int16_t)pulseTime - 1500, -500, 500); // convert to range -500 to 500
-    }
-  }
-}
 
 void setupRCControl() {
   rcFlags.RCStop = true;
