@@ -133,6 +133,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 byte SPEED_KNOB_PIN = 28;
 
 byte BUTTON_MODE_PIN = 5; // can turn button control mode on and off
+byte RC_FORCE_STANDARD_MODE_PIN = 5;
 byte STEERING_OFF_SWITCH_PIN = 9;
 
 #elif defined(ESP32)
@@ -147,6 +148,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 byte SPEED_KNOB_PIN = 33;
 
 byte BUTTON_MODE_PIN = 23; // can turn button control mode on and off
+byte RC_FORCE_STANDARD_MODE_PIN = 23;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
 #else // nano or uno
@@ -160,6 +162,7 @@ byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 byte SPEED_KNOB_PIN = A3;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
+byte RC_FORCE_STANDARD_MODE_PIN = 2;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
 #endif
@@ -173,11 +176,11 @@ struct ButtonDriveConfig {
   float turn;
 };
 // button control settings
-const byte maxNumDriveButtons = 6;
-#if defined(ESP32)
 boolean ENABLE_BUTTON_CTRL = false;
 boolean USE_BUTTON_MODE_PIN = false;
 boolean BUTTON_MODE_TOGGLE = false;
+const byte maxNumDriveButtons = 6;
+#if defined(ESP32)
 byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -189,9 +192,6 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {25, -1, 0} //backwards
 };
 #elif defined(IS_PCB)
-boolean ENABLE_BUTTON_CTRL = false;
-boolean USE_BUTTON_MODE_PIN = false;
-boolean BUTTON_MODE_TOGGLE = false;
 byte NUM_DRIVE_BUTTONS = 4;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -203,9 +203,6 @@ ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   {6, 1, -1} //LF
 };
 #else // nano/uno or non-pcb-pico
-boolean ENABLE_BUTTON_CTRL = false;
-boolean BUTTON_MODE_TOGGLE = false;
-boolean USE_BUTTON_MODE_PIN = false;
 byte NUM_DRIVE_BUTTONS = 6;
 ButtonDriveConfig driveButtons[maxNumDriveButtons] = {
   //pin, speed, turn (there must be maxNumDriveButtons number of rows)
@@ -236,6 +233,8 @@ byte RC_PIN[NUM_RC_INPUTS] = {16, 17, 19, 22};
 byte RC_PIN[NUM_RC_INPUTS] = {5, 6, 7, 8};
 #endif
 
+boolean USE_RC_FORCE_STANDARD_MODE_PIN = false;
+
 boolean NO_RC_STOP_UNTIL_START = false; // RC INACTIVE UNTIL CONNECTED
 
 byte RC_MODE = 0;
@@ -263,6 +262,11 @@ byte ON_BUTTON = 11; // pin for the on button
 byte OFF_BUTTON = 12; // pin for the off button
 #endif
 boolean ON_OFF_BUTTONS_ACTIVE_HIGH = false;
+
+byte INACTIVITY_ALERT_TIMEOUT = 0;
+unsigned long lastMovedMillis = 0;
+unsigned long activityAlertPulseMillis = 0;
+
 
 #if defined(HAS_WIFI)
 int8_t CAR_WIFI_NAME = 1;
@@ -338,21 +342,21 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 
 #ifdef IS_PCB
 #if defined(HAS_WIFI)
-const int version_number = 33;  // pcb with picoW or pico2W
-const byte settings_memory_key = 33;
+const int version_number = 35;  // pcb with picoW or pico2W
+const byte settings_memory_key = 35;
 #else
-const int version_number = 32;  // pcb with pico or pico2
-const byte settings_memory_key = 32;
+const int version_number = 34;  // pcb with pico or pico2
+const byte settings_memory_key = 34;
 #endif
 #else
 #if defined(HAS_WIFI)
-const int version_number = 21;  // esp32, picoW or pico2W
-const byte settings_memory_key = 21;
+const int version_number = 23;  // esp32, picoW or pico2W
+const byte settings_memory_key = 23;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
-const int version_number = 20;  // nano or uno
+const int version_number = 22;  // nano or uno
 //if the 0th eeprom value isn't this key, the hardcoded values are saved to EEPROM.
-const byte settings_memory_key = 20;
+const byte settings_memory_key = 22;
 #endif
 #endif
 
@@ -482,9 +486,7 @@ void setupPins() {
     pinMode(OFF_BUTTON, INPUT_PULLUP);
   }
 
-
-
-#ifdef IS_PCB
+#ifdef IS_PCB // adds option to swap motors left/right since the pins are hardcoded instead of configurable
   // PCB
   if (SWAP_MOTORS) {
     leftMotorController.attach(RIGHT_MOTOR_CONTROLLER_PIN);
@@ -705,9 +707,23 @@ void loop()
     }
   }
 
-  if (startupPulse && joyOK && delayedStartDone) {
+  boolean doInactivityPulse = false;
+  if (abs(turnInput) > 0.001 || abs(speedInput) > 0.001) {
+    lastMovedMillis = millis();
+  } else {
+    if (INACTIVITY_ALERT_TIMEOUT != 0) {
+      if (millis() - lastMovedMillis > ((unsigned long)INACTIVITY_ALERT_TIMEOUT * 60000UL)) {
+        if (millis() - activityAlertPulseMillis > 15000UL) {
+          activityAlertPulseMillis = millis();
+          doInactivityPulse = true;
+        }
+      }
+    }
+  }
+
+  if (doInactivityPulse || (startupPulse && joyOK && delayedStartDone)) {
     startupPulse = false;
-    if (movementAllowed) {  // don't pulse if the website says don't move
+    if (movementAllowed) {  // don't pulse if the programming and configuration website says don't move
       delay(10);
       leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER + LEFT_MOTOR_PULSE * (LEFT_MOTOR_SLOW > 0 ? 1 : -1));
       rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER + RIGHT_MOTOR_PULSE * (RIGHT_MOTOR_SLOW > 0 ? 1 : -1));

@@ -243,6 +243,9 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_START_MOTOR_PULSE_TIME]) == 0) {
         START_MOTOR_PULSE_TIME = constrain(atoi(v), 0, 1000);
         printInt(START_MOTOR_PULSE_TIME);
+      } else if (strcmp_P(k, SETTING[S_INACTIVITY_ALERT_TIMEOUT]) == 0) {
+        INACTIVITY_ALERT_TIMEOUT = constrain(atoi(v), 0, 255);
+        printInt(INACTIVITY_ALERT_TIMEOUT);
       } else if (strcmp_P(k, SETTING[S_ENABLE_BUTTON_CTRL]) == 0) {
         ENABLE_BUTTON_CTRL = atoi(v);
         if (ENABLE_BUTTON_CTRL) {
@@ -541,6 +544,7 @@ void saveSettings()
   EEPROMwrite(addressW, LEFT_MOTOR_PULSE);
   EEPROMwrite(addressW, RIGHT_MOTOR_PULSE);
   EEPROMwrite(addressW, START_MOTOR_PULSE_TIME);
+  EEPROMwrite(addressW, INACTIVITY_ALERT_TIMEOUT);
   EEPROMwrite(addressW, JOY_CALIB_COUNT);
   EEPROMwrite(addressW, ENABLE_BUTTON_CTRL);
   EEPROMwrite(addressW, USE_BUTTON_MODE_PIN);
@@ -579,7 +583,6 @@ void saveSettings()
   EEPROMwrite(addressW, USE_WIFI);
 #endif
   EEPROMwrite(addressW, eepromCRC);
-  // addressW was 170
 
 #if defined(FAKE_EEPROM)
   EEPROM.commit();
@@ -634,6 +637,7 @@ void recallSettings()
   EEPROMread(addressR, LEFT_MOTOR_PULSE);
   EEPROMread(addressR, RIGHT_MOTOR_PULSE);
   EEPROMread(addressR, START_MOTOR_PULSE_TIME);
+  EEPROMread(addressR, INACTIVITY_ALERT_TIMEOUT);
   EEPROMread(addressR, JOY_CALIB_COUNT);
   EEPROMread(addressR, ENABLE_BUTTON_CTRL);
   EEPROMread(addressR, USE_BUTTON_MODE_PIN);
@@ -675,7 +679,6 @@ void recallSettings()
   uint32_t tempEepromCRC = eepromCRC;
   uint32_t readCRC = 0;
   EEPROMread(addressR, readCRC);
-  // addressR was 170
 
 #if defined(FAKE_EEPROM)
   if (errorCorrectionPerformed) {

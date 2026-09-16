@@ -45,6 +45,7 @@ const char enable_startup_pulse[] PROGMEM = "ENABLE_STARTUP_PULSE";
 const char left_motor_pulse[] PROGMEM = "LEFT_MOTOR_PULSE";
 const char right_motor_pulse[] PROGMEM = "RIGHT_MOTOR_PULSE";
 const char start_motor_pulse_time[] PROGMEM = "START_MOTOR_PULSE_TIME";
+const char inactivity_alert_timeout[] PROGMEM = "IAT"; //"INACTIVITY_ALERT_TIMEOUT"
 const char joy_calib_count[] PROGMEM = "JOY_CALIB_COUNT";
 const char enable_button_ctrl[] PROGMEM = "ENABLE_BUTTON_CTRL";
 const char use_button_mode_pin[] PROGMEM = "USE_BUTTON_MODE_PIN";
@@ -126,6 +127,7 @@ const char* const SETTING[] PROGMEM = {
   left_motor_pulse,
   right_motor_pulse,
   start_motor_pulse_time,
+  inactivity_alert_timeout,
   joy_calib_count,
   enable_button_ctrl,
   use_button_mode_pin,
@@ -202,6 +204,7 @@ enum SettingID {
   S_LEFT_MOTOR_PULSE,
   S_RIGHT_MOTOR_PULSE,
   S_START_MOTOR_PULSE_TIME,
+  S_INACTIVITY_ALERT_TIMEOUT,
   S_JOY_CALIB_COUNT,
   S_ENABLE_BUTTON_CTRL,
   S_USE_BUTTON_MODE_PIN,
