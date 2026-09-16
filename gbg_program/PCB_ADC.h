@@ -37,14 +37,6 @@ uint16_t configs[NUM_I2C_ADC_CHANNELS] = {
   //  0x03 | 0x04 << 5 | 0x01 << 8 | 0x02 << 9 | 0b100 << 12 | 0x01 << 15, // Ain0, spare channel
 };
 
-void setupPCBSensors() {
-  Wire1.setSDA(14);
-  Wire1.setSCL(15);
-  Wire1.onFinishedAsync(onI2CFinish);
-  Wire1.begin();
-  Wire1.setTimeout(25);
-}
-
 void onI2CFinish() {
   //  Serial.print("i2cDone ");
   //  Serial.println(adcCounter);
@@ -76,6 +68,14 @@ void onI2CFinish() {
         break;
     }
   }
+}
+
+void setupPCBSensors() {
+  Wire1.setSDA(14);
+  Wire1.setSCL(15);
+  Wire1.onFinishedAsync(onI2CFinish);
+  Wire1.begin();
+  Wire1.setTimeout(25);
 }
 
 void runPCBSensors() {
