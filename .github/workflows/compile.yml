@@ -2,7 +2,7 @@ name: Compile
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - "README.md"
       - "rcdocs/**"
@@ -84,8 +84,7 @@ jobs:
             code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -96,8 +95,7 @@ jobs:
             code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -108,8 +106,7 @@ jobs:
             code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "esp32:esp32 --additional-urls
-              https://github.com/espressif/arduino-esp32/releases/download/3.3.\
-              1/package_esp32_dev_index.json"
+              https://github.com/espressif/arduino-esp32/releases/download/3.3.11/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
@@ -120,8 +117,7 @@ jobs:
             code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -132,8 +128,7 @@ jobs:
             code-name: gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -144,8 +139,7 @@ jobs:
             code-name: PCB_gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -156,8 +150,7 @@ jobs:
             code-name: PCB_gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -168,8 +161,7 @@ jobs:
             code-name: PCB_gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -180,8 +172,7 @@ jobs:
             code-name: PCB_gbg_program
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -210,8 +201,7 @@ jobs:
             code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -222,8 +212,7 @@ jobs:
             code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -234,8 +223,7 @@ jobs:
             code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "esp32:esp32 --additional-urls
-              https://github.com/espressif/arduino-esp32/releases/download/3.3.\
-              1/package_esp32_dev_index.json"
+              https://github.com/espressif/arduino-esp32/releases/download/3.3.11/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
@@ -246,8 +234,7 @@ jobs:
             code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -258,8 +245,7 @@ jobs:
             code-name: clear_eeprom
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
@@ -288,8 +274,7 @@ jobs:
             code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
@@ -300,8 +285,7 @@ jobs:
             code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipicow"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
@@ -312,8 +296,7 @@ jobs:
             code-name: blink
             code-dir: blink
             arduino-platform: "esp32:esp32 --additional-urls
-              https://github.com/espressif/arduino-esp32/releases/download/3.3.\
-              1/package_esp32_dev_index.json"
+              https://github.com/espressif/arduino-esp32/releases/download/3.3.11/package_esp32_dev_index.json"
             fqbn: "esp32:esp32:esp32"
             board-upload: "ESP"
             niceBoardName: "ESP32"
@@ -324,8 +307,7 @@ jobs:
             code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
@@ -336,8 +318,7 @@ jobs:
             code-name: blink
             code-dir: blink
             arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/\
-              5.6.1/package_rp2040_index.json"
+              https://github.com/earlephilhower/arduino-pico/releases/download/6.1.0/package_rp2040_index.json"
             fqbn: "rp2040:rp2040:rpipico2w"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
