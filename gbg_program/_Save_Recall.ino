@@ -143,6 +143,7 @@ void settingsSerial() {
   if (in != -1) {
     if (in == ',') {
       buf[bufP] = 0;  // null terminator
+      bufP = 0; // reset counter, since buf is about to be processed
       //process new input
       char *k = strtok(buf, ":,");
       if (k == NULL) {
@@ -498,7 +499,6 @@ void settingsSerial() {
       Serial.print(resultBuf);
       Serial.println("\"}");
 
-      bufP = 0;
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
       buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
       if ((uint8_t)(bufP + 2) < sizeof buf) {
