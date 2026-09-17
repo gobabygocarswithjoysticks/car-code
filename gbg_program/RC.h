@@ -53,6 +53,9 @@ void (*RCISRs[])() = {
 };
 
 void setupRCControl() {
+  if (USE_RC_CONTROL == false) {
+    return;
+  }
   rcFlags.RCStop = true;
   for (byte i = 0; i < NUM_RC_INPUTS; i++) {
     pinMode(RC_PIN[i], INPUT_PULLUP);
@@ -127,20 +130,24 @@ void runRCInput(float &speed, float &turn) {
       speed = copiedRemoteInput[SPEED_RC] / 500.0;
       turn = copiedRemoteInput[TURN_RC] / 500.0;
     } else { // RCOverride switch is off
-      if (RC_MODE == 1) { // RC adds to joystick and button inputs
-        speed += copiedRemoteInput[SPEED_RC] / 500.0;
-        turn += copiedRemoteInput[TURN_RC] / 500.0;
-      } else if (RC_MODE == 2) {
-        if (abs(speed) > 0.001 || abs(turn) > 0.001) { // local controls are activated...
-          // so follow RC input
-          speed = copiedRemoteInput[SPEED_RC] / 500.0;
-          turn = copiedRemoteInput[TURN_RC] / 500.0;
-        } else { // local controls are deactivated so don't move
-          speed = 0;
-          turn = 0;
-        }
+      if (USE_RC_FORCE_STANDARD_MODE_PIN && digitalRead(RC_FORCE_STANDARD_MODE_PIN) == LOW) {
+        // rc mode is OVERRIDDEN to standard, so add no rc input
       } else {
-        // else, override is off and mode=0 so don't affect local controls
+        if (RC_MODE == 1) { // RC adds to joystick and button inputs
+          speed += copiedRemoteInput[SPEED_RC] / 500.0;
+          turn += copiedRemoteInput[TURN_RC] / 500.0;
+        } else if (RC_MODE == 2) {
+          if (abs(speed) > 0.001 || abs(turn) > 0.001) { // local controls are activated...
+            // so follow RC input
+            speed = copiedRemoteInput[SPEED_RC] / 500.0;
+            turn = copiedRemoteInput[TURN_RC] / 500.0;
+          } else { // local controls are deactivated so don't move
+            speed = 0;
+            turn = 0;
+          }
+        } else {
+          // rc mode is standard, so add no rc input
+        }
       }
     }
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;

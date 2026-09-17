@@ -73,8 +73,9 @@ const char turn_rc_pin[] PROGMEM = "RTP";//"RC_TURN_PIN";
 const char stop_rc_pin[] PROGMEM = "RPP";//"RC_STOP_PIN";
 const char ctrl_rc_pin[] PROGMEM = "RCP";//"RC_CTRL_PIN";
 const char no_rc_stop_until_start[] PROGMEM = "NRS";//"NO_RC_STOP_UNTIL_START";
-
 const char rc_mode[] PROGMEM = "RM"; //"RC_MODE";
+const char use_rc_force_standard_mode_pin[] PROGMEM = "UFS"; //"USE_RC_FORCE_STANDARD_MODE_PIN";
+const char rc_force_standard_mode_pin[] PROGMEM = "FS"; //"RC_FORCE_STANDARD_MODE_PIN";
 const char add_buttons_to_joystick[] PROGMEM = "AB";//"ADD_BUTTONS_TO_JOYSTICK";
 
 #ifdef HAS_WIFI
@@ -152,6 +153,8 @@ const char* const SETTING[] PROGMEM = {
   ctrl_rc_pin,
   no_rc_stop_until_start,
   rc_mode,
+  use_rc_force_standard_mode_pin,
+  rc_force_standard_mode_pin,
   add_buttons_to_joystick,
 #ifdef HAS_WIFI
   car_wifi_name,
@@ -229,6 +232,8 @@ enum SettingID {
   S_CTRL_RC_PIN,
   S_NO_RC_STOP_UNTIL_START,
   S_RC_MODE,
+  S_USE_RC_FORCE_STANDARD_MODE_PIN,
+  S_RC_FORCE_STANDARD_MODE_PIN,
   S_ADD_BUTTONS_TO_JOYSTICK,
 #ifdef HAS_WIFI
   S_CAR_WIFI_NAME,

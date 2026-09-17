@@ -473,9 +473,11 @@ void setupPins() {
     pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
   }
 
-  if ( USE_RC_CONTROL) {
-    setupRCControl();
+  setupRCControl(); // does nothing if USE_RC_CONTROL is false
+  if (USE_RC_FORCE_STANDARD_MODE_PIN) {
+    pinMode(RC_FORCE_STANDARD_MODE_PIN, INPUT_PULLUP);
   }
+
 
   if (USE_STOP_SWITCH) {
     pinMode(STOP_PIN, INPUT_PULLUP);

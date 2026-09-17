@@ -137,8 +137,58 @@ void settingsSerial() {
       buf[bufP] = 0;  // null terminator
       //process new input
       char *k = strtok(buf, ":,");
+      if (k == NULL) {
+        return;
+      }
+
+      // special case commands that don't take a value
+      if (strcmp(k, "SAVE") == 0) {
+        saveSettings();
+        Serial.println(F("{\"result\": \"saved\"}"));
+        return;
+      } else if (strcmp(k, "SETTINGS") == 0) {
+#if defined(HAS_WIFI)
+        printSettings(false);
+#else
+        printSettings();
+#endif
+        return;
+      } else if (strcmp(k, "REVERT") == 0) {
+        unsigned int settingsMemoryKeyAddr = 0;
+        EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
+#if defined(FAKE_EEPROM)
+        EEPROM.commit();
+#endif
+#ifdef ESP32
+        ESP.restart();
+#endif
+        delay(5000); // trigger wdt
+        return;
+      } else if (strcmp(k, "REBOOT") == 0) {
+#ifdef ESP32
+        ESP.restart();
+#endif
+        delay(5000); // trigger wdt
+        return;
+      } else if (strcmp(k, "G") == 0) {
+        movementAllowed = true;
+        Serial.println(F("{\"result\": \"movement allowed\"}"));
+        return;
+      } else if (strcmp(k, "S") == 0) {
+        movementAllowed = false;
+        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
+        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+        Serial.println(F("{\"result\": \"stopped\"}"));
+        return;
+      } else {
+        Serial.println(F("{\"result\": \"no change\"}"));
+        return;
+      }
+
       char *v = strtok(0, ":,");
-      boolean changedSomething = true;  // used to see if a valid command was found
+      if (v == NULL) {
+        return;
+      }
       memset(resultBuf, '\0', 15);
 
       boolean found = false;
@@ -294,10 +344,18 @@ void settingsSerial() {
         if (db >= 1 && db <= maxNumDriveButtons) { // a valid driveButtons index
           db--; // convert from array indices starting at 1 to starting at 0
           strtok(v, "_"); // the value after db
-          driveButtons[db].pin   = atoi(strtok(0, "_"));
-          driveButtons[db].speed = atof(strtok(0, "_"));
-          driveButtons[db].turn  = atof(strtok(0, "_"));
-
+          char* va = strtok(0, "_"); // the value after the first underscore
+          if (va != NULL) {
+            driveButtons[db].pin   = atoi(va);
+            va = strtok(0, "_"); // the value after the second underscore
+            if (va != NULL) {
+              driveButtons[db].speed = atof(va);
+              va = strtok(0, "_"); // the value after the third underscore
+              if (va != NULL) {
+                driveButtons[db].turn  = atof(va);
+              }
+            }
+          }
           pinMode(driveButtons[db].pin, INPUT_PULLUP);
 
           Serial.print(F("{\"result\": \"change\""));
@@ -319,16 +377,14 @@ void settingsSerial() {
           Serial.println("]}");
 
         }
-        changedSomething = false;
+        return;
       }
       else if (strcmp_P(k, SETTING[S_STEERING_OFF_SWITCH]) == 0) {
         STEERING_OFF_SWITCH = atoi(v);
         if (STEERING_OFF_SWITCH) {
           pinMode(STEERING_OFF_SWITCH_PIN, INPUT_PULLUP);
-          sprintf(resultBuf, "true");
         }
-        else
-          sprintf(resultBuf, "false");
+        printTrueOrFalse(STEERING_OFF_SWITCH);
       }
       else if (strcmp_P(k, SETTING[S_STEERING_OFF_SWITCH_PIN]) == 0) {
         STEERING_OFF_SWITCH_PIN = atoi(v);
@@ -337,14 +393,11 @@ void settingsSerial() {
       }
       else if (strcmp_P(k, SETTING[S_USE_RC_CONTROL]) == 0) {
         USE_RC_CONTROL = atoi(v);
+        detachRCControl();
         if (USE_RC_CONTROL) {
-          detachRCControl();
-          sprintf(resultBuf, "true");
           setupRCControl();
-        } else {
-          detachRCControl();
-          sprintf(resultBuf, "false");
         }
+        printTrueOrFalse(USE_RC_CONTROL);
       } else if (strcmp_P(k, SETTING[S_SPEED_RC_PIN]) == 0) {
         detachRCControl();
         RC_PIN[SPEED_RC] = atoi(v);
@@ -372,6 +425,16 @@ void settingsSerial() {
         RC_MODE = atoi(v);
         RC_MODE = constrain(RC_MODE, 0, 2);
         printInt(RC_MODE);
+      } else if (strcmp_P(k, SETTING[S_USE_RC_FORCE_STANDARD_MODE_PIN]) == 0) {
+        USE_RC_FORCE_STANDARD_MODE_PIN = atoi(v);
+        if (USE_RC_FORCE_STANDARD_MODE_PIN) {
+          pinMode(RC_FORCE_STANDARD_MODE_PIN, INPUT_PULLUP);
+        }
+        printTrueOrFalse(USE_RC_FORCE_STANDARD_MODE_PIN);
+      } else if (strcmp_P(k, SETTING[S_RC_FORCE_STANDARD_MODE_PIN]) == 0) {
+        RC_FORCE_STANDARD_MODE_PIN = atoi(v);
+        pinMode(RC_FORCE_STANDARD_MODE_PIN, INPUT_PULLUP);
+        printInt(RC_FORCE_STANDARD_MODE_PIN);
       } else if (strcmp_P(k, SETTING[S_ADD_BUTTONS_TO_JOYSTICK]) == 0) {
         ADD_BUTTONS_TO_JOYSTICK = atoi(v);
         printTrueOrFalse(ADD_BUTTONS_TO_JOYSTICK);
@@ -384,9 +447,7 @@ void settingsSerial() {
         printTrueOrFalse(USE_STOP_SWITCH);
       } else if (strcmp_P(k, SETTING[S_ON_OFF_SWITCH_PIN]) == 0) {
         STOP_PIN = atoi(v);
-        if (USE_STOP_SWITCH) {
-          pinMode(STOP_PIN, INPUT_PULLUP);
-        }
+        pinMode(STOP_PIN, INPUT_PULLUP);
         printInt(STOP_PIN);
       } else if (strcmp_P(k, SETTING[S_ON_OFF_ACTIVE_HIGH]) == 0) {
         STOP_PIN_HIGH = atoi(v);
@@ -414,7 +475,6 @@ void settingsSerial() {
         ON_OFF_BUTTONS_ACTIVE_HIGH = atoi(v);
         printTrueOrFalse(ON_OFF_BUTTONS_ACTIVE_HIGH);
       }
-
 #if defined(HAS_WIFI)
       else if (strcmp_P(k, SETTING[S_CAR_WIFI_NAME]) == 0) {
         CAR_WIFI_NAME = constrain(atoi(v), 0, 99);
@@ -427,63 +487,17 @@ void settingsSerial() {
       }
       else if (strcmp_P(k, SETTING[S_USE_WIFI]) == 0) {
         USE_WIFI = atoi(v);
-        if (USE_WIFI)
-          sprintf(resultBuf, "true");
-        else
-          sprintf(resultBuf, "false");
+        printTrueOrFalse(USE_WIFI);
       }
 #endif
-      else if (strcmp(k, "SAVE") == 0) {
-        saveSettings();
-        changedSomething = false;
-        Serial.println(F("{\"result\": \"saved\"}"));
-      } else if (strcmp(k, "SETTINGS") == 0) {
-#if defined(HAS_WIFI)
-        printSettings(false);
-#else
-        printSettings();
-#endif
-        changedSomething = false;
-      } else if (strcmp(k, "REVERT") == 0) {
-        unsigned int settingsMemoryKeyAddr = 0;
-        EEPROMwrite(settingsMemoryKeyAddr, settings_memory_key + 1);  // so that on reset the arduino discards EEPROM
-#if defined(FAKE_EEPROM)
-        EEPROM.commit();
-#endif
-#ifdef ESP32
-        ESP.restart();
-#endif
-        delay(5000); // trigger wdt
-      } else if (strcmp(k, "REBOOT") == 0) {
-#ifdef ESP32
-        ESP.restart();
-#endif
-        delay(5000); // trigger wdt
-      } else if (strcmp(k, "G") == 0) {
-        changedSomething = false;
-        movementAllowed = true;
-        Serial.println(F("{\"result\": \"movement allowed\"}"));
-      } else if (strcmp(k, "S") == 0) {
-        changedSomething = false;
-        movementAllowed = false;
-        leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
-        rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
-        Serial.println(F("{\"result\": \"stopped\"}"));
-      } else {
-        Serial.println(F("{\"result\": \"no change\"}"));
-        changedSomething = false;
-      }
-
-      if (changedSomething) {
-        Serial.print(F("{\"result\": \"change\""));
-        Serial.print(", ");
-        Serial.print(F("\"setting\": \""));
-        Serial.print(k);
-        Serial.print("\", ");
-        Serial.print(F("\"value\": \""));
-        Serial.print(resultBuf);
-        Serial.println("\"}");
-      }
+      Serial.print(F("{\"result\": \"change\""));
+      Serial.print(", ");
+      Serial.print(F("\"setting\": \""));
+      Serial.print(k);
+      Serial.print("\", ");
+      Serial.print(F("\"value\": \""));
+      Serial.print(resultBuf);
+      Serial.println("\"}");
 
       bufP = 0;
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
@@ -575,6 +589,8 @@ void saveSettings()
   EEPROMwrite(addressW, RC_PIN[CTRL_RC]);
   EEPROMwrite(addressW, NO_RC_STOP_UNTIL_START);
   EEPROMwrite(addressW, RC_MODE);
+  EEPROMwrite(addressW, USE_RC_FORCE_STANDARD_MODE_PIN);
+  EEPROMwrite(addressW, RC_FORCE_STANDARD_MODE_PIN);
   EEPROMwrite(addressW, ADD_BUTTONS_TO_JOYSTICK);
 
 #if defined(HAS_WIFI)
@@ -649,7 +665,7 @@ void recallSettings()
   EEPROMread(addressR, driveButtons);
 
   EEPROMread(addressR, STEERING_OFF_SWITCH);
-  EEPROMwrite(addressR, STEERING_OFF_SWITCH_PIN);
+  EEPROMread(addressR, STEERING_OFF_SWITCH_PIN);
 
   EEPROMread(addressR, USE_STOP_SWITCH);
   EEPROMread(addressR, STOP_PIN);
@@ -668,6 +684,8 @@ void recallSettings()
   EEPROMread(addressR, RC_PIN[CTRL_RC]);
   EEPROMread(addressR, NO_RC_STOP_UNTIL_START);
   EEPROMread(addressR, RC_MODE);
+  EEPROMread(addressR, USE_RC_FORCE_STANDARD_MODE_PIN);
+  EEPROMread(addressR, RC_FORCE_STANDARD_MODE_PIN);
   EEPROMread(addressR, ADD_BUTTONS_TO_JOYSTICK);
 
 #if defined(HAS_WIFI)
