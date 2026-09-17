@@ -1,1 +1,0 @@
-standard-rpiPico, gbg_program, RPIPICO, rpi pico
