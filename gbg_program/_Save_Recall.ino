@@ -180,9 +180,6 @@ void settingsSerial() {
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
         Serial.println(F("{\"result\": \"stopped\"}"));
         return;
-      } else {
-        Serial.println(F("{\"result\": \"no change\"}"));
-        return;
       }
 
       char *v = strtok(0, ":,");
@@ -490,6 +487,11 @@ void settingsSerial() {
         printTrueOrFalse(USE_WIFI);
       }
 #endif
+      else {
+        Serial.println(F("{\"result\": \"no change\"}"));
+        return;
+      }
+
       Serial.print(F("{\"result\": \"change\""));
       Serial.print(", ");
       Serial.print(F("\"setting\": \""));
