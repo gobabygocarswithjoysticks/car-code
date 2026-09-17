@@ -310,9 +310,6 @@ void settingsSerial() {
           if (USE_BUTTON_MODE_PIN) {
             pinMode(BUTTON_MODE_PIN, INPUT_PULLUP);
           }
-          for (byte i = 0; i < NUM_DRIVE_BUTTONS; i++) {
-            pinMode(driveButtons[i].pin, INPUT_PULLUP);
-          }
         }
         printTrueOrFalse(USE_BUTTON_MODE_PIN);
       } else if (strcmp_P(k, SETTING[S_BUTTON_MODE_TOGGLE]) == 0) {
