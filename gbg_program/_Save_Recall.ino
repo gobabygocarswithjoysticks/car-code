@@ -47,6 +47,7 @@ void settingsMemory()
 #include "settings_names.h"
 
 #define NUM_SETTINGS_ID_INT 19
+#define PIN_MODE_STARTING_AT_THIS_INDEX 19
 const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_CONTROL_RIGHT,
   S_CONTROL_CENTER_X,
@@ -67,6 +68,9 @@ const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_JOY_CALIB_COUNT,
   S_SPEED_KNOB_SLOW_VAL,
   S_SPEED_KNOB_FAST_VAL,
+  S_SPEED_KNOB_PIN,
+  S_JOY_X_PIN,
+  S_JOY_Y_PIN,
 };
 
 int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
@@ -89,6 +93,10 @@ int16_t* settingsPtr_int[NUM_SETTINGS_ID_INT] = {
   &JOY_CALIB_COUNT,
   &SPEED_KNOB_SLOW_VAL,
   &SPEED_KNOB_FAST_VAL,
+  // INPUT pins are below this
+  &SPEED_KNOB_PIN,
+  &JOY_X_PIN,
+  &JOY_Y_PIN,
 };
 
 #define NUM_SETTINGS_ID_FLOAT 11
@@ -193,6 +201,9 @@ void settingsSerial() {
         strcpy_P(phrase, (char *)pgm_read_ptr(&(SETTING[settingsID_int[i]])));//https://docs.arduino.cc/language-reference/en/variables/utilities/PROGMEM/
         if (strcmp(k, phrase) == 0) {
           *settingsPtr_int[i] = atoi(v);
+          if (i >= PIN_MODE_STARTING_AT_THIS_INDEX) {
+            pinMode(*settingsPtr_int[i], INPUT);
+          }
           printInt(*settingsPtr_int[i]);
           found = true;
           break;
@@ -229,18 +240,6 @@ void settingsSerial() {
       } else if (strcmp_P(k, SETTING[S_SCALE_ACCEL_WITH_SPEED]) == 0) {
         SCALE_ACCEL_WITH_SPEED = atoi(v);
         printTrueOrFalse(SCALE_ACCEL_WITH_SPEED);
-      } else if (strcmp_P(k, SETTING[S_SPEED_KNOB_PIN]) == 0) {
-        SPEED_KNOB_PIN = atoi(v);
-        pinMode(SPEED_KNOB_PIN, INPUT);
-        printInt(SPEED_KNOB_PIN);
-      } else if (strcmp_P(k, SETTING[S_JOY_X_PIN]) == 0) {
-        JOY_X_PIN = atoi(v);
-        pinMode(JOY_X_PIN, INPUT);
-        printInt(JOY_X_PIN);
-      } else if (strcmp_P(k, SETTING[S_JOY_Y_PIN]) == 0) {
-        JOY_Y_PIN = atoi(v);
-        pinMode(JOY_Y_PIN, INPUT);
-        printInt(JOY_Y_PIN);
 #ifdef IS_PCB
       } else if (strcmp_P(k, SETTING[S_SWAP_MOTORS]) == 0) {
         SWAP_MOTORS = atoi(v);
