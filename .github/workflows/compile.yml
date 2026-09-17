@@ -63,21 +63,21 @@ jobs:
           - configName: "standard-nanoOld"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
-            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
+            additional-commands: arduino-cli lib install Servo@1.3.0 PinChangeInterrupt@1.2.9
             order: 1
 
           - configName: "standard-nanoNew"
             code-name: gbg_program
             code-dir: gbg_program
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
-            additional-commands: arduino-cli lib install Servo PinChangeInterrupt
+            additional-commands: arduino-cli lib install Servo@1.3.0 PinChangeInterrupt@1.2.9
             order: 2
 
           - configName: "standard-rpiPico"
@@ -182,7 +182,7 @@ jobs:
           - configName: "clear_eeprom-nanoOld"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
@@ -191,7 +191,7 @@ jobs:
           - configName: "clear_eeprom-nanoNew"
             code-name: clear_eeprom
             code-dir: clear_eeprom
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
@@ -255,7 +255,7 @@ jobs:
           - configName: "blink-nanoOld"
             code-name: blink
             code-dir: blink
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nanoOldBootloader"
             niceBoardName: "old nano"
@@ -264,7 +264,7 @@ jobs:
           - configName: "blink-nanoNew"
             code-name: blink
             code-dir: blink
-            arduino-platform: "arduino:avr"
+            arduino-platform: "arduino:avr@1.8.8"
             fqbn: "arduino:avr:nano"
             board-upload: "nano"
             niceBoardName: "new nano or uno"
@@ -328,9 +328,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli@v2
+        uses: arduino/setup-arduino-cli@v2.0.0
         with:
-          version: "2.0.0"
+          version: "1.5.2"
 
       - name: Install Arduino platforms
         run: |
