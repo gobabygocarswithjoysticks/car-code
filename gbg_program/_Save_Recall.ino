@@ -46,7 +46,7 @@ void settingsMemory()
 
 #include "settings_names.h"
 
-#define NUM_SETTINGS_ID_INT 19
+#define NUM_SETTINGS_ID_INT 22
 #define PIN_MODE_STARTING_AT_THIS_INDEX 19
 const SettingID settingsID_int[NUM_SETTINGS_ID_INT] = {
   S_CONTROL_RIGHT,
