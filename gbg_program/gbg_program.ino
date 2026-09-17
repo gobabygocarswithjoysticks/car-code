@@ -111,8 +111,8 @@ int16_t SPEED_KNOB_FAST_VAL = 0;     //analogRead value when knob is turned full
 //////////////////////////////////////////// PINS /////////////////////////////////////
 #if defined(IS_PICO)
 ///// joystick reader pins /////
-byte JOY_X_PIN = 26;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = 27;  // Analog input pin that the forwards-backwards potentiometer is attached to
+int16_t JOY_X_PIN = 26;  // Analog input pin that the left-right potentiometer is attached to
+int16_t JOY_Y_PIN = 27;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 #ifdef IS_PCB
@@ -130,7 +130,7 @@ byte LEFT_MOTOR_CONTROLLER_PIN = 19;
 byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 #endif
 
-byte SPEED_KNOB_PIN = 28;
+int16_t SPEED_KNOB_PIN = 28;
 
 byte BUTTON_MODE_PIN = 5; // can turn button control mode on and off
 byte RC_FORCE_STANDARD_MODE_PIN = 5;
@@ -138,28 +138,28 @@ byte STEERING_OFF_SWITCH_PIN = 9;
 
 #elif defined(ESP32)
 ///// joystick reader pins /////
-byte JOY_X_PIN = 39;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = 35;  // Analog input pin that the forwards-backwards potentiometer is attached to
+int16_t JOY_X_PIN = 39;  // Analog input pin that the left-right potentiometer is attached to
+int16_t JOY_Y_PIN = 35;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 18;
 byte RIGHT_MOTOR_CONTROLLER_PIN = 21;
 
-byte SPEED_KNOB_PIN = 33;
+int16_t SPEED_KNOB_PIN = 33;
 
 byte BUTTON_MODE_PIN = 23; // can turn button control mode on and off
 byte RC_FORCE_STANDARD_MODE_PIN = 23;
 byte STEERING_OFF_SWITCH_PIN = 4;
 
 #else // nano or uno
-byte JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
-byte JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
+int16_t JOY_X_PIN = A4;  // Analog input pin that the left-right potentiometer is attached to
+int16_t JOY_Y_PIN = A1;  // Analog input pin that the forwards-backwards potentiometer is attached to
 
 ///// drive controller pins /////
 byte LEFT_MOTOR_CONTROLLER_PIN = 3;
 byte RIGHT_MOTOR_CONTROLLER_PIN = 6;
 
-byte SPEED_KNOB_PIN = A3;
+int16_t SPEED_KNOB_PIN = A3;
 
 byte BUTTON_MODE_PIN = 2; // can turn button control mode on and off
 byte RC_FORCE_STANDARD_MODE_PIN = 2;

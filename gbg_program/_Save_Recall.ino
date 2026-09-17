@@ -202,6 +202,7 @@ void settingsSerial() {
         if (strcmp(k, phrase) == 0) {
           *settingsPtr_int[i] = atoi(v);
           if (i >= PIN_MODE_STARTING_AT_THIS_INDEX) {
+            *settingsPtr_int[i]&=255;
             pinMode(*settingsPtr_int[i], INPUT);
           }
           printInt(*settingsPtr_int[i]);
@@ -542,9 +543,9 @@ void saveSettings()
   EEPROMwrite(addressW, SPEED_KNOB_SLOW_VAL);
   EEPROMwrite(addressW, SPEED_KNOB_FAST_VAL);
   EEPROMwrite(addressW, SCALE_ACCEL_WITH_SPEED);
-  EEPROMwrite(addressW, SPEED_KNOB_PIN);
-  EEPROMwrite(addressW, JOY_X_PIN);
-  EEPROMwrite(addressW, JOY_Y_PIN);
+  EEPROMwrite(addressW, (byte)SPEED_KNOB_PIN);
+  EEPROMwrite(addressW, (byte)JOY_X_PIN);
+  EEPROMwrite(addressW, (byte)JOY_Y_PIN);
 #ifdef IS_PCB
   EEPROMwrite(addressW, SWAP_MOTORS);
 #else
@@ -637,9 +638,9 @@ void recallSettings()
   EEPROMread(addressR, SPEED_KNOB_SLOW_VAL);
   EEPROMread(addressR, SPEED_KNOB_FAST_VAL);
   EEPROMread(addressR, SCALE_ACCEL_WITH_SPEED);
-  EEPROMread(addressR, SPEED_KNOB_PIN);
-  EEPROMread(addressR, JOY_X_PIN);
-  EEPROMread(addressR, JOY_Y_PIN);
+  EEPROMread(addressR, (byte)SPEED_KNOB_PIN);
+  EEPROMread(addressR, (byte)JOY_X_PIN);
+  EEPROMread(addressR, (byte)JOY_Y_PIN);
 #ifdef IS_PCB
   EEPROMread(addressR, SWAP_MOTORS);
 #else
