@@ -82,6 +82,9 @@ boolean printVariables(int interval) {
       bitSet(stopBits, 3);
     }
 #endif
+    if (USE_RC_FORCE_STANDARD_MODE_PIN && digitalRead(RC_FORCE_STANDARD_MODE_PIN) == LOW) {
+      bitSet(stopBits,  4); //not actually related to stopping, but use stopBits to send info about whether rc mode is overridden to "standard"
+    }
     prnt(F("stopBits"), stopBits);
 
     serialChecksum += Serial.print(F("\"b_m_p\":"));

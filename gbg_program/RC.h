@@ -145,9 +145,8 @@ void runRCInput(float &speed, float &turn) {
             speed = 0;
             turn = 0;
           }
-        } else {
-          // rc mode is standard, so add no rc input
         }
+        //else rc mode is standard, so add no rc input
       }
     }
     rcFlags.RC_make_motors_e_stop = rcFlags.RCStop;
