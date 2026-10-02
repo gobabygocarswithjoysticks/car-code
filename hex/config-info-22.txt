@@ -1,1 +1,0 @@
-blink-rpiPico-W, blink, RPIPICOW, rpi pico W
