@@ -153,21 +153,25 @@ void settingsSerial() {
       // special case commands that don't take a value
       if (strcmp(k, "SAVE") == 0) {
         saveSettings();
+#if defined(HAS_BLE)
         if (sentByBle) {
           gbgble.println("{\"result\": \"saved\"}");
-        } else {
+        } else 
+#else
+        {
           Serial.println(F("{\"result\": \"saved\"}"));
         }
+#endif
         return;
       } else if (strcmp(k, "SETTINGS") == 0) {
 #if defined(HAS_BLE)
         if (sentByBle) {
           printSettings(true);
-        } else {
-          printSettings(false);
-        }
+        } else 
 #else
+{
         printSettings();
+}
 #endif
         return;
       } else if (strcmp(k, "REVERT") == 0) {
@@ -189,11 +193,15 @@ void settingsSerial() {
         return;
       } else if (strcmp(k, "G") == 0) {
         movementAllowed = true;
+#ifdef HAS_BLE
         if (sentByBle) {
           gbgble.println("{\"result\": \"movement allowed\"}");
-        } else {
+        } else 
+#else
+        {
           Serial.println(F("{\"result\": \"movement allowed\"}"));
         }
+#endif
         return;
       } else if (strcmp(k, "S") == 0) {
         movementAllowed = false;
@@ -368,7 +376,7 @@ void settingsSerial() {
             }
           }
           pinMode(driveButtons[db].pin, INPUT_PULLUP);
-
+#ifdef HAS_BLE
           if (sentByBle) {
             blegbg.print(F("{\"result\": \"change\""));
             blegbg.print(",");
@@ -387,7 +395,9 @@ void settingsSerial() {
             blegbg.print(resultBuf);
 
             blegbg.println("]}");
-          } else {
+          } else 
+#else
+          {
             Serial.print(F("{\"result\": \"change\""));
             Serial.print(",");
             Serial.print(F("\"setting\": \""));
@@ -406,7 +416,7 @@ void settingsSerial() {
 
             Serial.println("]}");
           }
-
+#endif
         }
         return;
       }
@@ -538,14 +548,19 @@ void settingsSerial() {
       }
 #endif
       else {
+#ifdef HAS_BLE
         if (sentByBle) {
           gbgble.println("{\"result\": \"no change\"}");
-        } else {
+        } else 
+#else
+        {
           Serial.println(F("{\"result\": \"no change\"}"));
         }
+#endif
         return;
       }
 
+#ifdef HAS_BLE
       if (sentByBle) {
         gbgble.print("{\"result\": \"change\"");
         gbgble.print(", ");
@@ -555,7 +570,9 @@ void settingsSerial() {
         gbgble.print("\"value\": \"");
         gbgble.print(resultBuf);
         gbgble.println("\"}");
-      } else {
+      } else 
+#else
+      {
         Serial.print(F("{\"result\": \"change\""));
         Serial.print(", ");
         Serial.print(F("\"setting\": \""));
@@ -565,6 +582,7 @@ void settingsSerial() {
         Serial.print(resultBuf);
         Serial.println("\"}");
       }
+#endif
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
       buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
       if ((uint8_t)(bufP + 2) < sizeof buf) {
