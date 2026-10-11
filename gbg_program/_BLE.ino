@@ -1,3 +1,4 @@
+#ifdef HAS_BLE
 #include <BLE.h>
 #include <btstack.h>
 #include "BLEServiceGBG.h"
@@ -15,3 +16,4 @@ void setupBLE() {
   BLE.startAdvertising();
   blegbg.setAutoflush(20);
 }
+#endif

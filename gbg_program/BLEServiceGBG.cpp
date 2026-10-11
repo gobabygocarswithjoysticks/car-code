@@ -1,3 +1,4 @@
+#ifdef HAS_BLE
 #include "BLEServiceGBG.h"
 
 #include <Arduino.h>
@@ -155,3 +156,4 @@ void BLEServiceGBG::onWrite(BLECharacteristic* c)
     }
   }
 }
+#endif

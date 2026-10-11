@@ -3,7 +3,7 @@
     BLEServiceUART - v6.2.0
     Copyright (c) 2026 Earle F. Philhower, III.  GNU LGPL
 */
-
+#ifdef HAS_BLE
 #pragma once
 
 #include "BLECharacteristic.h"
@@ -75,3 +75,4 @@ class BLEServiceGBG : public BLEService, public BLECharacteristicCallbacks, publ
     uint32_t _lastFlush; // Time we last flushed data
     uint32_t _flushTimeout; // ms to sit on a buffer before forcing a flush on a callback
 };
+#endif
