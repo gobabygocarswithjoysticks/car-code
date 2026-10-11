@@ -157,22 +157,20 @@ void settingsSerial() {
         if (sentByBle) {
           gbgble.println("{\"result\": \"saved\"}");
         } else 
-#else
+#endif
         {
           Serial.println(F("{\"result\": \"saved\"}"));
         }
-#endif
         return;
       } else if (strcmp(k, "SETTINGS") == 0) {
 #if defined(HAS_BLE)
         if (sentByBle) {
           printSettings(true);
         } else 
-#else
+#endif
 {
         printSettings();
 }
-#endif
         return;
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
@@ -197,11 +195,10 @@ void settingsSerial() {
         if (sentByBle) {
           gbgble.println("{\"result\": \"movement allowed\"}");
         } else 
-#else
+#endif
         {
           Serial.println(F("{\"result\": \"movement allowed\"}"));
         }
-#endif
         return;
       } else if (strcmp(k, "S") == 0) {
         movementAllowed = false;
@@ -211,11 +208,10 @@ void settingsSerial() {
         if (sentByBle) {
           gbgble.println("{\"result\": \"stopped\"}");
         } else 
-#else
+#endif
         {
           Serial.println(F("{\"result\": \"stopped\"}"));
         }
-#endif
         return;
       }
 
@@ -400,7 +396,7 @@ void settingsSerial() {
 
             blegbg.println("]}");
           } else 
-#else
+#endif
           {
             Serial.print(F("{\"result\": \"change\""));
             Serial.print(",");
@@ -420,7 +416,6 @@ void settingsSerial() {
 
             Serial.println("]}");
           }
-#endif
         }
         return;
       }
@@ -556,11 +551,10 @@ void settingsSerial() {
         if (sentByBle) {
           gbgble.println("{\"result\": \"no change\"}");
         } else 
-#else
+#endif
         {
           Serial.println(F("{\"result\": \"no change\"}"));
         }
-#endif
         return;
       }
 
@@ -575,7 +569,7 @@ void settingsSerial() {
         gbgble.print(resultBuf);
         gbgble.println("\"}");
       } else 
-#else
+#endif
       {
         Serial.print(F("{\"result\": \"change\""));
         Serial.print(", ");
@@ -586,7 +580,7 @@ void settingsSerial() {
         Serial.print(resultBuf);
         Serial.println("\"}");
       }
-#endif
+
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
       buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
       if ((uint8_t)(bufP + 2) < sizeof buf) {
