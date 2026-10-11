@@ -129,7 +129,7 @@ float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
 
 char phrase[30]; // must be large enough to hold the longest setting name string
 #if defined(HAS_WIFI) || defined(HAS_BLE)
-void settingsSerial(int8_t input, bool sentByBle = false) {
+void settingsSerial(int8_t input, bool sentByBle) {
   int8_t in;
   if (input == -1) {
     in = Serial.read();
