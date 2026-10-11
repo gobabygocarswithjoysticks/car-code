@@ -115,6 +115,7 @@ bool printVariables(int interval)
 
   prnt(F("stopBits"), stopBits);
 
+#ifdef HAS_BLE
   printAndAppendToChecksum(F("\"b_m_p\":"));
   if (rcFlags.RCOverride) {
     printAndAppendToChecksum(F("\"R\""));
@@ -132,6 +133,25 @@ bool printVariables(int interval)
       printAndAppendToChecksum(F("\"B\""));
     }
   }
+#else
+   serialChecksum += Serial.print(F("\"b_m_p\":"));
+    if (rcFlags.RCOverride) {
+      serialChecksum += Serial.print("\"R\"");
+    } else {
+      if (ENABLE_BUTTON_CTRL) {
+        if (USE_BUTTON_MODE_PIN) {
+          if (buttonModeActive)
+            serialChecksum += Serial.print("\"Y\"");
+          else
+            serialChecksum += Serial.print("\"N\"");
+        } else { // mode pin use = false; buttons on
+          serialChecksum += Serial.print("\"A\"");
+        }
+      } else { // buttons off
+        serialChecksum += Serial.print("\"B\"");
+      }
+    }
+#endif
 
   printAndAppendToChecksum(F(",\"CHECKSUM\":"));
   #if defined(HAS_BLE)
