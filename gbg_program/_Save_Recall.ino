@@ -155,7 +155,7 @@ void settingsSerial() {
         saveSettings();
 #if defined(HAS_BLE)
         if (sentByBle) {
-          gbgble.println("{\"result\": \"saved\"}");
+          blegbg.println("{\"result\": \"saved\"}");
         } else 
 #endif
         {
@@ -193,7 +193,7 @@ void settingsSerial() {
         movementAllowed = true;
 #ifdef HAS_BLE
         if (sentByBle) {
-          gbgble.println("{\"result\": \"movement allowed\"}");
+          blegbg.println("{\"result\": \"movement allowed\"}");
         } else 
 #endif
         {
@@ -206,7 +206,7 @@ void settingsSerial() {
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
 #ifdef HAS_BLE
         if (sentByBle) {
-          gbgble.println("{\"result\": \"stopped\"}");
+          blegbg.println("{\"result\": \"stopped\"}");
         } else 
 #endif
         {
@@ -549,7 +549,7 @@ void settingsSerial() {
       else {
 #ifdef HAS_BLE
         if (sentByBle) {
-          gbgble.println("{\"result\": \"no change\"}");
+          blegbg.println("{\"result\": \"no change\"}");
         } else 
 #endif
         {
@@ -560,14 +560,14 @@ void settingsSerial() {
 
 #ifdef HAS_BLE
       if (sentByBle) {
-        gbgble.print("{\"result\": \"change\"");
-        gbgble.print(", ");
-        gbgble.print("\"setting\": \"");
-        gbgble.print(k);
-        gbgble.print("\", ");
-        gbgble.print("\"value\": \"");
-        gbgble.print(resultBuf);
-        gbgble.println("\"}");
+        blegbg.print("{\"result\": \"change\"");
+        blegbg.print(", ");
+        blegbg.print("\"setting\": \"");
+        blegbg.print(k);
+        blegbg.print("\", ");
+        blegbg.print("\"value\": \"");
+        blegbg.print(resultBuf);
+        blegbg.println("\"}");
       } else 
 #endif
       {

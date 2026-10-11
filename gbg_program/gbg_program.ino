@@ -542,8 +542,8 @@ void loop()
 
   if (use_memory) {
 #if defined(HAS_BLE)
-    if (gbgble.available()) {
-      settingsSerial(gbgble.read(), true);
+    if (blegbg.available()) {
+      settingsSerial(blegbg.read(), true);
     }
 #endif
 #if defined(HAS_WIFI)
