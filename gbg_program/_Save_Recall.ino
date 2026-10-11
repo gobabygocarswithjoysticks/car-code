@@ -207,11 +207,15 @@ void settingsSerial() {
         movementAllowed = false;
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
+#ifdef HAS_BLE
         if (sentByBle) {
           gbgble.println("{\"result\": \"stopped\"}");
-        } else {
+        } else 
+#else
+        {
           Serial.println(F("{\"result\": \"stopped\"}"));
         }
+#endif
         return;
       }
 
