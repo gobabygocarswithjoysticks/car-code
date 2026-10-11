@@ -280,6 +280,32 @@ int32_t CAR_BLE_PASSWORD = 12345678;
 boolean USE_BLE = true;
 #endif
 
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void printSettings(bool printToWifi = false);
+#else
+void printSettings();
+#endif
+#ifdef HAS_BLE
+#include "BLEServiceGBG.h"
+BLEServiceGBG blegbg;
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void settingsSerial(int8_t input, bool sentByBle = false);
+#else
+void settingsSerial();
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+bool printVariables(int interval, bool printToWifi = false);
+#else
+bool printVariables(int interval);
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+char wifiSettingsBuffer[2000];
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
