@@ -115,25 +115,25 @@ bool printVariables(int interval)
 
   prnt(F("stopBits"), stopBits);
 
-  serialChecksum += Serial.print(F("\"b_m_p\":"));
+  printAndAppendToChecksum(F("\"b_m_p\":"));
   if (rcFlags.RCOverride) {
-    serialChecksum += Serial.print("\"R\"");
+    printAndAppendToChecksum("\"R\"");
   } else {
     if (ENABLE_BUTTON_CTRL) {
       if (USE_BUTTON_MODE_PIN) {
         if (buttonModeActive)
-          serialChecksum += Serial.print("\"Y\"");
+          printAndAppendToChecksum("\"Y\"");
         else
-          serialChecksum += Serial.print("\"N\"");
+          printAndAppendToChecksum("\"N\"");
       } else { // mode pin use = false; buttons on
-        serialChecksum += Serial.print("\"A\"");
+        printAndAppendToChecksum("\"A\"");
       }
     } else { // buttons off
-      serialChecksum += Serial.print("\"B\"");
+      printAndAppendToChecksum("\"B\"");
     }
   }
 
-  serialChecksum += Serial.print(F(",\"CHECKSUM\":"));
+  printAndAppendToChecksum(F(",\"CHECKSUM\":"));
   Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
   Serial.println("}");
 #if defined(HAS_WIFI) || defined(HAS_BLE)
