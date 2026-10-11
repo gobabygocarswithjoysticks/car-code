@@ -1,137 +1,169 @@
 #include "settings_names.h"
 int serialChecksum = 0;
 
-#if defined(HAS_WIFI)
-bool ptw = false;
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+volatile bool ptw = false;
+volatile bool printing = false;
 char wifiSettingsBuffer[2000];
 int wifiBufI = 0;
 #endif
 
-boolean printVariables(int interval) {
-  ///// if interval is -1, nothing is printed /////
-  if (interval < 0)
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+bool printVariables(int interval, bool printToWifi = false)
+{
+  noInterrupts();
+  if (printing) {
+    interrupts();
     return false;
-  if (millis() - lastMillisPrintedValues >= (unsigned int)interval) {
-#if defined(HAS_WIFI)
-    wifiBufI = 0;
-    ptw = false;
-#endif
-    lastMillisPrintedValues = millis();
-    serialChecksum = 1; Serial.print("{");
-    prnt(F("current values, millis:"), millis());
-    prnt(F("joyXVal"), joyXVal);
-    prnt(F("joyYVal"), joyYVal);
-    prntf(F("turnInput"), turnInput);
-    prntf(F("speedInput"), speedInput);
-    prntf(F("turnProcessed"), turnProcessed);
-    prntf(F("speedProcessed"), speedProcessed);
-    prntf(F("turnToDrive"), turnToDrive);
-    prntf(F("speedToDrive"), speedToDrive);
-    prnt(F("leftMotorWriteVal"), leftMotorWriteVal);
-    prnt(F("rightMotorWriteVal"), rightMotorWriteVal);
-    prntf(F("speedKnobVal"), speedKnobVal);
-    prntbool(F("movementAllowed"), movementAllowed);
-    prntbool(F("joyOK"), joyOK);
-#ifdef IS_PCB
-    prntbool(F("pcbSen"), pcbSensorsAvailable);
-    prntf(F("batV"), batVoltage);
-    prntf(F("leftI"), leftCurrent);
-    prntf(F("rightI"), rightCurrent);
-#endif
-
-    int buttonBits = 0;
-    if (ENABLE_BUTTON_CTRL) {
-      int button;
-      for (button = 0; button < maxNumDriveButtons; button++) {
-        if (digitalRead(driveButtons[button].pin) == BUTTONS_ACTIVE_HIGH)
-          bitSet(buttonBits, button);
-      }
-
-      // extra MSB set to 1 if buttons active, to indicate the size of maxNumDriveButtons
-      if (ENABLE_BUTTON_CTRL) {
-        if (USE_BUTTON_MODE_PIN) {
-          if (buttonModeActive) {
-            bitSet(buttonBits, button);
-          }
-        } else { // mode pin use = false; buttons on
-          bitSet(buttonBits, button);
-        }
-      } //else  buttons off
-    }
-    prnt(F("buttons"), buttonBits);
-
-    int stopBits = 0;
-    if (USE_STOP_SWITCH) {
-      if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) { // if switch is saying stop...
-        if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) { // and the NO_STOP_UNTIL_START setting is active or the stop switch has previously been switched to on
-          bitSet(stopBits, 0);
-        }
-      }
-    }
-
-    if (rcFlags.Start_Stop_Buttons_e_stop) {
-      bitSet(stopBits, 1);
-    }
-
-    if (rcFlags.RC_make_motors_e_stop) {
-      bitSet(stopBits, 2);
-    }
-
-#if defined(HAS_WIFI)
-    if (!(activatedByRemote || !USE_WIFI)) {
-      bitSet(stopBits, 3);
-    }
-#endif
-    if (USE_RC_FORCE_STANDARD_MODE_PIN && digitalRead(RC_FORCE_STANDARD_MODE_PIN) == LOW) {
-      bitSet(stopBits,  4); //not actually related to stopping, but use stopBits to send info about whether rc mode is overridden to "standard"
-    }
-    prnt(F("stopBits"), stopBits);
-
-    serialChecksum += Serial.print(F("\"b_m_p\":"));
-    if (rcFlags.RCOverride) {
-      serialChecksum += Serial.print("\"R\"");
-    } else {
-      if (ENABLE_BUTTON_CTRL) {
-        if (USE_BUTTON_MODE_PIN) {
-          if (buttonModeActive)
-            serialChecksum += Serial.print("\"Y\"");
-          else
-            serialChecksum += Serial.print("\"N\"");
-        } else { // mode pin use = false; buttons on
-          serialChecksum += Serial.print("\"A\"");
-        }
-      } else { // buttons off
-        serialChecksum += Serial.print("\"B\"");
-      }
-    }
-
-    serialChecksum += Serial.print(F(",\"CHECKSUM\":"));
-    Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
-    Serial.println("}");
-    return true;
   }
-  return false;
-}
+  printing = true;
+  interrupts();
 
-#if defined(HAS_WIFI)
-void printSettings(bool printToWifi) {
+  ///// if interval is -1, nothing is printed /////
+  if (interval < 0) {
+    return false;
+  }
   ptw = printToWifi;
   wifiBufI = 0;
 #else
-void printSettings() {
-#endif
-  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  serialChecksum = 2; // starting and ending brackets
-#if defined(HAS_WIFI)
-  if (printToWifi) {
-    wifiSettingsBuffer[wifiBufI++] = '{';
-  } else {
-    Serial.print(F("{"));
-  }
-#else
-  Serial.print(F("{"));
+bool printVariables(int interval)
+{
+  ///// if interval is -1, nothing is printed /////
+  if (interval < 0)
+    return false;
 #endif
 
+  if (millis() - lastMillisPrintedValues <= (unsigned int)interval) {
+    return false;
+  }
+  lastMillisPrintedValues = millis();
+  serialChecksum = 0;
+  printAndAppendToChecksum(F("{"));
+  prnt(F("current values, millis:"), millis());
+  prnt(F("joyXVal"), joyXVal);
+  prnt(F("joyYVal"), joyYVal);
+  prntf(F("turnInput"), turnInput);
+  prntf(F("speedInput"), speedInput);
+  prntf(F("turnProcessed"), turnProcessed);
+  prntf(F("speedProcessed"), speedProcessed);
+  prntf(F("turnToDrive"), turnToDrive);
+  prntf(F("speedToDrive"), speedToDrive);
+  prnt(F("leftMotorWriteVal"), leftMotorWriteVal);
+  prnt(F("rightMotorWriteVal"), rightMotorWriteVal);
+  prntf(F("speedKnobVal"), speedKnobVal);
+  prntbool(F("movementAllowed"), movementAllowed);
+  prntbool(F("joyOK"), joyOK);
+#ifdef IS_PCB
+  prntbool(F("pcbSen"), pcbSensorsAvailable);
+  prntf(F("batV"), batVoltage);
+  prntf(F("leftI"), leftCurrent);
+  prntf(F("rightI"), rightCurrent);
+#endif
+
+  int buttonBits = 0;
+  if (ENABLE_BUTTON_CTRL) {
+    int button;
+    for (button = 0; button < maxNumDriveButtons; button++) {
+      if (digitalRead(driveButtons[button].pin) == BUTTONS_ACTIVE_HIGH)
+        bitSet(buttonBits, button);
+    }
+
+    // extra MSB set to 1 if buttons active, to indicate the size of maxNumDriveButtons
+    if (ENABLE_BUTTON_CTRL) {
+      if (USE_BUTTON_MODE_PIN) {
+        if (buttonModeActive) {
+          bitSet(buttonBits, button);
+        }
+      } else { // mode pin use = false; buttons on
+        bitSet(buttonBits, button);
+      }
+    } // else  buttons off
+  }
+  prnt(F("buttons"), buttonBits);
+
+  int stopBits = 0;
+  if (USE_STOP_SWITCH) {
+    if (digitalRead(STOP_PIN) == (STOP_PIN_HIGH ? HIGH : LOW)) { // if switch is saying stop...
+      if (NO_STOP_UNTIL_START == false || rcFlags.Start_Switch_Ever_Activated) { // and the NO_STOP_UNTIL_START setting is active or the stop switch has previously been switched to on
+        bitSet(stopBits, 0);
+      }
+    }
+  }
+
+  if (rcFlags.Start_Stop_Buttons_e_stop) {
+    bitSet(stopBits, 1);
+  }
+
+  if (rcFlags.RC_make_motors_e_stop) {
+    bitSet(stopBits, 2);
+  }
+
+#if defined(HAS_WIFI)
+  if (!(activatedByRemote || !USE_WIFI)) {
+    bitSet(stopBits, 3);
+  }
+#endif
+  if (USE_RC_FORCE_STANDARD_MODE_PIN && digitalRead(RC_FORCE_STANDARD_MODE_PIN) == LOW) {
+    bitSet(stopBits, 4); // not actually related to stopping, but use stopBits to send info about whether rc mode is overridden to "standard"
+  }
+
+#if defined(HAS_BLE)
+  if (!(activatedByBleRemote || !USE_BLE)) {
+    bitSet(stopBits, 5);
+  }
+#endif
+
+  prnt(F("stopBits"), stopBits);
+
+  serialChecksum += Serial.print(F("\"b_m_p\":"));
+  if (rcFlags.RCOverride) {
+    serialChecksum += Serial.print("\"R\"");
+  } else {
+    if (ENABLE_BUTTON_CTRL) {
+      if (USE_BUTTON_MODE_PIN) {
+        if (buttonModeActive)
+          serialChecksum += Serial.print("\"Y\"");
+        else
+          serialChecksum += Serial.print("\"N\"");
+      } else { // mode pin use = false; buttons on
+        serialChecksum += Serial.print("\"A\"");
+      }
+    } else { // buttons off
+      serialChecksum += Serial.print("\"B\"");
+    }
+  }
+
+  serialChecksum += Serial.print(F(",\"CHECKSUM\":"));
+  Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
+  Serial.println("}");
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  ptw = false;
+  printing = false;
+#endif
+  return true;
+}
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void printSettings(bool printToWifi = false)
+{
+  noInterrupts();
+  if (printing) {
+    interrupts();
+    return;
+  }
+  printing = true;
+  interrupts();
+
+  ptw = printToWifi;
+  wifiBufI = 0;
+#else
+void printSettings()
+{
+#endif
+  ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
+  serialChecksum = 1; // ending bracket
+
+  printAndAppendToChecksum(F("{"));
   prnt(F("current settings, version:"), version_number);
   prnt(FV(SETTING[S_CONTROL_RIGHT]), CONTROL_RIGHT);
   prnt(FV(SETTING[S_CONTROL_CENTER_X]), CONTROL_CENTER_X);
@@ -189,8 +221,8 @@ void printSettings() {
 
   for (byte db = 0; db < maxNumDriveButtons; db++) {
     printAndAppendToChecksum(F("\"DRIVE_BUTTON_"));
-#if defined(HAS_WIFI)
-    if (printToWifi) {
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+    if (ptw) {
       wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d", db + 1);
       wifiSettingsBuffer[wifiBufI++] = '"';
       wifiSettingsBuffer[wifiBufI++] = ':';
@@ -202,7 +234,9 @@ void printSettings() {
       wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", driveButtons[db].turn);
       wifiSettingsBuffer[wifiBufI++] = ']';
       wifiSettingsBuffer[wifiBufI++] = ',';
-    } else {
+    } else
+#endif
+    {
       serialChecksum += Serial.print(db + 1);
       printAndAppendToChecksum(F("\":["));
       serialChecksum += Serial.print(driveButtons[db].pin);
@@ -212,17 +246,8 @@ void printSettings() {
       serialChecksum += Serial.print(driveButtons[db].turn, 4);
       printAndAppendToChecksum(F("],"));
     }
-#else
-    serialChecksum += Serial.print(db + 1);
-    printAndAppendToChecksum(F("\":["));
-    serialChecksum += Serial.print(driveButtons[db].pin);
-    printAndAppendToChecksum(F(","));
-    serialChecksum += Serial.print(driveButtons[db].speed, 4);
-    printAndAppendToChecksum(F(","));
-    serialChecksum += Serial.print(driveButtons[db].turn, 4);
-    printAndAppendToChecksum(F("],"));
-#endif
   }
+
   prntbool(FV(SETTING[S_STEERING_OFF_SWITCH]), STEERING_OFF_SWITCH);
   prnt(FV(SETTING[S_STEERING_OFF_SWITCH_PIN]), STEERING_OFF_SWITCH_PIN);
 
@@ -250,36 +275,51 @@ void printSettings() {
   prnt(FV(SETTING[S_CAR_WIFI_PASSWORD]), CAR_WIFI_PASSWORD);
 #endif
 
-#if defined(HAS_WIFI)
-  if (printToWifi) {
-    wifiBufI -= 2; // delete space and comma from prnt CAR_WIFI_PASSWORD
-    wifiSettingsBuffer[wifiBufI++] = '}';
-    wifiSettingsBuffer[wifiBufI++ ] = '\0';
-  } else {
-    printAndAppendToChecksum(F("\"CHECKSUM\":"));
-    Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
-    Serial.println("}");
-  }
-  ptw = false;
-#else
-  printAndAppendToChecksum(F("\"CHECKSUM\":"));
-  Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
-  Serial.println("}");
+#if defined(HAS_BLE)
+  prntbool(FV(SETTING[S_USE_BLE]), USE_BLE);
+  prnt(FV(SETTING[S_CAR_BLE_NAME]), CAR_BLE_NAME);
+  prnt(FV(SETTING[S_CAR_BLE_PASSWORD]), CAR_BLE_PASSWORD);
 #endif
 
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  if (ptw) {
+    wifiBufI -= 2; // delete space and comma from prnt CAR__PASSWORD
+    wifiSettingsBuffer[wifiBufI++] = '}';
+    wifiSettingsBuffer[wifiBufI++] = '\0';
+  } else
+#endif
+  {
+    printAndAppendToChecksum(F("\"CHECKSUM\":"));
+    Serial.print(serialChecksum + 4 /*serialChecksum is in the thousands so 4 characters*/);
+    printAndAppendToChecksum(F("}"));
+  }
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  ptw = false;
+  printing = false;
+#endif
 }
 
-void prnt(const __FlashStringHelper *fsh, int value) {
-#if defined(HAS_WIFI)
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+char wifiStringLabel[30];
+#endif
+
+void prnt(const __FlashStringHelper* fsh, int value)
+{
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  delay(0);
   if (ptw) {
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%S", fsh);
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    strcpy_P(wifiStringLabel, (char*)fsh);
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", wifiStringLabel);
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    wifiSettingsBuffer[wifiBufI++] = ':';
     wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d", value);
-    wifiSettingsBuffer[wifiBufI++ ] = ',';
-    wifiSettingsBuffer[wifiBufI++ ] = ' ';
-  } else {
+    wifiSettingsBuffer[wifiBufI++] = ',';
+    wifiSettingsBuffer[wifiBufI++] = ' ';
+  } else
+#endif
+  {
     serialChecksum += 5;
     Serial.print("\"");
     serialChecksum += Serial.print(fsh);
@@ -287,76 +327,63 @@ void prnt(const __FlashStringHelper *fsh, int value) {
     serialChecksum += Serial.print(value);
     Serial.print(", ");
   }
-  delay(0);
-#else
-  serialChecksum += 5;
-  Serial.print("\"");
-  serialChecksum += Serial.print(fsh);
-  Serial.print("\":");
-  serialChecksum += Serial.print(value);
-  Serial.print(", ");
-#endif
 }
 
+void prntf(const __FlashStringHelper* fsh, float value)
+{
 #if defined(HAS_WIFI)
-char stringLabel[30];
-#endif
-void prntf(const __FlashStringHelper *fsh, float value) {
-#if defined(HAS_WIFI)
+  delay(0);
   if (ptw) {
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    strcpy_P(wifiStringLabel, (char*)fsh);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", wifiStringLabel);
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    wifiSettingsBuffer[wifiBufI++] = ':';
     wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%.4f", value);
-    wifiSettingsBuffer[wifiBufI++ ] = ',';
-    wifiSettingsBuffer[wifiBufI++ ] = ' ';
-  } else {
+    wifiSettingsBuffer[wifiBufI++] = ',';
+    wifiSettingsBuffer[wifiBufI++] = ' ';
+  } else
+#endif
+  {
     serialChecksum += 5;
     Serial.print("\"");
     serialChecksum += Serial.print(fsh);
     Serial.print("\":");
     serialChecksum += Serial.print(value, 4);
     Serial.print(", ");
+    Serial.flush();
   }
-  delay(0);
-#else
-  serialChecksum += 5;
-  Serial.print("\"");
-  serialChecksum += Serial.print(fsh);
-  Serial.print("\":");
-  serialChecksum += Serial.print(value, 4);
-  Serial.print(", ");
-  Serial.flush();
-#endif
 }
 
-void prntbool(const __FlashStringHelper *fsh, boolean value) {
-#if defined(HAS_WIFI)
+void prntbool(const __FlashStringHelper* fsh, boolean value)
+{
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  delay(0);
   if (ptw) {
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
-    wifiSettingsBuffer[wifiBufI++ ] = '"';
-    wifiSettingsBuffer[wifiBufI++ ] = ':';
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    strcpy_P(wifiStringLabel, (char*)fsh);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", wifiStringLabel);
+    wifiSettingsBuffer[wifiBufI++] = '"';
+    wifiSettingsBuffer[wifiBufI++] = ':';
     if (value) {
-      wifiSettingsBuffer[wifiBufI++ ] = 't';
-      wifiSettingsBuffer[wifiBufI++ ] = 'r';
-      wifiSettingsBuffer[wifiBufI++ ] = 'u';
-      wifiSettingsBuffer[wifiBufI++ ] = 'e';
-      wifiSettingsBuffer[wifiBufI++ ] = ',';
-      wifiSettingsBuffer[wifiBufI++ ] = ' ';
+      wifiSettingsBuffer[wifiBufI++] = 't';
+      wifiSettingsBuffer[wifiBufI++] = 'r';
+      wifiSettingsBuffer[wifiBufI++] = 'u';
+      wifiSettingsBuffer[wifiBufI++] = 'e';
+      wifiSettingsBuffer[wifiBufI++] = ',';
+      wifiSettingsBuffer[wifiBufI++] = ' ';
     } else {
-      wifiSettingsBuffer[wifiBufI++ ] = 'f';
-      wifiSettingsBuffer[wifiBufI++ ] = 'a';
-      wifiSettingsBuffer[wifiBufI++ ] = 'l';
-      wifiSettingsBuffer[wifiBufI++ ] = 's';
-      wifiSettingsBuffer[wifiBufI++ ] = 'e';
-      wifiSettingsBuffer[wifiBufI++ ] = ',';
-      wifiSettingsBuffer[wifiBufI++ ] = ' ';
+      wifiSettingsBuffer[wifiBufI++] = 'f';
+      wifiSettingsBuffer[wifiBufI++] = 'a';
+      wifiSettingsBuffer[wifiBufI++] = 'l';
+      wifiSettingsBuffer[wifiBufI++] = 's';
+      wifiSettingsBuffer[wifiBufI++] = 'e';
+      wifiSettingsBuffer[wifiBufI++] = ',';
+      wifiSettingsBuffer[wifiBufI++] = ' ';
     }
-  } else {
+  } else
+#endif
+  {
     serialChecksum += 3; // for the three total characters, " and ":
     Serial.print("\"");
     serialChecksum += Serial.print(fsh);
@@ -368,30 +395,18 @@ void prntbool(const __FlashStringHelper *fsh, boolean value) {
     }
     Serial.flush();
   }
-  delay(0);
-#else
-  serialChecksum += 3; // for the three total characters, " and ":
-  Serial.print("\"");
-  serialChecksum += Serial.print(fsh);
-  Serial.print("\":");
-  if (value) {
-    serialChecksum += Serial.print("true, ");
-  } else {
-    serialChecksum += Serial.print("false, ");
-  }
-#endif
 }
 
-void printAndAppendToChecksum(const __FlashStringHelper * fsh) {
-#if defined(HAS_WIFI)
+void printAndAppendToChecksum(const __FlashStringHelper* fsh)
+{
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+  delay(0);
   if (ptw) {
-    strcpy_P(stringLabel, (char *)fsh);
-    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", stringLabel);
-  } else {
+    strcpy_P(wifiStringLabel, (char*)fsh);
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%s", wifiStringLabel);
+  } else
+#endif
+  {
     serialChecksum += Serial.print(fsh);
   }
-  delay(0);
-#else
-  serialChecksum += Serial.print(fsh);
-#endif
 }

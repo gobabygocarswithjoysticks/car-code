@@ -1,3 +1,5 @@
+#define IS_PICO
+#define HAS_BLE
 /*
    This program is for controlling modified ride on cars for children who need different kinds of controls like joysticks.
    https://github.com/gobabygocarswithjoysticks/car-code
@@ -274,6 +276,12 @@ int32_t CAR_WIFI_PASSWORD = 12345678;
 boolean USE_WIFI = true;
 #endif
 
+#if defined(HAS_BLE)
+int8_t CAR_BLE_NAME = 1;
+int32_t CAR_BLE_PASSWORD = 12345678;
+boolean USE_BLE = true;
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,6 +300,18 @@ byte remoteMode = 0; //0 is car, 1 is remote
 float remoteFB = 0;
 float remoteLR = 0;
 unsigned long lastRemoteCommandMillis = 0;
+#endif
+
+#if defined(HAS_BLE)
+boolean activatedByBleRemote = true;
+
+boolean USE_BLE_val_on_startup = false;
+
+boolean deactivateIfBleRemoteDisconnects = false;
+byte bleRemoteMode = 0; //0 is car, 1 is remote
+float bleRemoteFB = 0;
+float bleRemoteLR = 0;
+unsigned long lastBleRemoteCommandMillis = 0;
 #endif
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -349,7 +369,10 @@ const int version_number = 34;  // pcb with pico or pico2
 const byte settings_memory_key = 34;
 #endif
 #else
-#if defined(HAS_WIFI)
+#if defined(HAS_WIFI) && defined(HAS_BLE)
+const int version_number = 24;  // picoW or pico2W
+const byte settings_memory_key = 24;
+#elif defined(HAS_WIFI)
 const int version_number = 23;  // esp32, picoW or pico2W
 const byte settings_memory_key = 23;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
@@ -433,25 +456,19 @@ void setup() {
   startupPulse = ENABLE_STARTUP_PULSE;
 
   delay(120);
-#if defined(HAS_WIFI)
-  printSettings(false);
-#else
-  printSettings();
-#endif
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  delay(250);
-
-#if defined(HAS_WIFI)
-  printSettings(false);
-#else
   printSettings();
-#endif
+  delay(250);
   // do it again to increase the chance of a valid message going through
+  printSettings();
 
   setupPins();
 #if defined(HAS_WIFI)
   delay(50);
   setupWifi();
+#endif
+#if defined(HAS_BLE)
+  setupBLE();
 #endif
 
 }
@@ -526,6 +543,11 @@ void loop()
 #endif
 
   if (use_memory) {
+#if defined(HAS_BLE)
+    if (gbgble.available()) {
+      settingsSerial(gbgble.read(), true);
+    }
+#endif
 #if defined(HAS_WIFI)
     settingsSerial(-1);
 #else
@@ -750,5 +772,10 @@ void loop()
     // code added here runs right after the line of data is printed
     //    Serial.println(timeInterval, 5);
   }
+#if defined(HAS_BLE)
+  if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS * 3, true)) {
+    blegbg.print(wifiSettingsBuffer);
+  }
+#endif
   delay(1);
 }  //end of loop()

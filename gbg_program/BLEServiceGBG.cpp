@@ -1,16 +1,17 @@
 #include "BLEServiceGBG.h"
 
 #include <Arduino.h>
-#include <btstack.h>
+#include <BluetoothLock.h>
+#include <LocklessQueue.h>
 #include <ble/att_db_util.h>
+#include <btstack.h>
+#include <list>
 #include <pico/async_context.h>
 #include <pico/cyw43_arch.h>
-#include <list>
-#include <LocklessQueue.h>
-#include <BluetoothLock.h>
 
 BLEServiceGBG::BLEServiceGBG()
-  : BLEService(BLEUUID(SERVICE_UUID)) {
+  : BLEService(BLEUUID(SERVICE_UUID))
+{
   const int rxbuff = 2000;
   const int txbuff = 2000;
   _txSize = 200;
@@ -22,7 +23,6 @@ BLEServiceGBG::BLEServiceGBG()
   addCharacteristic(_tx);
   _rxQueue = new LocklessQueue<uint8_t>(rxbuff);
   _txQueue = new LocklessQueue<uint8_t>(txbuff);
-  _overflow = false;
   _flushAlarm = -1;
   _flushTimeout = 0;
   _lastFlush = millis();
@@ -33,10 +33,10 @@ BLEServiceGBG::BLEServiceGBG()
   _telm->setCallbacks(this);
   addCharacteristic(_ctrl);
   addCharacteristic(_telm);
-
 }
 
-BLEServiceGBG::~BLEServiceGBG() {
+BLEServiceGBG::~BLEServiceGBG()
+{
   BluetoothLock b;
   delete _rx;
   delete _tx;
@@ -45,29 +45,35 @@ BLEServiceGBG::~BLEServiceGBG() {
   async_context_remove_at_time_worker(cyw43_arch_async_context(), &_flushwork);
 }
 
-void BLEServiceGBG::begin() {
+void BLEServiceGBG::begin()
+{
 }
 
-void BLEServiceGBG::begin(unsigned long baud) {
+void BLEServiceGBG::begin(unsigned long baud)
+{
   (void)baud;
   begin();
 }
 
-void BLEServiceGBG::begin(unsigned long baud, uint16_t cfg) {
+void BLEServiceGBG::begin(unsigned long baud, uint16_t cfg)
+{
   (void)baud;
   (void)cfg;
   begin();
 }
 
-void BLEServiceGBG::end() {
+void BLEServiceGBG::end()
+{
   panic("unsupported BLEUart::end");
 }
 
-void BLEServiceGBG::setAutoflush(uint32_t ms) {
+void BLEServiceGBG::setAutoflush(uint32_t ms)
+{
   _flushTimeout = ms;
 }
 
-BLEServiceGBG::operator bool() {
+BLEServiceGBG::operator bool()
+{
   if (con_handle != 0) {
     return true;
   } else {
@@ -75,7 +81,8 @@ BLEServiceGBG::operator bool() {
   }
 }
 
-int BLEServiceGBG::read() {
+int BLEServiceGBG::read()
+{
   uint8_t ret;
   if (_rxQueue->read(&ret)) {
     return ret;
@@ -84,7 +91,8 @@ int BLEServiceGBG::read() {
   }
 }
 
-int BLEServiceGBG::peek() {
+int BLEServiceGBG::peek()
+{
   uint8_t ret;
   if (_rxQueue->peek(&ret)) {
     return ret;
@@ -93,35 +101,34 @@ int BLEServiceGBG::peek() {
   }
 }
 
-int BLEServiceGBG::available() {
+int BLEServiceGBG::available()
+{
   return _rxQueue->available();
 }
 
-bool BLEServiceGBG::overflow() {
-  BluetoothLock b;
-  bool ovf = _overflow;
-  _overflow = false;
-  return ovf;
+int BLEServiceGBG::availableForWrite()
+{
+  return _txQueue->available();
 }
 
-size_t BLEServiceGBG::write(uint8_t c) {
+size_t BLEServiceGBG::write(uint8_t c)
+{
   if (_txQueue->write(c)) {
     // We can just buffer it up for now, but set reminder alarm
     BluetoothLock b;
     if ((_flushTimeout > 0) && (_flushAlarm < 0)) {
       _flushwork.do_work = _flushWorkCB;
-      _flushwork.user_data = (void *)this;
+      _flushwork.user_data = (void*)this;
       async_context_add_at_time_worker_in_ms(cyw43_arch_async_context(), &_flushwork, _flushTimeout);
       _flushAlarm = 1;
     }
     return 1;
   }
-  // Write buffer is full, update characteristic
-  flush();
-  return _txQueue->write(c);
+  return 0;
 }
 
-void BLEServiceGBG::flush() {
+void BLEServiceGBG::flush()
+{
   async_context_remove_at_time_worker(cyw43_arch_async_context(), &_flushwork);
 
   _flushAlarm = -1;
@@ -138,14 +145,13 @@ void BLEServiceGBG::flush() {
   _lastFlush = millis();
 }
 
-void BLEServiceGBG::onWrite(BLECharacteristic *c) {
+void BLEServiceGBG::onWrite(BLECharacteristic* c)
+{
   if (c == _rx) {
     auto len = c->valueLen();
-    const char *data = (const char *)c->valueData();
+    const char* data = (const char*)c->valueData();
     for (size_t off = 0; off < len; off++) {
-      if (!_rxQueue->write(data[off])) {
-        _overflow = true;
-      }
+      _rxQueue->write(data[off]);
     }
   }
 }
