@@ -85,7 +85,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -96,7 +96,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
@@ -118,7 +118,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -129,7 +129,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
@@ -140,7 +140,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
@@ -151,7 +151,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB -DHAS_BLE
@@ -162,7 +162,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
@@ -173,7 +173,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB -DHAS_BLE
@@ -202,7 +202,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -213,7 +213,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
@@ -235,7 +235,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -246,7 +246,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
