@@ -3,8 +3,6 @@
 #include <btstack.h>
 #include "BLEServiceGBG.h"
 
-BLEServiceGBG blegbg;
-
 void setupBLE() {
   char nameBuffer[20];
   sprintf(nameBuffer, "gbgcar%d", CAR_BLE_NAME);

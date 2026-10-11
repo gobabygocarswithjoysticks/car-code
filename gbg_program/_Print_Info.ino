@@ -4,12 +4,11 @@ int serialChecksum = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 volatile bool ptw = false;
 volatile bool printing = false;
-char wifiSettingsBuffer[2000];
 int wifiBufI = 0;
 #endif
 
 #if defined(HAS_WIFI) || defined(HAS_BLE)
-bool printVariables(int interval, bool printToWifi = false)
+bool printVariables(int interval, bool printToWifi)
 {
   noInterrupts();
   if (printing) {
@@ -169,7 +168,7 @@ bool printVariables(int interval)
 }
 
 #if defined(HAS_WIFI) || defined(HAS_BLE)
-void printSettings(bool printToWifi = false)
+void printSettings(bool printToWifi)
 {
   noInterrupts();
   if (printing) {
