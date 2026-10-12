@@ -297,7 +297,7 @@ void settingsSerial();
 #endif
 
 #if defined(HAS_WIFI) || defined(HAS_BLE)
-bool printVariables(int interval, bool printToWifi = false);
+bool printVariables(int interval, bool printToWifi = false, bool sendBLE = false);
 #else
 bool printVariables(int interval);
 #endif
@@ -797,9 +797,7 @@ void loop()
 #if defined(HAS_BLE)
     if(USE_BLE){
       printVariables(-1, true); // -1 forces it to print
-      blegbg.print(wifiSettingsBuffer);
     }
-    Serial.println(millis());
 #endif
   }
   delay(1);
