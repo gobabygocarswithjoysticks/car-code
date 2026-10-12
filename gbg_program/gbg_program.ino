@@ -795,8 +795,10 @@ void loop()
   if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {
     // code added here runs right after the line of data is printed
 #if defined(HAS_BLE)
-    printVariables(-1, true); // -1 forces it to print
-    blegbg.print(wifiSettingsBuffer);
+    if(USE_BLE){
+      printVariables(-1, true); // -1 forces it to print
+      blegbg.print(wifiSettingsBuffer);
+    }
 #endif
   }
   delay(1);

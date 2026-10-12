@@ -25,7 +25,7 @@ bool printVariables(int interval)
 {
 #endif
 
-  if (interval>0 && millis() - lastMillisPrintedValues <= (unsigned int)interval) {
+  if (interval > 0 && millis() - lastMillisPrintedValues <= (unsigned int)interval) {
     return false;
   }
   lastMillisPrintedValues = millis();
