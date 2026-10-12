@@ -26,7 +26,9 @@ bool printVariables(int interval)
 #endif
 
   if (interval > 0 && millis() - lastMillisPrintedValues <= (unsigned int)interval) {
+#if defined(HAS_WIFI) || defined(HAS_BLE)
     printing = false;
+#else
     return false;
   }
   lastMillisPrintedValues = millis();
