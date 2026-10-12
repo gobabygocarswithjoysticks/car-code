@@ -162,9 +162,11 @@ bool printVariables(int interval)
 
 #if defined(HAS_WIFI) || defined(HAS_BLE)
   ptw = false;
+#ifdef HAS_BLE
   if(sendBLE){
     blegbg.print(wifiSettingsBuffer);
   }
+#endif
   printing = false;
 #endif
   return true;
