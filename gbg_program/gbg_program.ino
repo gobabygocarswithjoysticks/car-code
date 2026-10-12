@@ -799,6 +799,7 @@ void loop()
       printVariables(-1, true); // -1 forces it to print
       blegbg.print(wifiSettingsBuffer);
     }
+    Serial.println(millis());
 #endif
   }
   delay(1);

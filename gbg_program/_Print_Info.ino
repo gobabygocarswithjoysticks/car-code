@@ -10,6 +10,7 @@ int wifiBufI = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 bool printVariables(int interval, bool printToWifi)
 {
+  Serial.println("AAA");
   noInterrupts();
   if (printing) {
     interrupts();
@@ -17,6 +18,9 @@ bool printVariables(int interval, bool printToWifi)
   }
   printing = true;
   interrupts();
+
+  Serial.print("BBBBB: ");
+  Serial.println(printToWifi);
 
   ptw = printToWifi;
   wifiBufI = 0;
@@ -157,7 +161,7 @@ bool printVariables(int interval)
   Serial.println("}");
   }
 
-  #if defined(HAS_WIFI) || defined(HAS_BLE)
+#if defined(HAS_WIFI) || defined(HAS_BLE)
   ptw = false;
   printing = false;
 #endif
