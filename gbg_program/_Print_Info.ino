@@ -10,10 +10,6 @@ int wifiBufI = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 bool printVariables(int interval, bool printToWifi)
 {
-  ///// if interval is -1, nothing is printed /////
-  if (interval < 0) {
-    return false;
-  }
   noInterrupts();
   if (printing) {
     interrupts();
@@ -27,12 +23,9 @@ bool printVariables(int interval, bool printToWifi)
 #else
 bool printVariables(int interval)
 {
-  ///// if interval is -1, nothing is printed /////
-  if (interval < 0)
-    return false;
 #endif
 
-  if (millis() - lastMillisPrintedValues <= (unsigned int)interval) {
+  if (interval>0 && millis() - lastMillisPrintedValues <= (unsigned int)interval) {
     return false;
   }
   lastMillisPrintedValues = millis();
@@ -155,8 +148,8 @@ bool printVariables(int interval)
   printAndAppendToChecksum(F(",\"CHECKSUM\":"));
   #if defined(HAS_BLE)
   if(ptw){
-  blegbg.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
-  blegbg.println("}");
+    int checksum=wifiBufI + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/;
+    wifiBufI += sprintf(wifiSettingsBuffer + wifiBufI, "%d}\r\n", checksum);
   }else
   #endif
   {

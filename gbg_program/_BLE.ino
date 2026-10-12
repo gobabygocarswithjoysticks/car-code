@@ -4,7 +4,7 @@
 #include "BLEServiceGBG.h"
 
 void setupBLE() {
-  if(USE_BLE) {
+  if(!USE_BLE) {
     return;
   }
   char nameBuffer[20];

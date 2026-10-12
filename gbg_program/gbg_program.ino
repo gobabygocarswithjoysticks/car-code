@@ -309,7 +309,7 @@ char wifiSettingsBuffer[2000];
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
+const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;
 
 const int16_t rcControlSwitchDeadband = 100;
 const int16_t rcControlDeadband = 50;
@@ -385,19 +385,19 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #ifdef IS_PCB
-#if defined(HAS_WIFI)
-const int version_number = 35;  // pcb with picoW or pico2W
-const byte settings_memory_key = 35;
+#if defined(HAS_WIFI) && defined(HAS_BLE)
+const int version_number = 37;  // pcb with picoW or pico2W
+const byte settings_memory_key = 37;
 #else
-const int version_number = 34;  // pcb with pico or pico2
-const byte settings_memory_key = 34;
+const int version_number = 36;  // pcb with pico or pico2
+const byte settings_memory_key = 36;
 #endif
 #else
 #if defined(HAS_WIFI) && defined(HAS_BLE)
 const int version_number = 24;  // picoW or pico2W
 const byte settings_memory_key = 24;
 #elif defined(HAS_WIFI)
-const int version_number = 23;  // esp32, picoW or pico2W
+const int version_number = 23;  // esp32
 const byte settings_memory_key = 23;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
@@ -794,12 +794,10 @@ void loop()
 
   if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {
     // code added here runs right after the line of data is printed
-    //    Serial.println(timeInterval, 5);
-  }
 #if defined(HAS_BLE)
-  if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS * 3, true)) {
+    printVariables(-1, true); // -1 forces it to print
     blegbg.print(wifiSettingsBuffer);
-  }
 #endif
+  }
   delay(1);
 }  //end of loop()
