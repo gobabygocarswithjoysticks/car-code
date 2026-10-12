@@ -166,6 +166,7 @@ void settingsSerial() {
 #if defined(HAS_BLE)
         if (sentByBle) {
           printSettings(true);
+          blegbg.println(wifiSettingsBuffer);
         } else 
 #endif
 {
@@ -537,8 +538,8 @@ void settingsSerial() {
         printInt(CAR_BLE_NAME);
       }
       else if (strcmp_P(k, SETTING[S_CAR_BLE_PASSWORD]) == 0) {
-        CAR_WIFI_PASSWORD = atoi(v);
-        CAR_WIFI_PASSWORD = constrain(CAR_BLE_PASSWORD, 0, 999999999);
+        CAR_BLE_PASSWORD = atoi(v);
+        CAR_BLE_PASSWORD = constrain(CAR_BLE_PASSWORD, 0, 999999);
         printInt(CAR_BLE_PASSWORD);
       }
       else if (strcmp_P(k, SETTING[S_USE_BLE]) == 0) {
@@ -679,6 +680,11 @@ void saveSettings()
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
   EEPROMwrite(addressW, USE_WIFI);
 #endif
+#if defined(HAS_BLE)
+  EEPROMwrite(addressW, CAR_BLE_NAME);
+  EEPROMwrite(addressW, CAR_BLE_PASSWORD);
+  EEPROMwrite(addressW, USE_BLE);
+#endif
   EEPROMwrite(addressW, eepromCRC);
 
 #if defined(FAKE_EEPROM)
@@ -773,6 +779,12 @@ void recallSettings()
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
   EEPROMread(addressR, USE_WIFI);
+#endif
+
+#if defined(HAS_BLE)
+  EEPROMread(addressR, CAR_BLE_NAME);
+  EEPROMread(addressR, CAR_BLE_PASSWORD);
+  EEPROMread(addressR, USE_BLE);
 #endif
 
   uint32_t tempEepromCRC = eepromCRC;

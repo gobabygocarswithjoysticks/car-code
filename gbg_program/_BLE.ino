@@ -4,6 +4,9 @@
 #include "BLEServiceGBG.h"
 
 void setupBLE() {
+  if(USE_BLE) {
+    return;
+  }
   char nameBuffer[20];
   sprintf(nameBuffer, "gbgcar%d", CAR_BLE_NAME);
   BLE.begin(nameBuffer);

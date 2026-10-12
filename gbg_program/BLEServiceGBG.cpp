@@ -28,9 +28,9 @@ BLEServiceGBG::BLEServiceGBG()
   _flushTimeout = 0;
   _lastFlush = millis();
 
-  _ctrl = new BLECharacteristic(BLEUUID(CHARACTERISTIC_UUID_RX), BLEWrite, "GBG CTRL");
+  _ctrl = new BLECharacteristic(BLEUUID(CHARACTERISTIC_UUID_RC_CTRL), BLEWrite, "GBG CTRL");
   _ctrl->setCallbacks(this);
-  _telm = new BLECharacteristic(BLEUUID(CHARACTERISTIC_UUID_TX), BLERead | BLENotify, "GBG TELM");
+  _telm = new BLECharacteristic(BLEUUID(CHARACTERISTIC_UUID_RC_TELEM), BLERead | BLENotify, "GBG TELM");
   _telm->setCallbacks(this);
   addCharacteristic(_ctrl);
   addCharacteristic(_telm);
@@ -144,6 +144,12 @@ void BLEServiceGBG::flush()
   }
   _tx->setValue(b, len);
   _lastFlush = millis();
+  if (_txQueue->available()) {
+     _flushwork.do_work = _flushWorkCB;
+     _flushwork.user_data = (void*)this;
+     async_context_add_at_time_worker_in_ms(cyw43_arch_async_context(), &_flushwork, _flushTimeout);
+     _flushAlarm = 1;
+   }
 }
 
 void BLEServiceGBG::onWrite(BLECharacteristic* c)

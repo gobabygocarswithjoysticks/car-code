@@ -10,6 +10,10 @@ int wifiBufI = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 bool printVariables(int interval, bool printToWifi)
 {
+  ///// if interval is -1, nothing is printed /////
+  if (interval < 0) {
+    return false;
+  }
   noInterrupts();
   if (printing) {
     interrupts();
@@ -18,10 +22,6 @@ bool printVariables(int interval, bool printToWifi)
   printing = true;
   interrupts();
 
-  ///// if interval is -1, nothing is printed /////
-  if (interval < 0) {
-    return false;
-  }
   ptw = printToWifi;
   wifiBufI = 0;
 #else
@@ -154,13 +154,17 @@ bool printVariables(int interval)
 
   printAndAppendToChecksum(F(",\"CHECKSUM\":"));
   #if defined(HAS_BLE)
+  if(ptw){
   blegbg.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
   blegbg.println("}");
-  #else
+  }else
+  #endif
+  {
   Serial.print(serialChecksum + 1 /*closing bracket*/ + 3 /*serialChecksum is in the hundreds and takes 3 characters*/);
   Serial.println("}");
-  #endif
-#if defined(HAS_WIFI) || defined(HAS_BLE)
+  }
+
+  #if defined(HAS_WIFI) || defined(HAS_BLE)
   ptw = false;
   printing = false;
 #endif

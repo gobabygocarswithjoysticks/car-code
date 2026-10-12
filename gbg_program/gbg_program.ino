@@ -276,7 +276,7 @@ boolean USE_WIFI = true;
 
 #if defined(HAS_BLE)
 int8_t CAR_BLE_NAME = 0;
-int32_t CAR_BLE_PASSWORD = 12345678;
+int32_t CAR_BLE_PASSWORD = 123456;
 boolean USE_BLE = false;
 #endif
 
