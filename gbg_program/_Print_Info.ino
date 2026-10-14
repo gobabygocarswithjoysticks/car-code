@@ -36,9 +36,11 @@ bool printVariables(int interval)
 #endif
     return false;
   }
+#if defined(HAS_WIFI) || defined(HAS_BLE)
         Serial.print(__FILE__); 
       Serial.print(":"); 
       Serial.println(__LINE__);
+#endif
 lastMillisPrintedValues = millis();
   serialChecksum = 0;
   printAndAppendToChecksum(F("{"));

@@ -150,11 +150,13 @@ void settingsSerial() {
         return;
       }
 
+#if defined(HAS_WIFI) || defined(HAS_BLE)
       Serial.print(k);
       Serial.print("   ");
       Serial.print(__FILE__); 
       Serial.print(":"); 
       Serial.println(__LINE__);
+#endif
 
       // special case commands that don't take a value
       if (strcmp(k, "SAVE") == 0) {
