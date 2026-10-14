@@ -10,6 +10,10 @@ int wifiBufI = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 bool printVariables(int interval, bool printToWifi, bool sendBLE)
 {
+        Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+
   noInterrupts();
   if (printing) {
     interrupts();
@@ -32,7 +36,10 @@ bool printVariables(int interval)
 #endif
     return false;
   }
-  lastMillisPrintedValues = millis();
+        Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+lastMillisPrintedValues = millis();
   serialChecksum = 0;
   printAndAppendToChecksum(F("{"));
   prnt(F("current values, millis:"), millis());
@@ -176,8 +183,16 @@ bool printVariables(int interval)
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 void printSettings(bool printToWifi)
 {
+        Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+
   noInterrupts();
   if (printing) {
+          Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+
     interrupts();
     return;
   }
@@ -325,6 +340,10 @@ void printSettings()
   }
 
 #if defined(HAS_WIFI) || defined(HAS_BLE)
+      Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+
   ptw = false;
   printing = false;
 #endif

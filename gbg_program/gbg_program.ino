@@ -569,6 +569,9 @@ void loop()
   if (use_memory) {
 #if defined(HAS_BLE)
     if (blegbg.available()) {
+      Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
       settingsSerial(blegbg.read(), true);
     }
 #endif

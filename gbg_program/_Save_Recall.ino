@@ -150,6 +150,12 @@ void settingsSerial() {
         return;
       }
 
+      Serial.print(k);
+      Serial.print("   ");
+      Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+
       // special case commands that don't take a value
       if (strcmp(k, "SAVE") == 0) {
         saveSettings();
@@ -163,6 +169,7 @@ void settingsSerial() {
         }
         return;
       } else if (strcmp(k, "SETTINGS") == 0) {
+        Serial.println("PRINTING SETTINGS");
 #if defined(HAS_BLE)
         if (sentByBle) {
           printSettings(true);
