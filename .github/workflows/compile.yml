@@ -85,7 +85,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -96,10 +96,10 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
             order: 4
 
           - configName: "standard-esp32"
@@ -118,7 +118,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -129,10 +129,10 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
             order: 7
 
           - configName: "PCB-rpiPico"
@@ -140,7 +140,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
@@ -151,10 +151,10 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB -DHAS_BLE
             order: 9
 
           - configName: "PCB-rpiPico-2"
@@ -162,7 +162,7 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO -DIS_PCB
@@ -173,10 +173,10 @@ jobs:
             code-dir: gbg_program
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DIS_PCB -DHAS_BLE
             order: 11
 
           - configName: "clear_eeprom-nanoOld"
@@ -202,7 +202,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
+            fqbn: "rp2040:rp2040:rpipico:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO"
             niceBoardName: "rpi pico"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -213,10 +213,10 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
+            fqbn: "rp2040:rp2040:rpipicow:ipbtstack=ipv4btcble"
             board-upload: "RPIPICOW"
             niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
+            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO -DHAS_BLE
             order: 15
 
           - configName: "clear_eeprom-esp32"
@@ -235,7 +235,7 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
+            fqbn: "rp2040:rp2040:rpipico2:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2"
             niceBoardName: "rpi pico 2"
             additional-parameters: -DFAKE_EEPROM -DIS_PICO
@@ -246,84 +246,11 @@ jobs:
             code-dir: clear_eeprom
             arduino-platform: "rp2040:rp2040 --additional-urls
               https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
+            fqbn: "rp2040:rp2040:rpipico2w:ipbtstack=ipv4btcble"
             board-upload: "RPIPICO2W"
             niceBoardName: "rpi pico 2 W"
             additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
             order: 18
-
-          - configName: "blink-nanoOld"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "arduino:avr@1.8.8"
-            fqbn: "arduino:avr:nano"
-            board-upload: "nanoOldBootloader"
-            niceBoardName: "old nano"
-            order: 19
-
-          - configName: "blink-nanoNew"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "arduino:avr@1.8.8"
-            fqbn: "arduino:avr:nano"
-            board-upload: "nano"
-            niceBoardName: "new nano or uno"
-            order: 20
-
-          - configName: "blink-rpiPico"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico"
-            board-upload: "RPIPICO"
-            niceBoardName: "rpi pico"
-            additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 21
-
-          - configName: "blink-rpiPico-W"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipicow"
-            board-upload: "RPIPICOW"
-            niceBoardName: "rpi pico W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 22
-
-          - configName: "blink-esp32"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "esp32:esp32 --additional-urls
-              https://github.com/espressif/arduino-esp32/releases/download/3.3.11/package_esp32_dev_index.json"
-            fqbn: "esp32:esp32:esp32"
-            board-upload: "ESP"
-            niceBoardName: "ESP32"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI
-            order: 23
-
-          - configName: "blink-rpiPico2"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2"
-            board-upload: "RPIPICO2"
-            niceBoardName: "rpi pico 2"
-            additional-parameters: -DFAKE_EEPROM -DIS_PICO
-            order: 24
-
-          - configName: "blink-rpiPico-2W"
-            code-name: blink
-            code-dir: blink
-            arduino-platform: "rp2040:rp2040 --additional-urls
-              https://github.com/earlephilhower/arduino-pico/releases/download/6.2.0/package_rp2040_index.json"
-            fqbn: "rp2040:rp2040:rpipico2w"
-            board-upload: "RPIPICO2W"
-            niceBoardName: "rpi pico 2 W"
-            additional-parameters: -DFAKE_EEPROM -DHAS_WIFI -DIS_PICO
-            order: 25
 
     runs-on: ubuntu-latest
     steps:

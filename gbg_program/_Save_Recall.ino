@@ -128,8 +128,8 @@ float* settingsPtr_float[NUM_SETTINGS_ID_FLOAT] = {
 };
 
 char phrase[30]; // must be large enough to hold the longest setting name string
-#if defined(HAS_WIFI)
-void settingsSerial(int8_t input) {
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void settingsSerial(int8_t input, bool sentByBle) {
   int8_t in;
   if (input == -1) {
     in = Serial.read();
@@ -150,17 +150,37 @@ void settingsSerial() {
         return;
       }
 
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+      Serial.print(k);
+      Serial.print("   ");
+      Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+#endif
+
       // special case commands that don't take a value
       if (strcmp(k, "SAVE") == 0) {
         saveSettings();
-        Serial.println(F("{\"result\": \"saved\"}"));
+#if defined(HAS_BLE)
+        if (sentByBle) {
+          blegbg.println("{\"result\": \"saved\"}");
+        } else 
+#endif
+        {
+          Serial.println(F("{\"result\": \"saved\"}"));
+        }
         return;
       } else if (strcmp(k, "SETTINGS") == 0) {
-#if defined(HAS_WIFI)
-        printSettings(false);
-#else
-        printSettings();
+        Serial.println("PRINTING SETTINGS");
+#if defined(HAS_BLE)
+        if (sentByBle) {
+          printSettings(true);
+          blegbg.println(wifiSettingsBuffer);
+        } else 
 #endif
+{
+        printSettings();
+}
         return;
       } else if (strcmp(k, "REVERT") == 0) {
         unsigned int settingsMemoryKeyAddr = 0;
@@ -181,13 +201,27 @@ void settingsSerial() {
         return;
       } else if (strcmp(k, "G") == 0) {
         movementAllowed = true;
-        Serial.println(F("{\"result\": \"movement allowed\"}"));
+#ifdef HAS_BLE
+        if (sentByBle) {
+          blegbg.println("{\"result\": \"movement allowed\"}");
+        } else 
+#endif
+        {
+          Serial.println(F("{\"result\": \"movement allowed\"}"));
+        }
         return;
       } else if (strcmp(k, "S") == 0) {
         movementAllowed = false;
         leftMotorController.writeMicroseconds(LEFT_MOTOR_CENTER);
         rightMotorController.writeMicroseconds(RIGHT_MOTOR_CENTER);
-        Serial.println(F("{\"result\": \"stopped\"}"));
+#ifdef HAS_BLE
+        if (sentByBle) {
+          blegbg.println("{\"result\": \"stopped\"}");
+        } else 
+#endif
+        {
+          Serial.println(F("{\"result\": \"stopped\"}"));
+        }
         return;
       }
 
@@ -203,7 +237,7 @@ void settingsSerial() {
         if (strcmp(k, phrase) == 0) {
           *settingsPtr_int[i] = atoi(v);
           if (i >= PIN_MODE_STARTING_AT_THIS_INDEX) {
-            *settingsPtr_int[i]&=255;
+            *settingsPtr_int[i] &= 255;
             pinMode(*settingsPtr_int[i], INPUT);
           }
           printInt(*settingsPtr_int[i]);
@@ -352,25 +386,46 @@ void settingsSerial() {
             }
           }
           pinMode(driveButtons[db].pin, INPUT_PULLUP);
+#ifdef HAS_BLE
+          if (sentByBle) {
+            blegbg.print(F("{\"result\": \"change\""));
+            blegbg.print(",");
+            blegbg.print(F("\"setting\": \""));
+            blegbg.print("DRIVE_BUTTON_");
+            blegbg.print(db + 1);
+            blegbg.print("\",");
+            blegbg.print(F("\"value\":["));
 
-          Serial.print(F("{\"result\": \"change\""));
-          Serial.print(",");
-          Serial.print(F("\"setting\": \""));
-          Serial.print("DRIVE_BUTTON_");
-          Serial.print(db + 1);
-          Serial.print("\",");
-          Serial.print(F("\"value\":["));
+            blegbg.print(driveButtons[db].pin);
+            blegbg.print(",");
+            dtostrf(driveButtons[db].speed, 0, 4, resultBuf);
+            blegbg.print(resultBuf);
+            blegbg.print(",");
+            dtostrf(driveButtons[db].turn, 0, 4, resultBuf);
+            blegbg.print(resultBuf);
 
-          Serial.print(driveButtons[db].pin);
-          Serial.print(",");
-          dtostrf(driveButtons[db].speed, 0, 4, resultBuf);
-          Serial.print(resultBuf);
-          Serial.print(",");
-          dtostrf(driveButtons[db].turn, 0, 4, resultBuf);
-          Serial.print(resultBuf);
+            blegbg.println("]}");
+          } else 
+#endif
+          {
+            Serial.print(F("{\"result\": \"change\""));
+            Serial.print(",");
+            Serial.print(F("\"setting\": \""));
+            Serial.print("DRIVE_BUTTON_");
+            Serial.print(db + 1);
+            Serial.print("\",");
+            Serial.print(F("\"value\":["));
 
-          Serial.println("]}");
+            Serial.print(driveButtons[db].pin);
+            Serial.print(",");
+            dtostrf(driveButtons[db].speed, 0, 4, resultBuf);
+            Serial.print(resultBuf);
+            Serial.print(",");
+            dtostrf(driveButtons[db].turn, 0, 4, resultBuf);
+            Serial.print(resultBuf);
 
+            Serial.println("]}");
+          }
         }
         return;
       }
@@ -485,19 +540,56 @@ void settingsSerial() {
         printTrueOrFalse(USE_WIFI);
       }
 #endif
+
+#if defined(HAS_BLE)
+      else if (strcmp_P(k, SETTING[S_CAR_BLE_NAME]) == 0) {
+        CAR_BLE_NAME = constrain(atoi(v), 0, 99);
+        printInt(CAR_BLE_NAME);
+      }
+      else if (strcmp_P(k, SETTING[S_CAR_BLE_PASSWORD]) == 0) {
+        CAR_BLE_PASSWORD = atoi(v);
+        CAR_BLE_PASSWORD = constrain(CAR_BLE_PASSWORD, 0, 999999);
+        printInt(CAR_BLE_PASSWORD);
+      }
+      else if (strcmp_P(k, SETTING[S_USE_BLE]) == 0) {
+        USE_BLE = atoi(v);
+        printTrueOrFalse(USE_BLE);
+      }
+#endif
       else {
-        Serial.println(F("{\"result\": \"no change\"}"));
+#ifdef HAS_BLE
+        if (sentByBle) {
+          blegbg.println("{\"result\": \"no change\"}");
+        } else 
+#endif
+        {
+          Serial.println(F("{\"result\": \"no change\"}"));
+        }
         return;
       }
 
-      Serial.print(F("{\"result\": \"change\""));
-      Serial.print(", ");
-      Serial.print(F("\"setting\": \""));
-      Serial.print(k);
-      Serial.print("\", ");
-      Serial.print(F("\"value\": \""));
-      Serial.print(resultBuf);
-      Serial.println("\"}");
+#ifdef HAS_BLE
+      if (sentByBle) {
+        blegbg.print("{\"result\": \"change\"");
+        blegbg.print(", ");
+        blegbg.print("\"setting\": \"");
+        blegbg.print(k);
+        blegbg.print("\", ");
+        blegbg.print("\"value\": \"");
+        blegbg.print(resultBuf);
+        blegbg.println("\"}");
+      } else 
+#endif
+      {
+        Serial.print(F("{\"result\": \"change\""));
+        Serial.print(", ");
+        Serial.print(F("\"setting\": \""));
+        Serial.print(k);
+        Serial.print("\", ");
+        Serial.print(F("\"value\": \""));
+        Serial.print(resultBuf);
+        Serial.println("\"}");
+      }
 
     } else if (isAlphaNumeric(in) || in == '-' || in == '.' || in == ':' || in == '_') { // removes things like spaces and new line characters
       buf[bufP] = toupper(in); // settings names are all caps, but this way lower case versions will also be accepted
@@ -597,6 +689,11 @@ void saveSettings()
   EEPROMwrite(addressW, CAR_WIFI_PASSWORD);
   EEPROMwrite(addressW, USE_WIFI);
 #endif
+#if defined(HAS_BLE)
+  EEPROMwrite(addressW, CAR_BLE_NAME);
+  EEPROMwrite(addressW, CAR_BLE_PASSWORD);
+  EEPROMwrite(addressW, USE_BLE);
+#endif
   EEPROMwrite(addressW, eepromCRC);
 
 #if defined(FAKE_EEPROM)
@@ -691,6 +788,12 @@ void recallSettings()
   EEPROMread(addressR, CAR_WIFI_NAME);
   EEPROMread(addressR, CAR_WIFI_PASSWORD);
   EEPROMread(addressR, USE_WIFI);
+#endif
+
+#if defined(HAS_BLE)
+  EEPROMread(addressR, CAR_BLE_NAME);
+  EEPROMread(addressR, CAR_BLE_PASSWORD);
+  EEPROMread(addressR, USE_BLE);
 #endif
 
   uint32_t tempEepromCRC = eepromCRC;

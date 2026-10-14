@@ -84,6 +84,13 @@ const char car_wifi_password[] PROGMEM = "CAR_WIFI_PASSWORD";
 const char use_wifi[] PROGMEM = "USE_WIFI";
 #endif
 
+#ifdef HAS_BLE
+const char car_ble_name[] PROGMEM = "CAR_BLE_NAME";
+const char car_ble_password[] PROGMEM = "CAR_BLE_PASSWORD";
+const char use_ble[] PROGMEM = "USE_BLE";
+#endif
+
+
 const char* const SETTING[] PROGMEM = {
   control_right,
   control_center_x,
@@ -160,6 +167,11 @@ const char* const SETTING[] PROGMEM = {
   car_wifi_name,
   car_wifi_password,
   use_wifi,
+#endif
+#ifdef HAS_BLE
+  car_ble_name,
+  car_ble_password,
+  use_ble,
 #endif
 };
 
@@ -239,6 +251,11 @@ enum SettingID {
   S_CAR_WIFI_NAME,
   S_CAR_WIFI_PASSWORD,
   S_USE_WIFI,
+#endif
+#ifdef HAS_BLE
+  S_CAR_BLE_NAME,
+  S_CAR_BLE_PASSWORD,
+  S_USE_BLE,
 #endif
   S_NUM
 };

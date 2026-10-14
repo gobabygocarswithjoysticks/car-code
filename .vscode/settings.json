@@ -23,5 +23,8 @@
         "WDCE",
         "WDIE",
         "WDTCSR"
-    ]
+    ],
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "C_Cpp.vcFormat.indent.braces": true
 }

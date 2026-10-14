@@ -274,10 +274,42 @@ int32_t CAR_WIFI_PASSWORD = 12345678;
 boolean USE_WIFI = true;
 #endif
 
+#if defined(HAS_BLE)
+int8_t CAR_BLE_NAME = 0;
+int32_t CAR_BLE_PASSWORD = 123456;
+boolean USE_BLE = false;
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void printSettings(bool printToWifi = false);
+#else
+void printSettings();
+#endif
+#ifdef HAS_BLE
+#include "BLEServiceGBG.h"
+BLEServiceGBG blegbg;
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+void settingsSerial(int8_t input, bool sentByBle = false);
+#else
+void settingsSerial();
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+bool printVariables(int interval, bool printToWifi = false, bool sendBLE = false);
+#else
+bool printVariables(int interval);
+#endif
+
+#if defined(HAS_WIFI) || defined(HAS_BLE)
+char wifiSettingsBuffer[2000];
+#endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////// END OF CONSTANTS SECTION //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;  // or -1 makes it not print variables to the serial monitor
+const int PRINT_VARIABLES_INTERVAL_MILLIS = 100;
 
 const int16_t rcControlSwitchDeadband = 100;
 const int16_t rcControlDeadband = 50;
@@ -292,6 +324,18 @@ byte remoteMode = 0; //0 is car, 1 is remote
 float remoteFB = 0;
 float remoteLR = 0;
 unsigned long lastRemoteCommandMillis = 0;
+#endif
+
+#if defined(HAS_BLE)
+boolean activatedByBleRemote = true;
+
+boolean USE_BLE_val_on_startup = false;
+
+boolean deactivateIfBleRemoteDisconnects = false;
+byte bleRemoteMode = 0; //0 is car, 1 is remote
+float bleRemoteFB = 0;
+float bleRemoteLR = 0;
+unsigned long lastBleRemoteCommandMillis = 0;
 #endif
 
 //////////////////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////////////////////////////////////////
@@ -341,16 +385,19 @@ ISR(WDT_vect) // Watchdog timer interrupt.
 #endif
 
 #ifdef IS_PCB
-#if defined(HAS_WIFI)
-const int version_number = 35;  // pcb with picoW or pico2W
-const byte settings_memory_key = 35;
+#if defined(HAS_WIFI) && defined(HAS_BLE)
+const int version_number = 37;  // pcb with picoW or pico2W
+const byte settings_memory_key = 37;
 #else
-const int version_number = 34;  // pcb with pico or pico2
-const byte settings_memory_key = 34;
+const int version_number = 36;  // pcb with pico or pico2
+const byte settings_memory_key = 36;
 #endif
 #else
-#if defined(HAS_WIFI)
-const int version_number = 23;  // esp32, picoW or pico2W
+#if defined(HAS_WIFI) && defined(HAS_BLE)
+const int version_number = 24;  // picoW or pico2W
+const byte settings_memory_key = 24;
+#elif defined(HAS_WIFI)
+const int version_number = 23;  // esp32
 const byte settings_memory_key = 23;
 #else // not pcb or wifi-capable, standard nano or uno or pico without wifi, but with capability for RC control (now part of the standard code)
 // the version_number is used by the website to know how many settings to expect. This helps error-check the serial data.
@@ -433,25 +480,19 @@ void setup() {
   startupPulse = ENABLE_STARTUP_PULSE;
 
   delay(120);
-#if defined(HAS_WIFI)
-  printSettings(false);
-#else
-  printSettings();
-#endif
   ///// print settings and any other info ///// (useful for if you don't have a record of the settings on a car)
-  delay(250);
-
-#if defined(HAS_WIFI)
-  printSettings(false);
-#else
   printSettings();
-#endif
+  delay(250);
   // do it again to increase the chance of a valid message going through
+  printSettings();
 
   setupPins();
 #if defined(HAS_WIFI)
   delay(50);
   setupWifi();
+#endif
+#if defined(HAS_BLE)
+  setupBLE();
 #endif
 
 }
@@ -526,6 +567,14 @@ void loop()
 #endif
 
   if (use_memory) {
+#if defined(HAS_BLE)
+    if (blegbg.available()) {
+      Serial.print(__FILE__); 
+      Serial.print(":"); 
+      Serial.println(__LINE__);
+      settingsSerial(blegbg.read(), true);
+    }
+#endif
 #if defined(HAS_WIFI)
     settingsSerial(-1);
 #else
@@ -748,7 +797,11 @@ void loop()
 
   if (printVariables(PRINT_VARIABLES_INTERVAL_MILLIS)) {
     // code added here runs right after the line of data is printed
-    //    Serial.println(timeInterval, 5);
+#if defined(HAS_BLE)
+    if(USE_BLE){
+      printVariables(-1, true); // -1 forces it to print
+    }
+#endif
   }
   delay(1);
 }  //end of loop()
