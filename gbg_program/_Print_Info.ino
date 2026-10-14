@@ -10,10 +10,7 @@ int wifiBufI = 0;
 #if defined(HAS_WIFI) || defined(HAS_BLE)
 bool printVariables(int interval, bool printToWifi, bool sendBLE)
 {
-        Serial.print(__FILE__); 
-      Serial.print(":"); 
-      Serial.println(__LINE__);
-
+Serial.println("AAA");
   noInterrupts();
   if (printing) {
     interrupts();
@@ -23,6 +20,9 @@ bool printVariables(int interval, bool printToWifi, bool sendBLE)
   interrupts();
 
   ptw = printToWifi;
+  Serial.print("BB");
+  Serial.println(ptw);
+
   wifiBufI = 0;
 #else
 bool printVariables(int interval)
